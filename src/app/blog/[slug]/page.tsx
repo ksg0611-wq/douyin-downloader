@@ -1,6 +1,8 @@
 import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import CPABanner from "@/components/CPABanner";
+import { CPA_ADS } from "@/data/ads";
 import { getPostData } from "@/lib/posts";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
@@ -57,6 +59,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <article className="prose prose-zinc prose-rose max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-a:text-rose-600 hover:prose-a:text-rose-500 prose-img:rounded-xl">
           <ReactMarkdown>{postData.content}</ReactMarkdown>
         </article>
+
+        {/* CPA Banner (Card Type) */}
+        <div className="mt-16 pt-8 border-t border-zinc-200">
+          <div className="text-center mb-6">
+            <h3 className="text-lg font-bold text-zinc-900">🎁 에디터 추천</h3>
+            <p className="text-sm text-zinc-500 mt-1">블로그 독자만을 위한 특별한 혜택을 확인해 보세요!</p>
+          </div>
+          <CPABanner ad={CPA_ADS.insurance} type="card" />
+        </div>
       </main>
 
       <div className="bg-white border-t border-zinc-200">

@@ -9,6 +9,8 @@ import Header from "@/components/layout/Header";
 import AdBanner from "@/components/layout/AdBanner";
 import Footer from "@/components/layout/Footer";
 
+import CPABanner from "@/components/CPABanner";
+import { CPA_ADS } from "@/data/ads";
 import HeroSection from "@/components/home/HeroSection";
 import DownloaderCore from "@/components/home/DownloaderCore";
 import DownloadResult from "@/components/home/DownloadResult";
@@ -218,6 +220,10 @@ export default function Home() {
         <AdBanner position="top" />
 
         <HeroSection />
+
+        <div className="mb-6 w-full max-w-4xl mx-auto">
+          <CPABanner ad={CPA_ADS.car_finance} type="horizontal" />
+        </div>
 
         <DownloaderCore 
           url={url} 
