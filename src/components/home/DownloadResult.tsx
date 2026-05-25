@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "motion/react";
 import { Video, Play, Download, Music, RefreshCcw, CheckCircle2 } from "lucide-react";
 import { VideoMock } from "../../types";
+import CPABanner from "../CPABanner";
+import { CPA_ADS } from "@/data/ads";
 
 interface DownloadResultProps {
   analysisResult: VideoMock;
@@ -187,6 +189,11 @@ export default function DownloadResult({
 
           </div>
         </div>
+      </div>
+      
+      {/* Result Banner Slot */}
+      <div className="mt-6 w-full max-w-4xl mx-auto">
+        <CPABanner ad={CPA_ADS.download_result} type="horizontal" />
       </div>
     </motion.section>
   );
