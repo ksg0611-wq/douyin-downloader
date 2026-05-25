@@ -16,16 +16,16 @@ export const CPA_ADS: Record<string, AdData> = {
   },
   download_result: {
     id: "ad-download-result",
-    title: "초고속 인터넷 가입 특별전",
-    description: "최대 현금 사은품 당일 지급! 빠르고 안전한 가입",
-    imageUrl: "https://placehold.co/800x400/3f3f46/ffffff?text=Internet+CPA",
-    linkUrl: "#",
+    title: "실시간 신차 장기렌트 · 리스 비교견적 상담",
+    description: "초기비용 0원으로 원하는 신차를 가장 저렴하게 이용해 보세요",
+    imageUrl: "http://img.tenping.kr/Content/Upload/Images/2026052013210001_Dis_20260520132102.png",
+    linkUrl: "https://iryan.kr/t8glyqwvqr",
   },
   blog_middle: {
     id: "ad-blog-middle",
-    title: "직장인을 위한 숨은 환급금 찾기",
-    description: "놓치고 있던 내 환급금, 1분 만에 간편 조회하세요",
-    imageUrl: "https://placehold.co/800x400/52525b/ffffff?text=Refund+CPA",
-    linkUrl: "#",
+    title: "실시간 신차 장기렌트 · 리스 비교견적 상담",
+    description: "초기비용 0원으로 원하는 신차를 가장 저렴하게 이용해 보세요",
+    imageUrl: "http://img.tenping.kr/Content/Upload/Images/2026052013210001_Dis_20260520132102.png",
+    linkUrl: "https://iryan.kr/t8glyqwvqr",
   }
 };
