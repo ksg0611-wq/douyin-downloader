@@ -66,7 +66,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <h3 className="text-lg font-bold text-zinc-900">🎁 에디터 추천</h3>
             <p className="text-sm text-zinc-500 mt-1">블로그 독자만을 위한 특별한 혜택을 확인해 보세요!</p>
           </div>
-          <CPABanner ad={CPA_ADS.insurance} type="card" />
+          <CPABanner ad={CPA_ADS.main_cpa} type="card" />
         </div>
       </main>
 

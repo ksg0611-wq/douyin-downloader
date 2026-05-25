@@ -222,7 +222,7 @@ export default function Home() {
         <HeroSection />
 
         <div className="mb-6 w-full max-w-4xl mx-auto">
-          <CPABanner ad={CPA_ADS.car_finance} type="horizontal" />
+          <CPABanner ad={CPA_ADS.main_cpa} type="horizontal" />
         </div>
 
         <DownloaderCore 
