@@ -38,17 +38,24 @@ export function getSortedPostsData(): BlogPostMeta[] {
 
       // gray-matter를 사용하여 포스트의 메타데이터 파싱
       const matterResult = matter(fileContents);
+      const data = matterResult.data || {};
 
-      // 데이터와 id 결합
+      // 데이터와 id 결합 (필수 값이 없을 경우를 대비한 fallback)
       return {
         id,
-        ...(matterResult.data as Omit<BlogPostMeta, "id">),
+        title: data.title || "제목 없음",
+        summary: data.summary || "",
+        date: data.date || "2024. 01. 01",
+        category: data.category || "Uncategorized",
+        readTime: data.readTime || "1 min read",
       };
     });
 
   // 날짜 기준으로 내림차순 정렬 (최신 글이 먼저 오도록)
   return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
+    const dateA = a.date || "";
+    const dateB = b.date || "";
+    if (dateA < dateB) {
       return 1;
     } else {
       return -1;
@@ -66,10 +73,15 @@ export function getPostData(id: string): BlogPostDetail | null {
   
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const matterResult = matter(fileContents);
+  const data = matterResult.data || {};
 
   return {
     id,
     content: matterResult.content,
-    ...(matterResult.data as Omit<BlogPostMeta, "id">),
+    title: data.title || "제목 없음",
+    summary: data.summary || "",
+    date: data.date || "2024. 01. 01",
+    category: data.category || "Uncategorized",
+    readTime: data.readTime || "1 min read",
   };
 }

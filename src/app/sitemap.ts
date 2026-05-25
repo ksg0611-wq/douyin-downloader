@@ -16,8 +16,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getSortedPostsData();
   const blogRoutes = posts.map((post) => ({
     url: `${baseUrl}/blog/${post.id}`,
-    // 날짜 포맷 (예: '2024. 05. 25')을 유효한 ISO 포맷('2024-05-25')으로 변환
-    lastModified: new Date(post.date.replace(/\./g, '-').replace(/\s/g, '')).toISOString(),
+    // post.date가 없는 경우를 대비하여 방어 코드 추가 (Optional Chaining 및 Fallback)
+    lastModified: post.date 
+      ? new Date(post.date.replace(/\./g, '-').replace(/\s/g, '')).toISOString() 
+      : new Date().toISOString(),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }));
