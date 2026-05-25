@@ -1,0 +1,217 @@
+import React from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Link as LinkIcon, X, Clipboard, Download, RefreshCcw, AlertCircle, Flame, Sparkles, CheckCircle2 } from "lucide-react";
+import { MOCK_VIDEOS } from "../../data";
+
+interface DownloaderCoreProps {
+  url: string;
+  setUrl: (val: string) => void;
+  errorMessage: string;
+  setErrorMessage: (val: string) => void;
+  isAnalyzing: boolean;
+  handleAnalyze: () => void;
+  handlePaste: () => void;
+  handleQuickDemo: (url: string) => void;
+  analysisStep: number;
+}
+
+const stepsText = [
+  "접속 포트 분석기 초기화 및 패킷 스니핑 중...",
+  "Douyin 비디오 서명 서명 알고리즘 해제 및 암호화 우회 중...",
+  "1080p 고화질 무손실 데이터 스트림 파이프라인 생성 중...",
+  "오리지널 비디오 캐시 메모리에서 워터마크 태그 완전 분리 완료!"
+];
+
+export default function DownloaderCore({
+  url,
+  setUrl,
+  errorMessage,
+  setErrorMessage,
+  isAnalyzing,
+  handleAnalyze,
+  handlePaste,
+  handleQuickDemo,
+  analysisStep
+}: DownloaderCoreProps) {
+  return (
+    <section id="downloader-core" className="max-w-4xl mx-auto">
+      <div className="bg-zinc-950/60 border border-zinc-900 backdrop-blur-xl rounded-2xl p-4 sm:p-6 md:p-8 shadow-3xl shadow-black relative overflow-hidden">
+        
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#00f2fe]/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fe0979]/5 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative">
+          <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1 flex items-center justify-between">
+            <span>Douyin 동영상 링크 주소 입력하기</span>
+            <span className="text-[10px] text-zinc-500 font-normal normal-case">사파리, 크롬 복사 링크 완벽 통합 지원</span>
+          </label>
+
+          <div className="relative flex flex-col md:flex-row gap-3 items-stretch">
+            <div className="relative flex-grow group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-[#00f2fe] to-[#fe0979] rounded-xl opacity-20 group-focus-within:opacity-80 transition duration-300 blur-sm pointer-events-none" />
+              
+              <div className="relative flex items-center bg-zinc-900 border border-zinc-800 rounded-xl leading-none">
+                <span className="pl-4 text-zinc-500">
+                  <LinkIcon className="w-5 h-5 text-zinc-400 flex-shrink-0" />
+                </span>
+                
+                <input
+                  id="url-input"
+                  type="text"
+                  className="w-full bg-transparent text-zinc-100 placeholder-zinc-500 text-sm md:text-base px-3 py-4 focus:outline-none min-w-0 font-sans"
+                  placeholder="https://v.douyin.com/iyR8xP9q/ 또는 모바일 공유 텍스트 붙여넣기..."
+                  value={url}
+                  onChange={(e) => {
+                    setUrl(e.target.value);
+                    if (errorMessage) setErrorMessage("");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAnalyze();
+                  }}
+                />
+
+                {url && (
+                  <button
+                    onClick={() => setUrl("")}
+                    className="p-1 px-2.5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                    title="입력값 지우기"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+
+                <button
+                  onClick={handlePaste}
+                  className="mr-2 flex items-center gap-1 bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 text-zinc-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer hover:text-white transition-all font-medium flex-shrink-0"
+                  title="클립보드에서 자동 붙여넣기"
+                >
+                  <Clipboard className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">붙여넣기</span>
+                </button>
+              </div>
+            </div>
+
+            <button
+              onClick={handleAnalyze}
+              disabled={isAnalyzing}
+              className={`relative overflow-hidden rounded-xl font-bold text-sm md:text-base px-8 py-3.5 flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer text-white shadow-xl ${
+                isAnalyzing 
+                  ? "bg-zinc-800 border border-zinc-700 text-zinc-500 pointer-events-none cursor-not-allowed scale-95" 
+                  : "bg-gradient-to-r from-[#00f2fe] via-[#5c64ff] to-[#fe0979] hover:brightness-110 active:scale-95 hover:shadow-cyan-500/20"
+              }`}
+            >
+              <span className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors pointer-events-none" />
+              
+              {isAnalyzing ? (
+                <>
+                  <RefreshCcw className="w-5 h-5 animate-spin text-zinc-400" />
+                  <span>추출 분석 중...</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-5 h-5" />
+                  <span>워터마크 제거 & 다운로드</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          <AnimatePresence>
+            {errorMessage && (
+              <motion.div 
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-1.5 text-red-400 text-xs font-medium mt-3 px-1"
+              >
+                <AlertCircle className="w-3.5 h-3.5" />
+                <span>{errorMessage}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="mt-6 border-t border-zinc-900 pt-4">
+          <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 mb-2 px-1">
+            <Flame className="w-3 text-rose-500 animate-bounce" />
+            테스트용 Douyin 원클릭 샘플 링크 (직접 클릭해 하단에서 테스트 가능)
+          </p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            {MOCK_VIDEOS.map((v, idx) => (
+              <button
+                key={v.id}
+                onClick={() => handleQuickDemo(v.url)}
+                className="text-left bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700 p-2.5 rounded-lg text-xs leading-normal transition-all group flex items-start gap-2 max-w-full overflow-hidden"
+              >
+                <span className="w-5 h-5 rounded bg-zinc-800 text-zinc-400 text-[10px] font-bold flex items-center justify-center shrink-0 group-hover:bg-zinc-700 group-hover:text-[#00f2fe] transition-all">
+                  {idx + 1}
+                </span>
+                <div className="truncate">
+                  <div className="font-semibold text-zinc-300 group-hover:text-white truncate">
+                    {v.creatorName}
+                  </div>
+                  <div className="text-[10px] text-zinc-500 truncate mt-0.5">
+                    {v.title}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {isAnalyzing && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/95 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 z-20 text-center"
+            >
+              <div className="relative mb-6">
+                <div className="w-16 h-16 rounded-full border-4 border-zinc-800 border-t-cyan-400 border-r-rose-500 animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-cyan-400 animate-pulse" />
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold tracking-tight bg-gradient-to-r from-cyan-400 to-rose-400 bg-clip-text text-transparent mb-1">
+                인증 헤더 우회 분석 중
+              </h3>
+              <p className="text-xs text-zinc-400 mb-6 max-w-xs">
+                Douyin 시스템은 보안 쿠키 서신을 포함합니다. 수 밀리초 내에 AI 우회가 진행됩니다.
+              </p>
+
+              <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-lg p-3.5 text-left font-mono text-[10px] sm:text-xs text-zinc-400 space-y-2.5">
+                {stepsText.map((txt, index) => {
+                  const isDone = index < analysisStep;
+                  const isActive = index === analysisStep;
+                  return (
+                    <div 
+                      key={index} 
+                      className={`flex items-start gap-2.5 transition-all duration-300 ${
+                        isDone ? "text-cyan-400" : isActive ? "text-rose-400 font-semibold" : "text-zinc-600"
+                      }`}
+                    >
+                      <span className="shrink-0 mt-0.5">
+                        {isDone ? (
+                          <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                        ) : isActive ? (
+                          <RefreshCcw className="w-4 h-4 animate-spin text-rose-400 shrink-0" />
+                        ) : (
+                          <div className="w-3.5 h-3.5 rounded-full border border-zinc-700 bg-zinc-950" />
+                        )}
+                      </span>
+                      <span className="flex-grow">{txt}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+      </div>
+    </section>
+  );
+}
