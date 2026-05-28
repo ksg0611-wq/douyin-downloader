@@ -4,9 +4,11 @@ import { BookOpen, DownloadCloud } from "lucide-react";
 
 interface HeaderProps {
   theme?: "light" | "dark";
+  lang?: "ko" | "en";
+  setLang?: (val: "ko" | "en") => void;
 }
 
-export default function Header({ theme = "dark" }: HeaderProps) {
+export default function Header({ theme = "dark", lang = "ko", setLang }: HeaderProps) {
   const isDark = theme === "dark";
 
   return (
@@ -35,7 +37,7 @@ export default function Header({ theme = "dark" }: HeaderProps) {
                 </span>
               </h1>
               <p className={`text-[10px] sm:text-xs ${isDark ? 'text-zinc-500' : 'text-gray-500'}`}>
-                비즈니스 & 마케팅 인사이트
+                {lang === "ko" ? "비즈니스 & 마케팅 인사이트" : "Business & Marketing Insights"}
               </p>
             </div>
           </Link>
@@ -52,7 +54,7 @@ export default function Header({ theme = "dark" }: HeaderProps) {
             }`}
           >
             <BookOpen className="w-4 h-4" />
-            <span className="hidden sm:inline">블로그</span>
+            <span className="hidden sm:inline">{lang === "ko" ? "블로그" : "Blog"}</span>
           </Link>
           <Link 
             href="/download"
@@ -63,8 +65,34 @@ export default function Header({ theme = "dark" }: HeaderProps) {
             }`}
           >
             <DownloadCloud className="w-4 h-4" />
-            <span className="hidden sm:inline">다운로더</span>
+            <span className="hidden sm:inline">{lang === "ko" ? "다운로더" : "Downloader"}</span>
           </Link>
+
+          {/* KO | EN Language Toggle */}
+          {setLang && (
+            <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-0.5 ml-2">
+              <button
+                onClick={() => setLang("ko")}
+                className={`px-2 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                  lang === "ko"
+                    ? "bg-[#fe0979]/20 text-[#fe0979] border border-[#fe0979]/30 font-extrabold"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                KO
+              </button>
+              <button
+                onClick={() => setLang("en")}
+                className={`px-2 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                  lang === "en"
+                    ? "bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/30 font-extrabold"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                EN
+              </button>
+            </div>
+          )}
         </nav>
       </div>
     </header>

@@ -15,6 +15,7 @@ interface DownloaderCoreProps {
   analysisStep: number;
   platform: "douyin" | "xiaohongshu";
   setPlatform: (val: "douyin" | "xiaohongshu") => void;
+  lang?: "ko" | "en";
 }
 
 const stepsText = [
@@ -35,7 +36,8 @@ export default function DownloaderCore({
   handleQuickDemo,
   analysisStep,
   platform,
-  setPlatform
+  setPlatform,
+  lang = "ko"
 }: DownloaderCoreProps) {
   return (
     <section id="downloader-core" className="max-w-4xl mx-auto">
@@ -59,7 +61,7 @@ export default function DownloaderCore({
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-              도우인 (Douyin)
+              {lang === "ko" ? "도우인 (Douyin)" : "Douyin"}
             </button>
             <button
               onClick={() => {
@@ -73,13 +75,19 @@ export default function DownloaderCore({
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-              샤오홍수 (Xiaohongshu)
+              {lang === "ko" ? "샤오홍수 (Xiaohongshu)" : "Xiaohongshu"}
             </button>
           </div>
 
           <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1 flex items-center justify-between">
-            <span>{platform === "douyin" ? "Douyin 동영상 링크 주소 입력하기" : "Xiaohongshu 동영상/이미지 링크 주소 입력하기"}</span>
-            <span className="text-[10px] text-zinc-500 font-normal normal-case">사파리, 크롬 복사 링크 완벽 통합 지원</span>
+            <span>
+              {lang === "ko" 
+                ? (platform === "douyin" ? "Douyin 동영상 링크 주소 입력하기" : "Xiaohongshu 동영상/이미지 링크 주소 입력하기")
+                : (platform === "douyin" ? "Enter Douyin Video Link" : "Enter Xiaohongshu Video/Image Link")}
+            </span>
+            <span className="text-[10px] text-zinc-500 font-normal normal-case">
+              {lang === "ko" ? "사파리, 크롬 복사 링크 완벽 통합 지원" : "Fully supports Safari & Chrome copied links"}
+            </span>
           </label>
 
           <div className="relative flex flex-col md:flex-row gap-3 items-stretch">
@@ -95,7 +103,7 @@ export default function DownloaderCore({
                   id="url-input"
                   type="text"
                   className="w-full bg-transparent text-zinc-100 placeholder-zinc-500 text-sm md:text-base px-3 py-4 focus:outline-none min-w-0 font-sans"
-                  placeholder={platform === "douyin" ? "도우인 주소를 입력하세요" : "샤오홍수(xhslink) 주소를 입력하세요"}
+                  placeholder={lang === "ko" ? "여기에 동영상 링크를 붙여넣으세요..." : "Paste the video link here..."}
                   value={url}
                   onChange={(e) => {
                     setUrl(e.target.value);
@@ -110,7 +118,7 @@ export default function DownloaderCore({
                   <button
                     onClick={() => setUrl("")}
                     className="p-1 px-2.5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                    title="입력값 지우기"
+                    title={lang === "ko" ? "입력값 지우기" : "Clear input"}
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -119,10 +127,10 @@ export default function DownloaderCore({
                 <button
                   onClick={handlePaste}
                   className="mr-2 flex items-center gap-1 bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 text-zinc-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer hover:text-white transition-all font-medium flex-shrink-0"
-                  title="클립보드에서 자동 붙여넣기"
+                  title={lang === "ko" ? "클립보드에서 자동 붙여넣기" : "Paste from clipboard"}
                 >
                   <Clipboard className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">붙여넣기</span>
+                  <span className="hidden sm:inline">{lang === "ko" ? "붙여넣기" : "Paste"}</span>
                 </button>
               </div>
             </div>
@@ -141,12 +149,12 @@ export default function DownloaderCore({
               {isAnalyzing ? (
                 <>
                   <RefreshCcw className="w-5 h-5 animate-spin text-zinc-400" />
-                  <span>추출 분석 중...</span>
+                  <span>{lang === "ko" ? "추출 분석 중..." : "Analyzing..."}</span>
                 </>
               ) : (
                 <>
                   <Download className="w-5 h-5" />
-                  <span>워터마크 제거 & 다운로드</span>
+                  <span>{lang === "ko" ? "다운로드" : "Download"}</span>
                 </>
               )}
             </button>

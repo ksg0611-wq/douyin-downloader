@@ -21,6 +21,7 @@ import FAQSection from "@/components/home/FAQSection";
 export default function Home() {
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
+  const [lang, setLang] = useState<"ko" | "en">("ko");
   const [errorMessage, setErrorMessage] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisStep, setAnalysisStep] = useState(0);
@@ -105,22 +106,22 @@ export default function Home() {
     if (!url.trim()) {
       setErrorMessage(
         platform === "douyin"
-          ? "Douyin 비디오 주소를 정확히 입력해 주세요."
-          : "Xiaohongshu 주소를 정확히 입력해 주세요."
+          ? (lang === "ko" ? "Douyin 비디오 주소를 정확히 입력해 주세요." : "Please enter a valid Douyin video URL.")
+          : (lang === "ko" ? "Xiaohongshu 주소를 정확히 입력해 주세요." : "Please enter a valid Xiaohongshu URL.")
       );
       return;
     }
 
     // 예외 처리:
     if (platform === "xiaohongshu" && (url.includes("douyin.com") || url.includes("v.douyin"))) {
-      setErrorMessage("올바른 샤오홍수 링크가 아닙니다.");
-      showToast("올바른 샤오홍수 링크가 아닙니다.");
+      setErrorMessage(lang === "ko" ? "올바른 샤오홍수 링크가 아닙니다." : "Not a valid Xiaohongshu link.");
+      showToast(lang === "ko" ? "올바른 샤오홍수 링크가 아닙니다." : "Not a valid Xiaohongshu link.");
       return;
     }
 
     if (platform === "douyin" && (url.includes("xiaohongshu.com") || url.includes("xhslink.com"))) {
-      setErrorMessage("올바른 도우인 링크가 아닙니다.");
-      showToast("올바른 도우인 링크가 아닙니다.");
+      setErrorMessage(lang === "ko" ? "올바른 도우인 링크가 아닙니다." : "Not a valid Douyin link.");
+      showToast(lang === "ko" ? "올바른 도우인 링크가 아닙니다." : "Not a valid Douyin link.");
       return;
     }
 
@@ -154,12 +155,12 @@ export default function Home() {
       setAnalysisResult(data.data);
       saveToHistory(data.data);
       setDownloadSessionCount(c => c + 1);
-      showToast(data.warning || `${platform === "douyin" ? "Douyin" : "Xiaohongshu"} 분석 완료!`);
+      showToast(data.warning || `${platform === "douyin" ? "Douyin" : "Xiaohongshu"} ${lang === "ko" ? "분석 완료!" : "Analysis Complete!"}`);
       
     } catch (err: any) {
       clearInterval(interval);
       setErrorMessage(err.message);
-      showToast("분석에 실패했습니다.");
+      showToast(lang === "ko" ? "분석에 실패했습니다." : "Analysis failed.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -168,7 +169,7 @@ export default function Home() {
   const handleQuickDemo = (demoUrl: string) => {
     setUrl(demoUrl);
     setErrorMessage("");
-    showToast("데모 주소가 입력되었습니다. '다운로드'를 클릭하세요!");
+    showToast(lang === "ko" ? "데모 주소가 입력되었습니다. '다운로드'를 클릭하세요!" : "Demo URL entered. Click 'Download'!");
   };
 
   const triggerDownloadAction = (type: "video" | "audio") => {
@@ -177,7 +178,7 @@ export default function Home() {
     const targetUrl = type === "video" ? analysisResult.realVideoUrl : analysisResult.realAudioUrl;
     
     if (!targetUrl) {
-       showToast("다운로드할 수 있는 원본 미디어 링크가 없습니다.");
+       showToast(lang === "ko" ? "다운로드할 수 있는 원본 미디어 링크가 없습니다." : "No original media link available for download.");
        return;
     }
 
@@ -211,7 +212,9 @@ export default function Home() {
        clearInterval(stepInterval);
        setDownloadProgress(100);
        setDownloadCompleted(true);
-       showToast(type === "video" ? "MP4 비디오 저장 시작!" : "오디오 트랙 추출 시작!");
+       showToast(type === "video" 
+         ? (lang === "ko" ? "MP4 비디오 저장 시작!" : "MP4 Video download started!")
+         : (lang === "ko" ? "오디오 트랙 추출 시작!" : "Audio track extraction started!"));
        setTimeout(() => setDownloadProgress(null), 3000);
     }, 1500);
   };
@@ -232,12 +235,12 @@ export default function Home() {
       <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-rose-500/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 left-1/3 w-[450px] h-[450px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <Header />
+      <Header lang={lang} setLang={setLang} />
 
       <main id="app-main" className="flex-grow max-w-6xl w-full mx-auto px-4 py-6 md:py-10 z-10">
         <AdBanner position="top" />
 
-        <HeroSection />
+        <HeroSection lang={lang} />
 
         <div className="mb-6 w-full max-w-4xl mx-auto">
           <CPABanner ad={CPA_ADS.main_cpa} type="horizontal" />
@@ -255,6 +258,7 @@ export default function Home() {
           analysisStep={analysisStep}
           platform={platform}
           setPlatform={setPlatform}
+          lang={lang}
         />
 
         <AdBanner position="bottom" />
