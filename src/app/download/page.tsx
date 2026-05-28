@@ -20,6 +20,7 @@ import FAQSection from "@/components/home/FAQSection";
 
 export default function Home() {
   const [url, setUrl] = useState("");
+  const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [errorMessage, setErrorMessage] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisStep, setAnalysisStep] = useState(0);
@@ -102,7 +103,24 @@ export default function Home() {
 
   const handleAnalyze = async () => {
     if (!url.trim()) {
-      setErrorMessage("Douyin 비디오 주소를 정확히 입력해 주세요.");
+      setErrorMessage(
+        platform === "douyin"
+          ? "Douyin 비디오 주소를 정확히 입력해 주세요."
+          : "Xiaohongshu 주소를 정확히 입력해 주세요."
+      );
+      return;
+    }
+
+    // 예외 처리:
+    if (platform === "xiaohongshu" && (url.includes("douyin.com") || url.includes("v.douyin"))) {
+      setErrorMessage("올바른 샤오홍수 링크가 아닙니다.");
+      showToast("올바른 샤오홍수 링크가 아닙니다.");
+      return;
+    }
+
+    if (platform === "douyin" && (url.includes("xiaohongshu.com") || url.includes("xhslink.com"))) {
+      setErrorMessage("올바른 도우인 링크가 아닙니다.");
+      showToast("올바른 도우인 링크가 아닙니다.");
       return;
     }
 
@@ -122,7 +140,7 @@ export default function Home() {
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url, platform })
       });
       
       const data = await response.json();
@@ -136,7 +154,7 @@ export default function Home() {
       setAnalysisResult(data.data);
       saveToHistory(data.data);
       setDownloadSessionCount(c => c + 1);
-      showToast(data.warning || "Douyin 분석 완료!");
+      showToast(data.warning || `${platform === "douyin" ? "Douyin" : "Xiaohongshu"} 분석 완료!`);
       
     } catch (err: any) {
       clearInterval(interval);
@@ -235,6 +253,8 @@ export default function Home() {
           handlePaste={handlePaste} 
           handleQuickDemo={handleQuickDemo}
           analysisStep={analysisStep}
+          platform={platform}
+          setPlatform={setPlatform}
         />
 
         <AdBanner position="bottom" />

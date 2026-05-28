@@ -13,6 +13,8 @@ interface DownloaderCoreProps {
   handlePaste: () => void;
   handleQuickDemo: (url: string) => void;
   analysisStep: number;
+  platform: "douyin" | "xiaohongshu";
+  setPlatform: (val: "douyin" | "xiaohongshu") => void;
 }
 
 const stepsText = [
@@ -31,7 +33,9 @@ export default function DownloaderCore({
   handleAnalyze,
   handlePaste,
   handleQuickDemo,
-  analysisStep
+  analysisStep,
+  platform,
+  setPlatform
 }: DownloaderCoreProps) {
   return (
     <section id="downloader-core" className="max-w-4xl mx-auto">
@@ -41,8 +45,40 @@ export default function DownloaderCore({
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fe0979]/5 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative">
+          {/* Platform Selection Tab */}
+          <div className="flex gap-2.5 mb-5 p-1 bg-zinc-900/60 border border-zinc-800/80 rounded-xl max-w-sm">
+            <button
+              onClick={() => {
+                setPlatform("douyin");
+                setErrorMessage("");
+              }}
+              className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
+                platform === "douyin"
+                  ? "bg-gradient-to-r from-[#00f2fe]/20 to-[#fe0979]/20 border border-rose-500/30 text-white shadow-md shadow-[#fe0979]/10"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              도우인 (Douyin)
+            </button>
+            <button
+              onClick={() => {
+                setPlatform("xiaohongshu");
+                setErrorMessage("");
+              }}
+              className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
+                platform === "xiaohongshu"
+                  ? "bg-gradient-to-r from-[#fe0979]/20 to-[#00f2fe]/20 border border-cyan-500/30 text-white shadow-md shadow-[#00f2fe]/10"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              샤오홍수 (Xiaohongshu)
+            </button>
+          </div>
+
           <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1 flex items-center justify-between">
-            <span>Douyin 동영상 링크 주소 입력하기</span>
+            <span>{platform === "douyin" ? "Douyin 동영상 링크 주소 입력하기" : "Xiaohongshu 동영상/이미지 링크 주소 입력하기"}</span>
             <span className="text-[10px] text-zinc-500 font-normal normal-case">사파리, 크롬 복사 링크 완벽 통합 지원</span>
           </label>
 
@@ -59,7 +95,7 @@ export default function DownloaderCore({
                   id="url-input"
                   type="text"
                   className="w-full bg-transparent text-zinc-100 placeholder-zinc-500 text-sm md:text-base px-3 py-4 focus:outline-none min-w-0 font-sans"
-                  placeholder="https://v.douyin.com/iyR8xP9q/ 또는 모바일 공유 텍스트 붙여넣기..."
+                  placeholder={platform === "douyin" ? "도우인 주소를 입력하세요" : "샤오홍수(xhslink) 주소를 입력하세요"}
                   value={url}
                   onChange={(e) => {
                     setUrl(e.target.value);
