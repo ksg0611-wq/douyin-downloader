@@ -148,13 +148,13 @@ export default function DownloaderCore({
             </p>
           </div>
 
-          <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2 px-1 flex items-center justify-between">
+          <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-400 mb-2 px-1 flex items-center justify-between">
             <span>
               {lang === "ko" 
                 ? (platform === "douyin" ? "Douyin 동영상 링크 주소 입력하기" : "Xiaohongshu 동영상/이미지 링크 주소 입력하기")
                 : (platform === "douyin" ? "Enter Douyin Video Link" : "Enter Xiaohongshu Video/Image Link")}
             </span>
-            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-normal normal-case">
+            <span className="text-[10px] text-zinc-600 dark:text-zinc-500 font-normal normal-case">
               {lang === "ko" ? "사파리, 크롬 복사 링크 완벽 통합 지원" : "Fully supports Safari & Chrome copied links"}
             </span>
           </label>
@@ -171,7 +171,7 @@ export default function DownloaderCore({
                 <input
                   id="url-input"
                   type="text"
-                  className="w-full bg-transparent text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 text-sm md:text-base px-3 py-4 focus:outline-none min-w-0 font-sans"
+                  className="w-full bg-transparent text-zinc-800 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-500 text-sm md:text-base px-3 py-4 focus:outline-none min-w-0 font-sans"
                   placeholder={lang === "ko" ? "여기에 동영상 링크를 붙여넣으세요..." : "Paste the video link here..."}
                   value={url}
                   onChange={(e) => {
@@ -245,7 +245,7 @@ export default function DownloaderCore({
         </div>
 
         <div className="mt-6 border-t border-zinc-200 dark:border-zinc-900 pt-4">
-          <p className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 mb-2 px-1">
+          <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-550 uppercase tracking-widest flex items-center gap-1.5 mb-2 px-1">
             <Flame className="w-3 text-rose-500 animate-bounce" />
             테스트용 Douyin 원클릭 샘플 링크 (직접 클릭해 하단에서 테스트 가능)
           </p>
@@ -261,10 +261,10 @@ export default function DownloaderCore({
                   {idx + 1}
                 </span>
                 <div className="truncate">
-                  <div className="font-semibold text-zinc-700 group-hover:text-rose-600 dark:text-zinc-300 dark:group-hover:text-white truncate">
+                  <div className="font-semibold text-zinc-750 group-hover:text-rose-600 dark:text-zinc-300 dark:group-hover:text-white truncate">
                     {v.creatorName}
                   </div>
-                  <div className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate mt-0.5">
+                  <div className="text-[10px] text-zinc-550 dark:text-zinc-500 truncate mt-0.5">
                     {v.title}
                   </div>
                 </div>

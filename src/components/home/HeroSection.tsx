@@ -29,7 +29,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight"
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-900 dark:text-white"
         >
           도우인 · 샤오홍슈 비디오 <br className="sm:hidden" />
           <span className="bg-gradient-to-r from-[#00f2fe] via-purple-400 to-[#fe0979] bg-clip-text text-transparent">
@@ -41,7 +41,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight"
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-900 dark:text-white"
         >
           Douyin & Xiaohongshu <br className="sm:hidden" />
           <span className="bg-gradient-to-r from-[#00f2fe] via-purple-400 to-[#fe0979] bg-clip-text text-transparent">
@@ -50,7 +50,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
         </motion.h2>
       )}
 
-      <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed">
+      <p className="text-zinc-750 dark:text-zinc-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed font-medium">
         {lang === "ko" 
           ? "동영상 주소 입력 한 번으로 도우인 및 샤오홍슈의 워터마크 없는 원본 고화질 비디오를 즉시 추출합니다."
           : "Instantly extract watermark-free original HD videos from Douyin and Xiaohongshu with a single click."}
@@ -58,7 +58,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
 
       {/* 종합 크리에이터 툴박스 배지 라인업 */}
       <div className="mt-5 flex flex-wrap justify-center gap-1.5 max-w-2xl mx-auto px-4">
-        <span className="text-[10.5px] sm:text-xs text-zinc-500 font-bold self-center mr-1">
+        <span className="text-[10.5px] sm:text-xs text-zinc-700 dark:text-zinc-400 font-bold self-center mr-1">
           {lang === "ko" ? "💡 크리에이터 필수 도구 탑재:" : "💡 Integrated Creator Tools:"}
         </span>
         {[
@@ -70,7 +70,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
         ].map((item, index) => (
           <span
             key={index}
-            className="px-2.5 py-0.5 rounded-full bg-zinc-900/60 border border-zinc-800 text-[10px] sm:text-[11px] text-zinc-400 font-medium hover:border-zinc-700 hover:text-zinc-300 transition-colors"
+            className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-[10px] sm:text-[11px] text-zinc-750 dark:text-zinc-400 font-semibold hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors"
           >
             {lang === "ko" ? item.ko : item.en}
           </span>
