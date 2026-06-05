@@ -22,6 +22,7 @@ import GlobalTranslator from "@/components/home/GlobalTranslator";
 import RevenueSimulator from "@/components/home/RevenueSimulator";
 import ToolModal from "@/components/home/ToolModal";
 import SafeZonePreviewer from "@/components/home/SafeZonePreviewer";
+import BPMCalculator from "@/components/home/BPMCalculator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -66,11 +67,21 @@ const TOOLS = [
     icon: "📱",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
+  {
+    id: "bpm-calculator",
+    title: "숏폼 BGM 컷편집 계산기",
+    titleEn: "BGM Beat-Sync Editor",
+    desc: "음악 비트에 맞춰 화면을 탭하면 실시간 BPM을 측정하고 비디오 싱크 컷편집에 알맞은 정확한 초(Seconds) 단위를 계산합니다.",
+    descEn: "Tap to the music beats to measure real-time BPM and calculate precise cut durations (1/2/4 beat cuts) in seconds.",
+    icon: "🎵",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
   }
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | null>(null);
+  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -531,6 +542,8 @@ export default function Home() {
               ? (lang === "ko" ? "숏폼 예상 수익 시뮬레이터" : "Revenue Simulator")
               : activeTool === "safe-zone"
               ? (lang === "ko" ? "숏폼 안전 영역(Safe Zone) 프리뷰어" : "Short-form Safe Zone Previewer")
+              : activeTool === "bpm-calculator"
+              ? (lang === "ko" ? "숏폼 BGM 컷편집 계산기 (BPM Tapper)" : "BGM Beat-Sync Editor (BPM Tapper)")
               : ""
           }
         >
@@ -538,6 +551,7 @@ export default function Home() {
           {activeTool === "translator" && <GlobalTranslator />}
           {activeTool === "revenue" && <RevenueSimulator />}
           {activeTool === "safe-zone" && <SafeZonePreviewer lang={lang} />}
+          {activeTool === "bpm-calculator" && <BPMCalculator lang={lang} />}
         </ToolModal>
 
         <FAQSection 
