@@ -52,9 +52,30 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
 
       <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed">
         {lang === "ko" 
-          ? "동영상 링크 주소 한 번의 클릭만으로 도우인(Douyin)과 샤오홍슈(Xiaohongshu) 동영상의 브랜드 로고와 워터마크가 완전히 배제된 깔끔한 원본 고화질 버전을 즉시 다운로드 해 드립니다."
-          : "With just one click of the video link, instantly download clean, original high-definition videos with brand logos and watermarks completely removed from Douyin and Xiaohongshu."}
+          ? "동영상 주소 입력 한 번으로 도우인 및 샤오홍슈의 워터마크 없는 원본 고화질 비디오를 즉시 추출합니다."
+          : "Instantly extract watermark-free original HD videos from Douyin and Xiaohongshu with a single click."}
       </p>
+
+      {/* 종합 크리에이터 툴박스 배지 라인업 */}
+      <div className="mt-5 flex flex-wrap justify-center gap-1.5 max-w-2xl mx-auto px-4">
+        <span className="text-[10.5px] sm:text-xs text-zinc-500 font-bold self-center mr-1">
+          {lang === "ko" ? "💡 크리에이터 필수 도구 탑재:" : "💡 Integrated Creator Tools:"}
+        </span>
+        {[
+          { ko: "📝 AI 대본 추출·요약", en: "📝 AI Script Extractor" },
+          { ko: "📊 해시태그 트렌드 분석", en: "📊 Hashtag Trend" },
+          { ko: "🌐 다국어 제목 번역", en: "🌐 Global Translator" },
+          { ko: "🎨 썸네일 자막 합성", en: "🎨 Thumbnail Editor" },
+          { ko: "🧮 예상 수익 계산기", en: "🧮 Revenue Simulator" },
+        ].map((item, index) => (
+          <span
+            key={index}
+            className="px-2.5 py-0.5 rounded-full bg-zinc-900/60 border border-zinc-800 text-[10px] sm:text-[11px] text-zinc-400 font-medium hover:border-zinc-700 hover:text-zinc-300 transition-colors"
+          >
+            {lang === "ko" ? item.ko : item.en}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
