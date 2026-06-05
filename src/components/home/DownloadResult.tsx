@@ -1,6 +1,6 @@
 import React from "react";
-import { motion } from "motion/react";
-import { Video, Play, Download, Music, RefreshCcw, CheckCircle2, Image as ImageIcon, Sparkles, Copy, Check } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { Video, Play, Music, RefreshCcw, CheckCircle2, Sparkles, Copy, FileText, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
 import { VideoMock } from "../../types";
 import CPABanner from "../CPABanner";
 import { CPA_ADS } from "@/data/ads";
@@ -30,6 +30,12 @@ export default function DownloadResult({
   const [captionText, setCaptionText] = React.useState<string>("");
   const [isGenerating, setIsGenerating] = React.useState<boolean>(false);
   const [isCopied, setIsCopied] = React.useState<boolean>(false);
+
+  // AI 대본 추출 관련 state
+  const [scriptText, setScriptText] = React.useState<string>("");
+  const [isExtractingScript, setIsExtractingScript] = React.useState<boolean>(false);
+  const [isScriptCopied, setIsScriptCopied] = React.useState<boolean>(false);
+  const [scriptExpanded, setScriptExpanded] = React.useState<boolean>(true);
 
   const handleDownloadThumbnail = async () => {
     if (!analysisResult.thumbnail) return;
@@ -94,13 +100,97 @@ export default function DownloadResult({
     try {
       await navigator.clipboard.writeText(captionText);
       setIsCopied(true);
-      if (showToast) {
-        showToast("클립보드에 복사되었습니다! 📋");
-      }
+      if (showToast) showToast("클립보드에 복사되었습니다! 📋");
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleExtractScript = async () => {
+    const audioUrl = analysisResult.realAudioUrl;
+    if (!audioUrl) {
+      if (showToast) showToast("이 영상에는 분석 가능한 오디오 주소가 없습니다.");
+      return;
+    }
+    setIsExtractingScript(true);
+    setScriptText("");
+    setScriptExpanded(true);
+    try {
+      const response = await fetch("/api/extract-script", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          audioUrl,
+          videoTitle: analysisResult.title,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error?.message || "대본 추출에 실패했습니다.");
+      }
+      setScriptText(data.script || "");
+      if (showToast) showToast("AI 대본 추출 완료! 📜");
+    } catch (err: any) {
+      console.error(err);
+      if (showToast) showToast(err.message || "잠시 후 다시 시도해 주세요.");
+    } finally {
+      setIsExtractingScript(false);
+    }
+  };
+
+  const handleCopyScript = async () => {
+    try {
+      await navigator.clipboard.writeText(scriptText);
+      setIsScriptCopied(true);
+      if (showToast) showToast("대본이 클립보드에 복사되었습니다! 📋");
+      setTimeout(() => setIsScriptCopied(false), 2000);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // 마크다운 텍스트를 간단하게 HTML로 렌더링하는 파서
+  const renderMarkdown = (text: string) => {
+    return text
+      .split("\n")
+      .map((line, i) => {
+        // H2
+        if (line.startsWith("## ")) return <h2 key={i} className="text-sm font-black text-cyan-300 mt-4 mb-2 flex items-center gap-1.5"><BookOpen className="w-3.5 h-3.5 shrink-0" />{line.slice(3)}</h2>;
+        // H3
+        if (line.startsWith("### ")) return <h3 key={i} className="text-xs font-bold text-purple-300 mt-3 mb-1.5">{line.slice(4)}</h3>;
+        // H1
+        if (line.startsWith("# ")) return <h1 key={i} className="text-base font-black text-white mt-4 mb-2">{line.slice(2)}</h1>;
+        // 구분선
+        if (line.startsWith("---") || line.startsWith("***")) return <hr key={i} className="border-zinc-700 my-3" />;
+        // 인용문
+        if (line.startsWith("> ")) return <blockquote key={i} className="border-l-2 border-yellow-500/60 pl-3 text-yellow-300/80 italic text-xs my-1">{line.slice(2)}</blockquote>;
+        // 테이블 행
+        if (line.startsWith("|") && line.endsWith("|")) {
+          const cells = line.split("|").filter((c) => c.trim() !== "");
+          const isSeparator = cells.every(c => /^[-:]+$/.test(c.trim()));
+          if (isSeparator) return null;
+          const isHeader = i > 0 ? false : true;
+          return (
+            <tr key={i} className="border-b border-zinc-800">
+              {cells.map((cell, j) => (
+                <td key={j} className="px-2.5 py-1.5 text-[11px] text-zinc-300 leading-relaxed">{cell.trim()}</td>
+              ))}
+            </tr>
+          );
+        }
+        // 불릿 리스트
+        if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} className="text-xs text-zinc-300 ml-3 list-disc leading-relaxed">{line.slice(2)}</li>;
+        // 번호 리스트
+        if (/^\d+\. /.test(line)) return <li key={i} className="text-xs text-zinc-300 ml-3 list-decimal leading-relaxed">{line.replace(/^\d+\. /, "")}</li>;
+        // 빈 줄
+        if (line.trim() === "") return <div key={i} className="h-1" />;
+        // 굵은 텍스트 처리 (인라인)
+        const boldProcessed = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+        // 일반 텍스트
+        return <p key={i} className="text-xs text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: boldProcessed }} />;
+      })
+      .filter(Boolean);
   };
 
   return (
@@ -333,6 +423,207 @@ export default function DownloadResult({
                     </div>
                   </motion.div>
                 )}
+              </div>
+
+              {/* ═══ AI 대본 추출 섹션 ═══ */}
+              <div className="space-y-3">
+                {/* 대본 추출 버튼 */}
+                <button
+                  id="extract-script-btn"
+                  onClick={handleExtractScript}
+                  disabled={isExtractingScript || !analysisResult.realAudioUrl}
+                  className="w-full py-3.5 bg-gradient-to-r from-emerald-700 via-teal-600 to-cyan-700 hover:brightness-110 active:scale-[0.99] text-white font-extrabold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-teal-950/20 disabled:opacity-60 disabled:cursor-not-allowed relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-white/5 hover:bg-transparent pointer-events-none" />
+                  {isExtractingScript ? (
+                    <>
+                      <RefreshCcw className="w-4 h-4 animate-spin text-white" />
+                      <span>AI가 음성을 분석 중...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="w-4 h-4 text-white" />
+                      <span>📝 AI 영상 대본 추출 및 요약하기</span>
+                    </>
+                  )}
+                </button>
+
+                {/* 로딩 중 상태 배너 */}
+                <AnimatePresence>
+                  {isExtractingScript && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="bg-teal-950/40 border border-teal-500/30 rounded-xl p-4 flex flex-col items-center gap-3">
+                        {/* 파형 애니메이션 */}
+                        <div className="flex items-end gap-0.5 h-8">
+                          {[0.4, 0.7, 1, 0.8, 0.5, 0.9, 0.6, 1, 0.7, 0.4, 0.8, 0.5].map((h, i) => (
+                            <div
+                              key={i}
+                              className="w-1 bg-gradient-to-t from-teal-500 to-cyan-300 rounded-full animate-pulse"
+                              style={{
+                                height: `${h * 100}%`,
+                                animationDelay: `${i * 80}ms`,
+                                animationDuration: `${600 + i * 50}ms`,
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <div className="text-center">
+                          <p className="text-xs font-bold text-teal-300">AI가 영상의 음성을 분석하고 번역하는 중입니다...</p>
+                          <p className="text-[10px] text-zinc-500 mt-0.5">약 10~20초 소요됩니다. 잠시만 기다려 주세요 ☕</p>
+                        </div>
+                        <div className="w-full bg-zinc-900 rounded-full h-1 overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-teal-500 to-cyan-400 rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '60%' }} />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* 대본 결과 마크다운 뷰어 */}
+                <AnimatePresence>
+                  {scriptText && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="border border-teal-500/25 bg-gradient-to-b from-teal-950/20 to-zinc-950/40 rounded-xl overflow-hidden"
+                    >
+                      {/* 헤더 바 */}
+                      <div className="flex items-center justify-between px-4 py-2.5 border-b border-teal-500/20 bg-teal-950/30">
+                        <span className="text-xs font-black text-teal-300 flex items-center gap-1.5">
+                          <BookOpen className="w-3.5 h-3.5 text-teal-400" />
+                          📜 AI 번역 대본 & 마케팅 요약본
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          {/* 복사 버튼 */}
+                          <button
+                            onClick={handleCopyScript}
+                            className="p-1.5 px-2.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-[11px] font-bold"
+                          >
+                            {isScriptCopied ? (
+                              <>
+                                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                                <span className="text-emerald-400">복사됨</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                <span>복사하기</span>
+                              </>
+                            )}
+                          </button>
+                          {/* 접기/펼치기 버튼 */}
+                          <button
+                            onClick={() => setScriptExpanded(p => !p)}
+                            className="p-1.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white transition-all cursor-pointer"
+                          >
+                            {scriptExpanded
+                              ? <ChevronUp className="w-3.5 h-3.5" />
+                              : <ChevronDown className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* 본문 마크다운 렌더러 */}
+                      <AnimatePresence>
+                        {scriptExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="p-4 space-y-0.5 max-h-[480px] overflow-y-auto custom-scrollbar">
+                              {/* 테이블 행 모아서 table 태그로 감싸기 */}
+                              {(() => {
+                                const lines = scriptText.split("\n");
+                                const elements: React.ReactNode[] = [];
+                                let tableRows: React.ReactNode[] = [];
+                                let tableHeaderParsed = false;
+
+                                const flushTable = (key: string) => {
+                                  if (tableRows.length > 0) {
+                                    elements.push(
+                                      <div key={`tbl-${key}`} className="overflow-x-auto my-3 rounded-lg border border-zinc-800">
+                                        <table className="w-full text-left border-collapse">
+                                          <tbody>{tableRows}</tbody>
+                                        </table>
+                                      </div>
+                                    );
+                                    tableRows = [];
+                                    tableHeaderParsed = false;
+                                  }
+                                };
+
+                                lines.forEach((line, i) => {
+                                  const isTableLine = line.startsWith("|") && line.endsWith("|");
+                                  const isSeparator = isTableLine && line.split("|").filter(c => c.trim()).every(c => /^[-:]+$/.test(c.trim()));
+
+                                  if (isTableLine && !isSeparator) {
+                                    const cells = line.split("|").filter((c) => c.trim() !== "");
+                                    if (!tableHeaderParsed) {
+                                      tableRows.push(
+                                        <tr key={i} className="bg-teal-950/40 border-b border-zinc-700">
+                                          {cells.map((c, j) => (
+                                            <th key={j} className="px-3 py-2 text-[11px] font-black text-teal-300 whitespace-nowrap">{c.trim()}</th>
+                                          ))}
+                                        </tr>
+                                      );
+                                      tableHeaderParsed = true;
+                                    } else {
+                                      tableRows.push(
+                                        <tr key={i} className="border-b border-zinc-800/60 hover:bg-teal-950/10 transition-colors">
+                                          {cells.map((c, j) => (
+                                            <td key={j} className="px-3 py-2 text-[11px] text-zinc-300 leading-relaxed">{c.trim()}</td>
+                                          ))}
+                                        </tr>
+                                      );
+                                    }
+                                  } else if (isSeparator) {
+                                    // 구분자 행 무시
+                                  } else {
+                                    flushTable(String(i));
+                                    // 일반 마크다운 렌더링
+                                    if (line.startsWith("## ")) {
+                                      elements.push(<h2 key={i} className="text-sm font-black text-cyan-300 mt-5 mb-2 flex items-center gap-1.5 border-b border-cyan-500/20 pb-1.5"><BookOpen className="w-3.5 h-3.5 shrink-0" />{line.slice(3)}</h2>);
+                                    } else if (line.startsWith("### ")) {
+                                      elements.push(<h3 key={i} className="text-xs font-bold text-teal-300 mt-3 mb-1.5">{line.slice(4)}</h3>);
+                                    } else if (line.startsWith("# ")) {
+                                      elements.push(<h1 key={i} className="text-base font-black text-white mt-4 mb-2">{line.slice(2)}</h1>);
+                                    } else if (line.startsWith("> ")) {
+                                      elements.push(<blockquote key={i} className="border-l-2 border-yellow-500/60 pl-3 text-yellow-300/80 italic text-xs my-1.5">{line.slice(2)}</blockquote>);
+                                    } else if (line.startsWith("---")) {
+                                      elements.push(<hr key={i} className="border-zinc-700/60 my-3" />);
+                                    } else if (line.startsWith("- ") || line.startsWith("* ")) {
+                                      elements.push(<li key={i} className="text-xs text-zinc-300 ml-4 list-disc leading-relaxed">{line.slice(2)}</li>);
+                                    } else if (/^\d+\.\s/.test(line)) {
+                                      elements.push(<li key={i} className="text-xs text-zinc-300 ml-4 list-decimal leading-relaxed">{line.replace(/^\d+\.\s/, "")}</li>);
+                                    } else if (line.trim() === "") {
+                                      elements.push(<div key={i} className="h-1.5" />);
+                                    } else {
+                                      const html = line
+                                        .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
+                                        .replace(/`(.+?)`/g, '<code class="bg-zinc-800 text-cyan-300 px-1 py-0.5 rounded text-[10px] font-mono">$1</code>');
+                                      elements.push(<p key={i} className="text-xs text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />);
+                                    }
+                                  }
+                                });
+                                flushTable("end");
+                                return elements;
+                              })()}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Reset/New analysis button */}
