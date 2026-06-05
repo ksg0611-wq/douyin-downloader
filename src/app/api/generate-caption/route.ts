@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     }
 
     // 구글 2026 최신 정식 규격 주소 및 payload 구조 강제 고정
-    const targetUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
     
     const response = await fetch(targetUrl, {
       method: 'POST',
