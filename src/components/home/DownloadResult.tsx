@@ -1,9 +1,10 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Video, Play, Music, RefreshCcw, CheckCircle2, Sparkles, Copy, FileText, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
+import { Video, Play, Music, RefreshCcw, CheckCircle2, Sparkles, Copy, FileText, BookOpen, ChevronDown, ChevronUp, Palette } from "lucide-react";
 import { VideoMock } from "../../types";
 import CPABanner from "../CPABanner";
 import { CPA_ADS } from "@/data/ads";
+import ThumbnailEditor from "./ThumbnailEditor";
 
 interface DownloadResultProps {
   analysisResult: VideoMock;
@@ -27,6 +28,7 @@ export default function DownloadResult({
   showToast
 }: DownloadResultProps) {
   const [thumbnailProgress, setThumbnailProgress] = React.useState<boolean>(false);
+  const [showEditor, setShowEditor] = React.useState<boolean>(false);
   const [captionText, setCaptionText] = React.useState<string>("");
   const [isGenerating, setIsGenerating] = React.useState<boolean>(false);
   const [isCopied, setIsCopied] = React.useState<boolean>(false);
@@ -360,7 +362,7 @@ export default function DownloadResult({
                   </span>
                 </button>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 gap-2">
                   {/* 2. MP3 Audio Extraction Button */}
                   <button
                     onClick={() => triggerDownloadAction("audio")}
@@ -370,24 +372,37 @@ export default function DownloadResult({
                     <span>오디오(MP3)만 추출하기</span>
                   </button>
 
-                  {/* 3. HD Thumbnail Download Button */}
-                  <button
-                    onClick={handleDownloadThumbnail}
-                    disabled={thumbnailProgress}
-                    className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs sm:text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
-                  >
-                    {thumbnailProgress ? (
-                      <>
-                        <RefreshCcw className="w-4 h-4 text-purple-400 animate-spin" />
-                        <span>썸네일 다운로드 중...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-sm leading-none">🖼️</span>
-                        <span>고화질 썸네일 다운로드</span>
-                      </>
-                    )}
-                  </button>
+                  {/* 3 & 4: 썸네일 + 에디터 버튼 (2열 그리드) */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {/* 3. HD Thumbnail Download */}
+                    <button
+                      onClick={handleDownloadThumbnail}
+                      disabled={thumbnailProgress}
+                      className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                    >
+                      {thumbnailProgress ? (
+                        <>
+                          <RefreshCcw className="w-4 h-4 text-purple-400 animate-spin" />
+                          <span>다운로드 중...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-sm leading-none">🖼️</span>
+                          <span>썸네일 다운로드</span>
+                        </>
+                      )}
+                    </button>
+
+                    {/* 4. 🎨 커버 에디터 버튼 (NEW) */}
+                    <button
+                      id="thumbnail-editor-open-btn"
+                      onClick={() => setShowEditor(true)}
+                      className="relative overflow-hidden bg-gradient-to-r from-rose-900/60 to-purple-900/60 hover:from-rose-800/70 hover:to-purple-800/70 border border-rose-700/40 hover:border-rose-600/60 text-rose-200 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                    >
+                      <Palette className="w-3.5 h-3.5 text-rose-300" />
+                      <span>🎨 커버 에디터</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -700,6 +715,14 @@ export default function DownloadResult({
       <div className="mt-6 w-full max-w-4xl mx-auto">
         <CPABanner ad={CPA_ADS.download_result} type="horizontal" />
       </div>
+
+      {/* 🎨 썸네일 커버 에디터 모달 */}
+      <ThumbnailEditor
+        thumbnailUrl={analysisResult.thumbnail}
+        videoId={analysisResult.id}
+        isOpen={showEditor}
+        onClose={() => setShowEditor(false)}
+      />
     </motion.section>
   );
 }
