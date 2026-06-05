@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     const prompt = `${systemInstruction}\n\n영상 제목: "${title}"`;
 
-    const modelName = "gemini-1.5-flash";
+    const modelName = "gemini-pro";
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
