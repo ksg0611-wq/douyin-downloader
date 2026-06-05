@@ -384,7 +384,7 @@ export default function Home() {
           lang={lang}
         />
 
-        <AdBanner position="bottom" />
+        {/* <AdBanner position="bottom" /> */} {/* 구글 애드센스 승인 완료 시 주석 해제하여 활성화 (하단 Mock Slot) */}
 
         <AnimatePresence>
           {analysisResult && (
