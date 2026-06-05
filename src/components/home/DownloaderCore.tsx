@@ -39,6 +39,48 @@ export default function DownloaderCore({
   setPlatform,
   lang = "ko"
 }: DownloaderCoreProps) {
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    // 0에서 3420까지 1초간 부드럽게 상승하는 CountUp 효과
+    const target = 3420;
+    const duration = 1000; // 1초
+    const stepTime = 15;
+    const steps = duration / stepTime;
+    const increment = Math.ceil(target / steps);
+    
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(current);
+      }
+    }, stepTime);
+
+    // 3~7초 간격으로 +1 또는 +2씩 실시간으로 추가되는 타이머 (라이브 시뮬레이션)
+    let dynamicTimer: NodeJS.Timeout;
+    const scheduleNextAddition = () => {
+      const delay = Math.floor(Math.random() * 4000) + 3000;
+      dynamicTimer = setTimeout(() => {
+        const addition = Math.random() > 0.5 ? 2 : 1;
+        setCount((prev) => prev + addition);
+        scheduleNextAddition();
+      }, delay);
+    };
+
+    setTimeout(() => {
+      scheduleNextAddition();
+    }, duration);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(dynamicTimer);
+    };
+  }, []);
+
   return (
     <section id="downloader-core" className="max-w-4xl mx-auto">
       <div className="bg-zinc-950/60 border border-zinc-900 backdrop-blur-xl rounded-2xl p-4 sm:p-6 md:p-8 shadow-3xl shadow-black relative overflow-hidden">
@@ -77,6 +119,33 @@ export default function DownloaderCore({
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
               {lang === "ko" ? "샤오홍수 (Xiaohongshu)" : "Xiaohongshu"}
             </button>
+          </div>
+
+          {/* 실시간 라이브 트래픽 카운터 배너 */}
+          <div className="mb-5 p-3 rounded-xl bg-zinc-900/30 border border-zinc-900/60 flex items-center justify-center gap-2 relative overflow-hidden backdrop-blur-sm">
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent animate-pulse" />
+            <span className="flex h-2 w-2 relative shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
+            <p className="text-xs sm:text-sm font-semibold text-zinc-300 tracking-wide">
+              {lang === "ko" ? (
+                <>
+                  🔥 오늘 전 세계 크리에이터가 다운로드한 영상:{" "}
+                  <span className="font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-rose-400">
+                    {count.toLocaleString()}
+                  </span>
+                  개
+                </>
+              ) : (
+                <>
+                  🔥 Total videos downloaded by creators worldwide today:{" "}
+                  <span className="font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-rose-400">
+                    {count.toLocaleString()}
+                  </span>
+                </>
+              )}
+            </p>
           </div>
 
           <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1 flex items-center justify-between">
