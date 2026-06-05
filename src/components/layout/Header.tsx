@@ -68,6 +68,21 @@ export default function Header({ theme = "dark", lang = "ko", setLang }: HeaderP
             <span className="hidden sm:inline">{lang === "ko" ? "다운로더" : "Downloader"}</span>
           </Link>
 
+          <a 
+            href="https://global-toolbox.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
+              isDark 
+                ? "text-zinc-400 hover:text-white hover:bg-zinc-900 border-zinc-800 hover:border-zinc-700" 
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100 border-gray-200"
+            }`}
+            title={lang === "ko" ? "글로벌 툴박스 바로가기" : "Go to Global Toolbox"}
+          >
+            <span>🧰</span>
+            <span className="hidden sm:inline">{lang === "ko" ? "글로벌 툴박스" : "Global Toolbox"}</span>
+          </a>
+
           {/* KO | EN Language Toggle */}
           {setLang && (
             <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-0.5 ml-2">
