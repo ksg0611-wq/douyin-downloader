@@ -393,14 +393,14 @@ export default function DownloadResult({
                       )}
                     </button>
 
-                    {/* 4. 🎨 커버 에디터 버튼 (NEW) */}
+                    {/* 4. 🎨 썸네일 자막 합성 버튼 */}
                     <button
                       id="thumbnail-editor-open-btn"
                       onClick={() => setShowEditor(true)}
-                      className="relative overflow-hidden bg-gradient-to-r from-rose-900/60 to-purple-900/60 hover:from-rose-800/70 hover:to-purple-800/70 border border-rose-700/40 hover:border-rose-600/60 text-rose-200 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                      className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
                     >
-                      <Palette className="w-3.5 h-3.5 text-rose-300" />
-                      <span>🎨 커버 에디터</span>
+                      <Palette className="w-3.5 h-3.5 text-zinc-300" />
+                      <span>🎨 썸네일 자막 합성</span>
                     </button>
                   </div>
                 </div>
