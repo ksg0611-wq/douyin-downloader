@@ -24,6 +24,7 @@ import ToolModal from "@/components/home/ToolModal";
 import SafeZonePreviewer from "@/components/home/SafeZonePreviewer";
 import BPMCalculator from "@/components/home/BPMCalculator";
 import ShadowbanScanner from "@/components/home/ShadowbanScanner";
+import HookGenerator from "@/components/home/HookGenerator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -88,11 +89,21 @@ const TOOLS = [
     icon: "🛡️",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
+  {
+    id: "hook-generator",
+    title: "3초 후킹 대본 생성기",
+    titleEn: "3-Second Hook Generator",
+    desc: "영상 주제만 입력하면, 시청자의 시선을 3초 안에 사로잡을 3대 스타일의 도입부 대본을 AI가 즉시 자동 생성합니다.",
+    descEn: "Enter a topic to generate 3-second viral script hooks (facts, empathy, questions) using Gemini AI.",
+    icon: "🪄",
+    badge: "AI",
+    badgeColor: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/30",
   }
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | null>(null);
+  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -557,6 +568,8 @@ export default function Home() {
               ? (lang === "ko" ? "숏폼 BGM 컷편집 계산기 (BPM Tapper)" : "BGM Beat-Sync Editor (BPM Tapper)")
               : activeTool === "shadowban-scanner"
               ? (lang === "ko" ? "틱톡/도우인 섀도우밴 위험 단어 스캐너" : "TikTok/Douyin Shadowban Word Scanner")
+              : activeTool === "hook-generator"
+              ? (lang === "ko" ? "AI 3초 후킹 대본 생성기" : "AI 3-Second Hook Generator")
               : ""
           }
         >
@@ -566,6 +579,7 @@ export default function Home() {
           {activeTool === "safe-zone" && <SafeZonePreviewer lang={lang} />}
           {activeTool === "bpm-calculator" && <BPMCalculator lang={lang} />}
           {activeTool === "shadowban-scanner" && <ShadowbanScanner lang={lang} />}
+          {activeTool === "hook-generator" && <HookGenerator lang={lang} />}
         </ToolModal>
 
         <FAQSection 

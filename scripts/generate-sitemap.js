@@ -8,7 +8,7 @@ const publicDirectory = path.join(process.cwd(), 'public');
 function generateSitemap() {
   console.log('Generating sitemap.xml...');
   
-  const staticRoutes = ['', '/blog', '/privacy', '/terms', '/safe-zone', '/bpm-calculator', '/shadowban-scanner'];
+  const staticRoutes = ['', '/blog', '/privacy', '/terms', '/safe-zone', '/bpm-calculator', '/shadowban-scanner', '/hook-generator'];
   
   let posts = [];
   if (fs.existsSync(postsDirectory)) {

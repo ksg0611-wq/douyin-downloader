@@ -3,43 +3,49 @@
   
   <url>
     <loc>https://shortspack.com</loc>
-    <lastmod>2026-06-05T15:03:31.247Z</lastmod>
+    <lastmod>2026-06-05T15:07:52.237Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://shortspack.com/blog</loc>
-    <lastmod>2026-06-05T15:03:31.248Z</lastmod>
+    <lastmod>2026-06-05T15:07:52.238Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shortspack.com/privacy</loc>
-    <lastmod>2026-06-05T15:03:31.248Z</lastmod>
+    <lastmod>2026-06-05T15:07:52.238Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shortspack.com/terms</loc>
-    <lastmod>2026-06-05T15:03:31.248Z</lastmod>
+    <lastmod>2026-06-05T15:07:52.238Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shortspack.com/safe-zone</loc>
-    <lastmod>2026-06-05T15:03:31.248Z</lastmod>
+    <lastmod>2026-06-05T15:07:52.238Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shortspack.com/bpm-calculator</loc>
-    <lastmod>2026-06-05T15:03:31.248Z</lastmod>
+    <lastmod>2026-06-05T15:07:52.238Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shortspack.com/shadowban-scanner</loc>
-    <lastmod>2026-06-05T15:03:31.248Z</lastmod>
+    <lastmod>2026-06-05T15:07:52.238Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shortspack.com/hook-generator</loc>
+    <lastmod>2026-06-05T15:07:52.238Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
