@@ -13,9 +13,9 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="inline-flex items-center gap-1.5 bg-gradient-to-r from-cyan-950/40 via-purple-950/20 to-rose-950/40 border border-zinc-800 px-3 py-1.5 rounded-full text-xs text-zinc-400 mb-4"
+        className="inline-flex items-center gap-1.5 bg-blue-50/80 dark:bg-zinc-900/60 border border-blue-200 dark:border-zinc-800 px-3.5 py-1.5 rounded-full text-xs text-blue-900 dark:text-zinc-400 mb-4 font-semibold shadow-sm dark:shadow-none"
       >
-        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+        <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
         <span>
           {lang === "ko" 
             ? "최신 Douyin · Xiaohongshu V2 전용 아웃트로 컷팅 알고리즘 업데이트 완료"
@@ -29,10 +29,10 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-900 dark:text-white"
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-950 dark:text-white"
         >
           도우인 · 샤오홍슈 비디오 <br className="sm:hidden" />
-          <span className="bg-gradient-to-r from-[#00f2fe] via-purple-400 to-[#fe0979] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-600 via-purple-650 to-rose-600 dark:from-[#00f2fe] dark:via-purple-400 dark:to-[#fe0979] bg-clip-text text-transparent">
             워터마크 없는 초고화질
           </span> 다운로드
         </motion.h2>
@@ -41,16 +41,16 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-900 dark:text-white"
+          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-950 dark:text-white"
         >
           Douyin & Xiaohongshu <br className="sm:hidden" />
-          <span className="bg-gradient-to-r from-[#00f2fe] via-purple-400 to-[#fe0979] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-600 via-purple-650 to-rose-600 dark:from-[#00f2fe] dark:via-purple-400 dark:to-[#fe0979] bg-clip-text text-transparent">
             Watermark-Free HD
           </span> Downloader
         </motion.h2>
       )}
 
-      <p className="text-zinc-750 dark:text-zinc-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed font-medium">
+      <p className="text-zinc-800 dark:text-zinc-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed font-semibold">
         {lang === "ko" 
           ? "동영상 주소 입력 한 번으로 도우인 및 샤오홍슈의 워터마크 없는 원본 고화질 비디오를 즉시 추출합니다."
           : "Instantly extract watermark-free original HD videos from Douyin and Xiaohongshu with a single click."}
@@ -58,7 +58,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
 
       {/* 종합 크리에이터 툴박스 배지 라인업 */}
       <div className="mt-5 flex flex-wrap justify-center gap-1.5 max-w-2xl mx-auto px-4">
-        <span className="text-[10.5px] sm:text-xs text-zinc-700 dark:text-zinc-400 font-bold self-center mr-1">
+        <span className="text-[10.5px] sm:text-xs text-zinc-850 dark:text-zinc-400 font-extrabold self-center mr-1">
           {lang === "ko" ? "💡 크리에이터 필수 도구 탑재:" : "💡 Integrated Creator Tools:"}
         </span>
         {[
@@ -70,7 +70,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
         ].map((item, index) => (
           <span
             key={index}
-            className="px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-[10px] sm:text-[11px] text-zinc-750 dark:text-zinc-400 font-semibold hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-900 dark:hover:text-zinc-300 transition-colors"
+            className="px-2.5 py-0.5 rounded-full bg-zinc-150/80 dark:bg-zinc-900/60 border border-zinc-250 dark:border-zinc-800 text-[10px] sm:text-[11px] text-zinc-850 dark:text-zinc-400 font-bold hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-950 dark:hover:text-zinc-300 transition-colors"
           >
             {lang === "ko" ? item.ko : item.en}
           </span>
