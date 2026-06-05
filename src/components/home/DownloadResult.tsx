@@ -30,12 +30,39 @@ export default function DownloadResult({
   const [captionText, setCaptionText] = React.useState<string>("");
   const [isGenerating, setIsGenerating] = React.useState<boolean>(false);
   const [isCopied, setIsCopied] = React.useState<boolean>(false);
+  const [captionError, setCaptionError] = React.useState<string>("");
 
   // AI 대본 추출 관련 state
   const [scriptText, setScriptText] = React.useState<string>("");
   const [isExtractingScript, setIsExtractingScript] = React.useState<boolean>(false);
   const [isScriptCopied, setIsScriptCopied] = React.useState<boolean>(false);
   const [scriptExpanded, setScriptExpanded] = React.useState<boolean>(true);
+  const [scriptError, setScriptError] = React.useState<string>("");
+
+  // 영문/기술 에러메시지를 한국어로 안전하게 변환하는 헬퍼
+  const toFriendlyError = (msg: string): string => {
+    if (!msg) return '⚠️ 알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+    // 백엔드에서 이미 한국어문으로 담아만 것 그대로 사용
+    if (msg.startsWith('네') || msg.startsWith('⚠') || msg.startsWith('💡')) return msg;
+    // 영문 에러 패턴 가드
+    if (msg.includes('429') || msg.toLowerCase().includes('quota') || msg.toLowerCase().includes('rate limit') || msg.includes('RATE_LIMIT')) {
+      return '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!';
+    }
+    if (msg.includes('503') || msg.toLowerCase().includes('high demand') || msg.toLowerCase().includes('overload')) {
+      return '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!';
+    }
+    if (msg.toLowerCase().includes('network') || msg.toLowerCase().includes('fetch') || msg.toLowerCase().includes('failed')) {
+      return '⚠️ 네트워크 연결에 실패했습니다. 인터넷 연결을 확인하고 다시 시도해 주세요.';
+    }
+    if (msg.toLowerCase().includes('not found') || msg.includes('404')) {
+      return '⚠️ AI 모델을 찾을 수 없습니다. 잠시 후 다시 시도해 주세요.';
+    }
+    // 기타 영문 에러는 일괄 대체
+    if (/[a-zA-Z]{5,}/.test(msg)) {
+      return '⚠️ AI 요청 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+    }
+    return msg;
+  };
 
   const handleDownloadThumbnail = async () => {
     if (!analysisResult.thumbnail) return;
@@ -66,6 +93,7 @@ export default function DownloadResult({
   const handleGenerateCaption = async () => {
     setIsGenerating(true);
     setCaptionText("");
+    setCaptionError("");
     try {
       const response = await fetch("/api/generate-caption", {
         method: "POST",
@@ -77,20 +105,13 @@ export default function DownloadResult({
         throw new Error(data.error?.message || data.error || "Failed to generate caption");
       }
       const text = data.caption || data.text;
-      if (!text) {
-        throw new Error("No caption returned");
-      }
+      if (!text) throw new Error("No caption returned");
       setCaptionText(text);
-      if (showToast) {
-        showToast("AI 바이럴 캡션이 생성되었습니다! ✨");
-      }
+      if (showToast) showToast("AI 바이럴 캡션이 생성되었습니다! ✨");
     } catch (err: any) {
-      console.error(err);
-      if (showToast) {
-        showToast("잠시 후 다시 시도해 주세요.");
-      } else {
-        alert("잠시 후 다시 시도해 주세요.");
-      }
+      const friendly = toFriendlyError(err.message);
+      setCaptionError(friendly);
+      if (showToast) showToast(friendly);
     } finally {
       setIsGenerating(false);
     }
@@ -110,20 +131,20 @@ export default function DownloadResult({
   const handleExtractScript = async () => {
     const audioUrl = analysisResult.realAudioUrl;
     if (!audioUrl) {
-      if (showToast) showToast("이 영상에는 분석 가능한 오디오 주소가 없습니다.");
+      const msg = "이 영상에는 분석 가능한 오디오 주소가 없습니다.";
+      setScriptError(msg);
+      if (showToast) showToast(msg);
       return;
     }
     setIsExtractingScript(true);
     setScriptText("");
+    setScriptError("");
     setScriptExpanded(true);
     try {
       const response = await fetch("/api/extract-script", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          audioUrl,
-          videoTitle: analysisResult.title,
-        }),
+        body: JSON.stringify({ audioUrl, videoTitle: analysisResult.title }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -132,8 +153,9 @@ export default function DownloadResult({
       setScriptText(data.script || "");
       if (showToast) showToast("AI 대본 추출 완료! 📜");
     } catch (err: any) {
-      console.error(err);
-      if (showToast) showToast(err.message || "잠시 후 다시 시도해 주세요.");
+      const friendly = toFriendlyError(err.message);
+      setScriptError(friendly);
+      if (showToast) showToast(friendly);
     } finally {
       setIsExtractingScript(false);
     }
@@ -389,6 +411,21 @@ export default function DownloadResult({
                   )}
                 </button>
 
+                {/* 캡션 인라인 에러 배너 */}
+                <AnimatePresence>
+                  {captionError && !captionText && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-start gap-2.5 bg-amber-950/40 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300"
+                    >
+                      <span className="text-base leading-none shrink-0 mt-0.5">💡</span>
+                      <p className="leading-relaxed">{captionError}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {captionText && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
@@ -447,6 +484,21 @@ export default function DownloadResult({
                     </>
                   )}
                 </button>
+
+                {/* 대본 추출 인라인 에러 배너 */}
+                <AnimatePresence>
+                  {scriptError && !scriptText && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-start gap-2.5 bg-amber-950/40 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300"
+                    >
+                      <span className="text-base leading-none shrink-0 mt-0.5">💡</span>
+                      <p className="leading-relaxed">{scriptError}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* 로딩 중 상태 배너 */}
                 <AnimatePresence>

@@ -2,6 +2,23 @@ import { NextResponse } from 'next/server';
 
 const MAX_RETRIES = 3;
 
+// 구글 에러 메시지 → 한국어 안내문 변환
+function toKoreanError(status: number, message?: string): string {
+  if (status === 429) {
+    return '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!';
+  }
+  if (status === 503) {
+    return '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!';
+  }
+  if (status === 500 || status === 400) {
+    return '⚠️ AI 서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+  }
+  if (message?.includes('API_KEY_MISSING')) {
+    return '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.';
+  }
+  return '⚠️ AI 캡션 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+}
+
 async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Response> {
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     const response = await fetch(targetUrl, {
@@ -10,9 +27,9 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
       body,
     });
 
-    // 503 (과부하) 또는 429 (요청 제한)일 경우 재시도
+    // 429/503 → 지수 백오프 후 재시도
     if ((response.status === 503 || response.status === 429) && attempt < MAX_RETRIES - 1) {
-      const waitMs = 1000 * Math.pow(2, attempt); // 1초, 2초, 4초 대기
+      const waitMs = 1000 * Math.pow(2, attempt); // 1초 → 2초 → 4초
       await new Promise(resolve => setTimeout(resolve, waitMs));
       continue;
     }
@@ -20,8 +37,10 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
     return response;
   }
 
-  // 타입 안전을 위한 폴백 (실제로는 도달하지 않음)
-  throw new Error('Max retries exceeded');
+  // 3회 재시도 후에도 실패 → 429 에러로 처리
+  const limitError = new Error('RATE_LIMIT_EXCEEDED');
+  (limitError as any).status = 429;
+  throw limitError;
 }
 
 export async function POST(request: Request) {
@@ -30,10 +49,13 @@ export async function POST(request: Request) {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return NextResponse.json({ error: { message: "API_KEY_MISSING" } }, { status: 500 });
+      return NextResponse.json(
+        { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' } },
+        { status: 500 }
+      );
     }
 
-    // gemini-1.5-flash/2.0-flash는 2026년 폐기됨 → 최신 gemini-3.5-flash 사용
+    // gemini-3.5-flash (현재 최신 모델)
     const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
 
     const body = JSON.stringify({
@@ -48,24 +70,19 @@ export async function POST(request: Request) {
     const data = await response.json();
 
     if (!response.ok) {
-      // 503/429가 재시도 후에도 실패한 경우 친절한 메시지 반환
-      if (response.status === 503 || response.status === 429) {
-        return NextResponse.json({
-          error: { message: "AI 서버가 일시적으로 바쁩니다. 잠시 후 다시 시도해 주세요. (Google API 과부하)" }
-        }, { status: 503 });
-      }
-      return NextResponse.json({ error: { message: data.error?.message || "Google API Error" } }, { status: response.status });
+      const koreanMsg = toKoreanError(response.status, data.error?.message);
+      return NextResponse.json({ error: { message: koreanMsg } }, { status: response.status });
     }
 
-    const outputText = data.candidates?.[0]?.content?.parts?.[0]?.text || "콘텐츠를 생성할 수 없습니다.";
-    // 하위 호환성을 위해 success, text 필드도 함께 반환
-    return NextResponse.json({ 
-      success: true, 
-      text: outputText, 
-      caption: outputText 
-    });
+    const outputText = data.candidates?.[0]?.content?.parts?.[0]?.text || '콘텐츠를 생성할 수 없습니다.';
+    return NextResponse.json({ success: true, text: outputText, caption: outputText });
 
   } catch (error: any) {
-    return NextResponse.json({ error: { message: error.message } }, { status: 500 });
+    // Max retries exceeded (429) or network error
+    const status = error?.status === 429 ? 429 : 500;
+    const message = status === 429
+      ? '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!'
+      : '⚠️ AI 서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+    return NextResponse.json({ error: { message } }, { status });
   }
 }
