@@ -23,6 +23,7 @@ import RevenueSimulator from "@/components/home/RevenueSimulator";
 import ToolModal from "@/components/home/ToolModal";
 import SafeZonePreviewer from "@/components/home/SafeZonePreviewer";
 import BPMCalculator from "@/components/home/BPMCalculator";
+import ShadowbanScanner from "@/components/home/ShadowbanScanner";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -77,11 +78,21 @@ const TOOLS = [
     icon: "🎵",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
+  {
+    id: "shadowban-scanner",
+    title: "섀도우밴 위험 단어 스캐너",
+    titleEn: "Shadowban Word Scanner",
+    desc: "동영상 제목, 설명글, 혹은 자막 텍스트 내 알고리즘 노출 제한을 유발하는 민감 키워드를 실시간 스캔하여 우회 대체할 수 있게 돕습니다.",
+    descEn: "Scan transcript captions for sensitive words that trigger shadowbans on TikTok or Douyin, helping you rewrite safely.",
+    icon: "🛡️",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
   }
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | null>(null);
+  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -544,6 +555,8 @@ export default function Home() {
               ? (lang === "ko" ? "숏폼 안전 영역(Safe Zone) 프리뷰어" : "Short-form Safe Zone Previewer")
               : activeTool === "bpm-calculator"
               ? (lang === "ko" ? "숏폼 BGM 컷편집 계산기 (BPM Tapper)" : "BGM Beat-Sync Editor (BPM Tapper)")
+              : activeTool === "shadowban-scanner"
+              ? (lang === "ko" ? "틱톡/도우인 섀도우밴 위험 단어 스캐너" : "TikTok/Douyin Shadowban Word Scanner")
               : ""
           }
         >
@@ -552,6 +565,7 @@ export default function Home() {
           {activeTool === "revenue" && <RevenueSimulator />}
           {activeTool === "safe-zone" && <SafeZonePreviewer lang={lang} />}
           {activeTool === "bpm-calculator" && <BPMCalculator lang={lang} />}
+          {activeTool === "shadowban-scanner" && <ShadowbanScanner lang={lang} />}
         </ToolModal>
 
         <FAQSection 
