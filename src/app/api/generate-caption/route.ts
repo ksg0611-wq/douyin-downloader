@@ -9,8 +9,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { message: "API_KEY_MISSING" } }, { status: 500 });
     }
 
-    // 구글 2026 최신 정식 규격 주소 및 payload 구조 강제 고정
-    const targetUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+    // 한국 등 아시아 국가에서는 v1에서 1.5 모델이 404 → v1beta가 유일한 정답
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(targetUrl, {
       method: 'POST',
