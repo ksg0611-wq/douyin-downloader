@@ -23,4 +23,5 @@ export interface DownloadHistory {
   creatorName: string;
   thumbnail: string;
   downloadedAt: string;
+  videoData?: VideoMock;
 }

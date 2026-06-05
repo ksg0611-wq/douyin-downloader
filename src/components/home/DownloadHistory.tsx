@@ -1,12 +1,12 @@
 import React from "react";
-import { History, Trash2, X } from "lucide-react";
+import { History, Trash2, X, ArrowRight } from "lucide-react";
 import { DownloadHistory as DownloadHistoryType } from "../../types";
 
 interface DownloadHistoryProps {
   historyList: DownloadHistoryType[];
   clearAllHistory: () => void;
   deleteHistoryItem: (id: string, e: React.MouseEvent) => void;
-  handleHistoryClick: (url: string) => void;
+  handleHistoryClick: (item: DownloadHistoryType) => void;
 }
 
 export default function DownloadHistory({
@@ -15,13 +15,20 @@ export default function DownloadHistory({
   deleteHistoryItem,
   handleHistoryClick
 }: DownloadHistoryProps) {
+  // 최대 5개까지만 최신순 노출
+  const displayList = historyList.slice(0, 5);
+
   return (
     <section id="download-history-section" className="my-8 max-w-4xl mx-auto">
-      <div className="bg-zinc-950/40 border border-zinc-900/80 rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-4 border-b border-zinc-900 pb-3">
-          <h3 className="text-xs sm:text-sm font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+      <div className="bg-zinc-950/40 border border-zinc-900/80 rounded-2xl p-5 shadow-xl relative overflow-hidden backdrop-blur-sm">
+        
+        {/* Background glow */}
+        <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-xl pointer-events-none" />
+
+        <div className="flex items-center justify-between mb-4 border-b border-zinc-900 pb-3 relative z-10">
+          <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-widest flex items-center gap-2">
             <History className="w-4 h-4 text-cyan-400" />
-            최근 분석 다운로드 보관함
+            🕒 최근 다운로드 기록
           </h3>
           {historyList.length > 0 && (
             <button
@@ -34,45 +41,63 @@ export default function DownloadHistory({
           )}
         </div>
 
-        {historyList.length === 0 ? (
+        {displayList.length === 0 ? (
           <div className="text-center py-8 text-xs text-zinc-600 font-medium">
             아직 분석한 비디오 기록이 없습니다. 상단에서 비디오 주소를 입력하고 간편하게 다운로드해보세요.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {historyList.map((item) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 relative z-10">
+            {displayList.map((item) => (
               <div
                 key={item.id}
-                onClick={() => handleHistoryClick(item.url)}
-                className="p-3 bg-zinc-900/40 hover:bg-zinc-900 border border-zinc-800/60 rounded-xl flex items-center gap-3 cursor-pointer group transition-all"
+                onClick={() => handleHistoryClick(item)}
+                className="p-3 bg-zinc-900/30 hover:bg-zinc-900/70 border border-zinc-900 hover:border-zinc-800 rounded-xl flex items-center gap-3 cursor-pointer group transition-all animate-fade-in"
               >
-                <div className="relative w-12 h-16 rounded overflow-hidden shrink-0 bg-black border border-zinc-800">
+                {/* 썸네일 미니 미리보기 */}
+                <div className="relative w-11 h-14 rounded overflow-hidden shrink-0 bg-black border border-zinc-850">
                   <img 
                     src={item.thumbnail} 
                     alt="Thumbnail preview" 
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                   />
                 </div>
+
+                {/* 영상 정보 (말줄임표 처리 포함) */}
                 <div className="min-w-0 flex-grow">
                   <div className="text-[10px] font-bold text-zinc-500 flex items-center justify-between">
                     <span>{item.creatorName}</span>
                     <span>{item.downloadedAt}</span>
                   </div>
-                  <h4 className="text-xs font-semibold text-zinc-200 truncate mt-0.5 group-hover:text-[#00f2fe] transition-colors">
+                  <h4 className="text-xs font-semibold text-zinc-300 truncate mt-0.5 group-hover:text-[#00f2fe] transition-colors">
                     {item.title}
                   </h4>
-                  <div className="text-[10px] text-zinc-500 truncate mt-1">
+                  <div className="text-[9px] text-zinc-500 truncate mt-0.5">
                     {item.url}
                   </div>
                 </div>
-                <button
-                  onClick={(e) => deleteHistoryItem(item.id, e)}
-                  className="p-1 text-zinc-700 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-all shrink-0"
-                  title="이력에서 지우기"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+
+                {/* 제어 버튼 */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleHistoryClick(item);
+                    }}
+                    className="p-1 px-2 text-[10px] font-bold bg-zinc-950/80 hover:bg-cyan-500 hover:text-zinc-950 text-cyan-400 border border-cyan-500/30 hover:border-cyan-400 rounded-lg transition-all flex items-center gap-0.5 cursor-pointer"
+                    title="분석 결과로 이동"
+                  >
+                    <span>바로보기</span>
+                    <ArrowRight className="w-2.5 h-2.5" />
+                  </button>
+                  <button
+                    onClick={(e) => deleteHistoryItem(item.id, e)}
+                    className="p-1.5 text-zinc-700 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all cursor-pointer"
+                    title="이력에서 지우기"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

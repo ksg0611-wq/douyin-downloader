@@ -18,6 +18,9 @@ import FeaturesGuide from "@/components/home/FeaturesGuide";
 import DownloadHistory from "@/components/home/DownloadHistory";
 import FAQSection from "@/components/home/FAQSection";
 
+import { db } from "@/lib/firebase";
+import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
+
 export default function Home() {
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
@@ -31,6 +34,7 @@ export default function Home() {
   const [downloadCompleted, setDownloadCompleted] = useState(false);
   const [downloadType, setDownloadType] = useState<"video" | "audio" | null>(null);
 
+  const [guestUserId, setGuestUserId] = useState<string | null>(null);
   const [historyList, setHistoryList] = useState<DownloadHistoryType[]>([]);
   const [expandedFaqId, setExpandedFaqId] = useState<string | null>("faq-1");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -58,17 +62,80 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // 1. guestUserId가 없다면 생성 및 캐싱
+    let userId = localStorage.getItem("douyin_guest_user_id");
+    if (!userId) {
+      userId = "guest_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+      localStorage.setItem("douyin_guest_user_id", userId);
+    }
+    setGuestUserId(userId);
+
+    // 2. LocalStorage에서 먼저 로드 (즉시 UI 렌더링)
     const cached = localStorage.getItem("douyin_download_history");
+    let localHistory: DownloadHistoryType[] = [];
     if (cached) {
       try {
-        setHistoryList(JSON.parse(cached));
+        localHistory = JSON.parse(cached);
+        setHistoryList(localHistory);
       } catch (e) {
         // Safe bypass
       }
     }
+
+    // 3. Firestore에서 최신 이력 10개 동기화 (유기적 싱크)
+    if (db && userId) {
+      const fetchFirestoreHistory = async () => {
+        try {
+          const q = query(
+            collection(db, "download_history"),
+            where("guestUserId", "==", userId),
+            orderBy("timestamp", "desc"),
+            limit(10)
+          );
+          const querySnapshot = await getDocs(q);
+          const firestoreItems: DownloadHistoryType[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            firestoreItems.push({
+              id: doc.id, // Firestore 문서 ID를 item.id로 보존하여 삭제 시 활용
+              url: data.url,
+              title: data.title,
+              creatorName: data.creatorName,
+              thumbnail: data.thumbnail,
+              downloadedAt: data.downloadedAt,
+              videoData: data.videoData
+            });
+          });
+
+          if (firestoreItems.length > 0) {
+            setHistoryList(firestoreItems);
+            localStorage.setItem("douyin_download_history", JSON.stringify(firestoreItems));
+          } else if (localHistory.length > 0) {
+            // Firestore가 비어있고 Local 이력이 있으면 Firestore로 최초 업로드
+            for (const item of localHistory) {
+              await addDoc(collection(db, "download_history"), {
+                guestUserId: userId,
+                url: item.url,
+                title: item.title,
+                creatorName: item.creatorName,
+                thumbnail: item.thumbnail,
+                downloadedAt: item.downloadedAt,
+                videoData: item.videoData || null,
+                timestamp: Date.now()
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Error syncing with Firestore:", error);
+        }
+      };
+      fetchFirestoreHistory();
+    }
   }, []);
 
-  const saveToHistory = (video: VideoMock) => {
+  const saveToHistory = async (video: VideoMock) => {
+    const userId = localStorage.getItem("douyin_guest_user_id") || guestUserId;
+
     const newItem: DownloadHistoryType = {
       id: `${video.id}-${Date.now()}`,
       url: video.url,
@@ -80,26 +147,82 @@ export default function Home() {
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit"
-      })
+      }),
+      videoData: video
     };
 
+    // 로컬스토리지 즉시 업데이트
     const updated = [newItem, ...historyList.filter(item => item.url !== video.url)].slice(0, 10);
     setHistoryList(updated);
     localStorage.setItem("douyin_download_history", JSON.stringify(updated));
+
+    // 파이어베이스 Firestore 저장 및 중복 제거
+    if (db && userId) {
+      try {
+        const q = query(
+          collection(db, "download_history"),
+          where("guestUserId", "==", userId),
+          where("url", "==", video.url)
+        );
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach(async (docSnapshot) => {
+            await deleteDoc(doc(db, "download_history", docSnapshot.id));
+          });
+        }
+
+        await addDoc(collection(db, "download_history"), {
+          guestUserId: userId,
+          url: newItem.url,
+          title: newItem.title,
+          creatorName: newItem.creatorName,
+          thumbnail: newItem.thumbnail,
+          downloadedAt: newItem.downloadedAt,
+          videoData: video,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        console.error("Error writing to Firestore:", error);
+      }
+    }
   };
 
-  const deleteHistoryItem = (id: string, e: React.MouseEvent) => {
+  const deleteHistoryItem = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const updated = historyList.filter(item => item.id !== id);
     setHistoryList(updated);
     localStorage.setItem("douyin_download_history", JSON.stringify(updated));
     showToast("기록이 삭제되었습니다.");
+
+    if (db) {
+      try {
+        await deleteDoc(doc(db, "download_history", id));
+      } catch (error) {
+        console.error("Error deleting from Firestore:", error);
+      }
+    }
   };
 
-  const clearAllHistory = () => {
+  const clearAllHistory = async () => {
     setHistoryList([]);
     localStorage.removeItem("douyin_download_history");
     showToast("모든 다운로드 기록이 삭제되었습니다.");
+
+    const userId = localStorage.getItem("douyin_guest_user_id") || guestUserId;
+    if (db && userId) {
+      try {
+        const q = query(
+          collection(db, "download_history"),
+          where("guestUserId", "==", userId)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (docSnapshot) => {
+          await deleteDoc(doc(db, "download_history", docSnapshot.id));
+        });
+      } catch (error) {
+        console.error("Error clearing Firestore history:", error);
+      }
+    }
   };
 
   const handleAnalyze = async () => {
@@ -284,10 +407,17 @@ export default function Home() {
           historyList={historyList} 
           clearAllHistory={clearAllHistory} 
           deleteHistoryItem={deleteHistoryItem} 
-          handleHistoryClick={(historyUrl) => {
-            setUrl(historyUrl);
-            window.scrollTo({ top: 120, behavior: "smooth" });
-            showToast("주소가 붙여 넣어졌습니다. 다운로드 버튼을 클릭하세요!");
+          handleHistoryClick={(item) => {
+            if (item.videoData) {
+              setAnalysisResult(item.videoData);
+              setUrl(item.url);
+              window.scrollTo({ top: 400, behavior: "smooth" });
+              showToast("이전 분석 결과를 즉시 로드했습니다! ⚡");
+            } else {
+              setUrl(item.url);
+              window.scrollTo({ top: 120, behavior: "smooth" });
+              showToast("주소가 붙여 넣어졌습니다. 다운로드 버튼을 클릭하세요!");
+            }
           }} 
         />
 
