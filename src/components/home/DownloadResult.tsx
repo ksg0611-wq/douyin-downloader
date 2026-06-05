@@ -220,8 +220,8 @@ export default function DownloadResult({
                       </>
                     ) : (
                       <>
-                        <ImageIcon className="w-4 h-4 text-purple-400" />
-                        <span>고화질 썸네일(JPG) 다운로드</span>
+                        <span className="text-sm leading-none">🖼️</span>
+                        <span>고화질 썸네일 다운로드</span>
                       </>
                     )}
                   </button>
