@@ -3,25 +3,31 @@
   
   <url>
     <loc>https://shortspack.com</loc>
-    <lastmod>2026-06-05T14:43:00.590Z</lastmod>
+    <lastmod>2026-06-05T14:48:40.651Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://shortspack.com/blog</loc>
-    <lastmod>2026-06-05T14:43:00.591Z</lastmod>
+    <lastmod>2026-06-05T14:48:40.652Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shortspack.com/privacy</loc>
-    <lastmod>2026-06-05T14:43:00.591Z</lastmod>
+    <lastmod>2026-06-05T14:48:40.652Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://shortspack.com/terms</loc>
-    <lastmod>2026-06-05T14:43:00.591Z</lastmod>
+    <lastmod>2026-06-05T14:48:40.652Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://shortspack.com/safe-zone</loc>
+    <lastmod>2026-06-05T14:48:40.652Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

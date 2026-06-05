@@ -21,6 +21,7 @@ import HashtagTrendAnalyzer from "@/components/home/HashtagTrendAnalyzer";
 import GlobalTranslator from "@/components/home/GlobalTranslator";
 import RevenueSimulator from "@/components/home/RevenueSimulator";
 import ToolModal from "@/components/home/ToolModal";
+import SafeZonePreviewer from "@/components/home/SafeZonePreviewer";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -55,11 +56,21 @@ const TOOLS = [
     icon: "💰",
     badge: "POPULAR",
     badgeColor: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30",
+  },
+  {
+    id: "safe-zone",
+    title: "숏폼 안전 영역 프리뷰어",
+    titleEn: "Short-form Safe Zone Previewer",
+    desc: "유저 이미지를 업로드하여 틱톡, 쇼츠, 릴스, 도우인의 UI 가이드라인 오버레이 가려짐을 실시간 테스트합니다.",
+    descEn: "Upload images to test safe zones and UI layouts on TikTok, YouTube Shorts, Reels, and Douyin in real time.",
+    icon: "📱",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
   }
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | null>(null);
+  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -518,12 +529,15 @@ export default function Home() {
               ? (lang === "ko" ? "다국어 숏폼 제목 번역" : "Global Title Translator")
               : activeTool === "revenue"
               ? (lang === "ko" ? "숏폼 예상 수익 시뮬레이터" : "Revenue Simulator")
+              : activeTool === "safe-zone"
+              ? (lang === "ko" ? "숏폼 안전 영역(Safe Zone) 프리뷰어" : "Short-form Safe Zone Previewer")
               : ""
           }
         >
           {activeTool === "hashtag" && <HashtagTrendAnalyzer />}
           {activeTool === "translator" && <GlobalTranslator />}
           {activeTool === "revenue" && <RevenueSimulator />}
+          {activeTool === "safe-zone" && <SafeZonePreviewer lang={lang} />}
         </ToolModal>
 
         <FAQSection 
