@@ -19,6 +19,7 @@ import DownloadHistory from "@/components/home/DownloadHistory";
 import FAQSection from "@/components/home/FAQSection";
 import HashtagTrendAnalyzer from "@/components/home/HashtagTrendAnalyzer";
 import GlobalTranslator from "@/components/home/GlobalTranslator";
+import RevenueSimulator from "@/components/home/RevenueSimulator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -428,6 +429,9 @@ export default function Home() {
 
         {/* 3단계: 다국어 숏폼 제목 번역 & 마케팅 피드백 */}
         <GlobalTranslator />
+
+        {/* 3단계: 숏폼 예상 수익 & 광고 단가 시뮬레이터 */}
+        <RevenueSimulator />
 
         <FAQSection 
           expandedFaqId={expandedFaqId} 
