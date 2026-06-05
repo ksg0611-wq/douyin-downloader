@@ -83,14 +83,14 @@ export default function DownloaderCore({
 
   return (
     <section id="downloader-core" className="max-w-4xl mx-auto">
-      <div className="bg-zinc-950/60 border border-zinc-900 backdrop-blur-xl rounded-2xl p-4 sm:p-6 md:p-8 shadow-3xl shadow-black relative overflow-hidden">
+      <div className="bg-white/80 border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-900 backdrop-blur-xl rounded-2xl p-4 sm:p-6 md:p-8 shadow-xl dark:shadow-3xl dark:shadow-black relative overflow-hidden">
         
         <div className="absolute top-0 right-0 w-32 h-32 bg-[#00f2fe]/5 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fe0979]/5 rounded-full blur-2xl pointer-events-none" />
 
         <div className="relative">
           {/* Platform Selection Tab */}
-          <div className="flex gap-2.5 mb-5 p-1 bg-zinc-900/60 border border-zinc-800/80 rounded-xl max-w-sm">
+          <div className="flex gap-2.5 mb-5 p-1 bg-zinc-100 border border-zinc-200/80 dark:bg-zinc-900/60 dark:border-zinc-800/80 rounded-xl max-w-sm">
             <button
               onClick={() => {
                 setPlatform("douyin");
@@ -98,8 +98,8 @@ export default function DownloaderCore({
               }}
               className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
                 platform === "douyin"
-                  ? "bg-gradient-to-r from-[#00f2fe]/20 to-[#fe0979]/20 border border-rose-500/30 text-white shadow-md shadow-[#fe0979]/10"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  ? "bg-gradient-to-r from-[#00f2fe]/25 to-[#fe0979]/25 border border-rose-500/30 text-zinc-800 dark:text-white shadow-md shadow-[#fe0979]/10"
+                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
@@ -112,8 +112,8 @@ export default function DownloaderCore({
               }}
               className={`flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer ${
                 platform === "xiaohongshu"
-                  ? "bg-gradient-to-r from-[#fe0979]/20 to-[#00f2fe]/20 border border-cyan-500/30 text-white shadow-md shadow-[#00f2fe]/10"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  ? "bg-gradient-to-r from-[#fe0979]/25 to-[#00f2fe]/25 border border-cyan-500/30 text-zinc-800 dark:text-white shadow-md shadow-[#00f2fe]/10"
+                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
@@ -122,13 +122,13 @@ export default function DownloaderCore({
           </div>
 
           {/* 실시간 라이브 트래픽 카운터 배너 */}
-          <div className="mb-5 p-3 rounded-xl bg-zinc-900/30 border border-zinc-900/60 flex items-center justify-center gap-2 relative overflow-hidden backdrop-blur-sm">
+          <div className="mb-5 p-3 rounded-xl bg-zinc-100 border border-zinc-200 dark:bg-zinc-900/30 dark:border-zinc-900/60 flex items-center justify-center gap-2 relative overflow-hidden backdrop-blur-sm">
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent animate-pulse" />
             <span className="flex h-2 w-2 relative shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
             </span>
-            <p className="text-xs sm:text-sm font-semibold text-zinc-300 tracking-wide">
+            <p className="text-xs sm:text-sm font-semibold text-zinc-700 dark:text-zinc-300 tracking-wide">
               {lang === "ko" ? (
                 <>
                   🔥 오늘 전 세계 크리에이터가 다운로드한 영상:{" "}
@@ -148,13 +148,13 @@ export default function DownloaderCore({
             </p>
           </div>
 
-          <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-400 mb-2 px-1 flex items-center justify-between">
+          <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2 px-1 flex items-center justify-between">
             <span>
               {lang === "ko" 
                 ? (platform === "douyin" ? "Douyin 동영상 링크 주소 입력하기" : "Xiaohongshu 동영상/이미지 링크 주소 입력하기")
                 : (platform === "douyin" ? "Enter Douyin Video Link" : "Enter Xiaohongshu Video/Image Link")}
             </span>
-            <span className="text-[10px] text-zinc-500 font-normal normal-case">
+            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-normal normal-case">
               {lang === "ko" ? "사파리, 크롬 복사 링크 완벽 통합 지원" : "Fully supports Safari & Chrome copied links"}
             </span>
           </label>
@@ -163,15 +163,15 @@ export default function DownloaderCore({
             <div className="relative flex-grow group">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-[#00f2fe] to-[#fe0979] rounded-xl opacity-20 group-focus-within:opacity-80 transition duration-300 blur-sm pointer-events-none" />
               
-              <div className="relative flex items-center bg-zinc-900 border border-zinc-800 rounded-xl leading-none">
-                <span className="pl-4 text-zinc-500">
-                  <LinkIcon className="w-5 h-5 text-zinc-400 flex-shrink-0" />
+              <div className="relative flex items-center bg-white border border-zinc-250 dark:bg-zinc-900 dark:border-zinc-800 rounded-xl leading-none shadow-sm">
+                <span className="pl-4 text-zinc-400 dark:text-zinc-500">
+                  <LinkIcon className="w-5 h-5 text-zinc-400 dark:text-zinc-400 flex-shrink-0" />
                 </span>
                 
                 <input
                   id="url-input"
                   type="text"
-                  className="w-full bg-transparent text-zinc-100 placeholder-zinc-500 text-sm md:text-base px-3 py-4 focus:outline-none min-w-0 font-sans"
+                  className="w-full bg-transparent text-zinc-800 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 text-sm md:text-base px-3 py-4 focus:outline-none min-w-0 font-sans"
                   placeholder={lang === "ko" ? "여기에 동영상 링크를 붙여넣으세요..." : "Paste the video link here..."}
                   value={url}
                   onChange={(e) => {
@@ -195,7 +195,7 @@ export default function DownloaderCore({
 
                 <button
                   onClick={handlePaste}
-                  className="mr-2 flex items-center gap-1 bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 text-zinc-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer hover:text-white transition-all font-medium flex-shrink-0"
+                  className="mr-2 flex items-center gap-1 bg-zinc-100 hover:bg-zinc-200/80 border border-zinc-250 text-zinc-700 dark:bg-zinc-800/80 dark:hover:bg-zinc-800 dark:border-zinc-700/60 dark:text-zinc-300 px-3 py-1.5 rounded-lg text-xs cursor-pointer hover:text-zinc-900 dark:hover:text-white transition-all font-medium flex-shrink-0"
                   title={lang === "ko" ? "클립보드에서 자동 붙여넣기" : "Paste from clipboard"}
                 >
                   <Clipboard className="w-3.5 h-3.5" />
@@ -244,8 +244,8 @@ export default function DownloaderCore({
           </AnimatePresence>
         </div>
 
-        <div className="mt-6 border-t border-zinc-900 pt-4">
-          <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 mb-2 px-1">
+        <div className="mt-6 border-t border-zinc-200 dark:border-zinc-900 pt-4">
+          <p className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 mb-2 px-1">
             <Flame className="w-3 text-rose-500 animate-bounce" />
             테스트용 Douyin 원클릭 샘플 링크 (직접 클릭해 하단에서 테스트 가능)
           </p>
@@ -255,16 +255,16 @@ export default function DownloaderCore({
               <button
                 key={v.id}
                 onClick={() => handleQuickDemo(v.url)}
-                className="text-left bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700 p-2.5 rounded-lg text-xs leading-normal transition-all group flex items-start gap-2 max-w-full overflow-hidden"
+                className="text-left bg-white hover:bg-zinc-55 border border-zinc-200 dark:bg-zinc-900/60 dark:hover:bg-zinc-900 dark:border-zinc-800/80 dark:hover:border-zinc-700 p-2.5 rounded-lg text-xs leading-normal transition-all group flex items-start gap-2 max-w-full overflow-hidden shadow-sm dark:shadow-none"
               >
-                <span className="w-5 h-5 rounded bg-zinc-800 text-zinc-400 text-[10px] font-bold flex items-center justify-center shrink-0 group-hover:bg-zinc-700 group-hover:text-[#00f2fe] transition-all">
+                <span className="w-5 h-5 rounded bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 text-[10px] font-bold flex items-center justify-center shrink-0 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-700 group-hover:text-[#00f2fe] transition-all">
                   {idx + 1}
                 </span>
                 <div className="truncate">
-                  <div className="font-semibold text-zinc-300 group-hover:text-white truncate">
+                  <div className="font-semibold text-zinc-700 group-hover:text-rose-600 dark:text-zinc-300 dark:group-hover:text-white truncate">
                     {v.creatorName}
                   </div>
-                  <div className="text-[10px] text-zinc-500 truncate mt-0.5">
+                  <div className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate mt-0.5">
                     {v.title}
                   </div>
                 </div>
@@ -279,23 +279,23 @@ export default function DownloaderCore({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/95 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 z-20 text-center"
+              className="absolute inset-0 bg-white/95 dark:bg-black/95 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 z-20 text-center"
             >
               <div className="relative mb-6">
-                <div className="w-16 h-16 rounded-full border-4 border-zinc-800 border-t-cyan-400 border-r-rose-500 animate-spin" />
+                <div className="w-16 h-16 rounded-full border-4 border-zinc-200 dark:border-zinc-800 border-t-cyan-400 border-r-rose-500 animate-spin" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Sparkles className="w-6 h-6 text-cyan-400 animate-pulse" />
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold tracking-tight bg-gradient-to-r from-cyan-400 to-rose-400 bg-clip-text text-transparent mb-1">
+              <h3 className="text-xl font-bold tracking-tight bg-gradient-to-r from-cyan-500 via-purple-500 to-rose-500 dark:from-cyan-400 dark:to-rose-400 bg-clip-text text-transparent mb-1">
                 인증 헤더 우회 분석 중
               </h3>
-              <p className="text-xs text-zinc-400 mb-6 max-w-xs">
+              <p className="text-xs text-zinc-650 dark:text-zinc-400 mb-6 max-w-xs">
                 Douyin 시스템은 보안 쿠키 서신을 포함합니다. 수 밀리초 내에 AI 우회가 진행됩니다.
               </p>
 
-              <div className="w-full max-w-sm bg-zinc-900 border border-zinc-800 rounded-lg p-3.5 text-left font-mono text-[10px] sm:text-xs text-zinc-400 space-y-2.5">
+              <div className="w-full max-w-sm bg-zinc-50 border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 rounded-lg p-3.5 text-left font-mono text-[10px] sm:text-xs text-zinc-600 dark:text-zinc-400 space-y-2.5">
                 {stepsText.map((txt, index) => {
                   const isDone = index < analysisStep;
                   const isActive = index === analysisStep;

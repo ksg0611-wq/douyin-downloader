@@ -35,7 +35,7 @@ const PLATFORMS = [
     rpmMax: 0.3,
     sponsorIndex: 1.5,
     themeColor: "from-rose-500 to-red-600",
-    glowColor: "shadow-rose-500/20 border-rose-500/50 text-rose-200",
+    glowColor: "shadow-rose-500/10 border-rose-300/60 text-rose-650 dark:shadow-rose-500/20 dark:border-rose-500/50 dark:text-rose-200",
     accentColor: "accent-rose-500",
   },
   {
@@ -52,7 +52,7 @@ const PLATFORMS = [
     rpmMax: 0.08,
     sponsorIndex: 1.2,
     themeColor: "from-fuchsia-500 to-pink-600",
-    glowColor: "shadow-fuchsia-500/20 border-fuchsia-500/50 text-fuchsia-200",
+    glowColor: "shadow-fuchsia-500/10 border-fuchsia-300/60 text-fuchsia-650 dark:shadow-fuchsia-500/20 dark:border-fuchsia-500/50 dark:text-fuchsia-200",
     accentColor: "accent-fuchsia-500",
   },
   {
@@ -69,7 +69,7 @@ const PLATFORMS = [
     rpmMax: 0.15,
     sponsorIndex: 1.0,
     themeColor: "from-cyan-500 to-blue-500",
-    glowColor: "shadow-cyan-500/20 border-cyan-500/50 text-cyan-200",
+    glowColor: "shadow-cyan-500/10 border-cyan-300/60 text-cyan-650 dark:shadow-cyan-500/20 dark:border-cyan-500/50 dark:text-cyan-200",
     accentColor: "accent-cyan-500",
   },
 ] as const;
@@ -159,17 +159,17 @@ export default function RevenueSimulator() {
           <Calculator className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h2 className="text-lg font-black text-white tracking-tight">
+          <h2 className="text-lg font-black text-zinc-900 dark:text-white tracking-tight">
             🧮 숏폼 예상 수익 & 광고 단가 시뮬레이터
           </h2>
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-550 dark:text-zinc-500">
             조회수와 카테고리를 설정하여 순수익 및 브랜드 광고 협찬료를 즉시 시뮬레이션해 보세요
           </p>
         </div>
       </div>
 
       {/* 메인 박스 */}
-      <div className="bg-zinc-950/60 border border-zinc-800 rounded-2xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+      <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-800 rounded-2xl p-5 sm:p-6 backdrop-blur-xl shadow-xl dark:shadow-2xl relative overflow-hidden">
         {/* 배경 글로우 */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -180,7 +180,7 @@ export default function RevenueSimulator() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* 플랫폼 선택 */}
             <div className="space-y-2">
-              <label className="text-[11px] text-zinc-400 font-bold uppercase tracking-wider block">
+              <label className="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider block">
                 💻 플랫폼 선택
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -192,8 +192,8 @@ export default function RevenueSimulator() {
                       onClick={() => setActivePlatform(platform.key)}
                       className={`flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl text-[11.5px] font-bold border transition-all cursor-pointer ${
                         isActive
-                          ? `bg-gradient-to-b from-zinc-900 to-zinc-900/40 border border-zinc-700/80 shadow-md ${platform.glowColor}`
-                          : "bg-zinc-900/40 border-zinc-800/80 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
+                          ? `bg-white border-zinc-300 text-zinc-850 shadow-md ${platform.glowColor} dark:bg-gradient-to-b dark:from-zinc-900 dark:to-zinc-900/40 dark:border-zinc-700/80`
+                          : "bg-zinc-50 border-zinc-200 text-zinc-500 hover:border-zinc-300 hover:text-zinc-850 dark:bg-zinc-900/40 dark:border-zinc-800/80 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-200"
                       }`}
                     >
                       {platform.renderIcon(
@@ -210,17 +210,17 @@ export default function RevenueSimulator() {
 
             {/* 카테고리 선택 */}
             <div className="space-y-2">
-              <label className="text-[11px] text-zinc-400 font-bold uppercase tracking-wider block">
+              <label className="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider block">
                 🏷️ 채널 카테고리
               </label>
               <div className="relative">
                 <select
                   value={activeCategory}
                   onChange={(e) => setActiveCategory(e.target.value)}
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 resize-none font-sans leading-relaxed transition-colors appearance-none cursor-pointer"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-zinc-800 placeholder-zinc-400 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500/60 resize-none font-sans leading-relaxed transition-colors appearance-none cursor-pointer"
                 >
                   {CATEGORIES.map((cat) => (
-                    <option key={cat.key} value={cat.key} className="bg-zinc-950 text-zinc-100">
+                    <option key={cat.key} value={cat.key} className="bg-white text-zinc-800 dark:bg-zinc-950 dark:text-zinc-100">
                       {cat.label} (가중치 x{cat.multiplier.toFixed(1)})
                     </option>
                   ))}
@@ -234,16 +234,16 @@ export default function RevenueSimulator() {
           </div>
 
           {/* 슬라이더 컨트롤 */}
-          <div className="space-y-3 bg-zinc-900/40 border border-zinc-900 rounded-xl p-4 sm:p-5">
+          <div className="space-y-3 bg-zinc-50/50 border border-zinc-200 dark:bg-zinc-900/40 dark:border-zinc-900 rounded-xl p-4 sm:p-5">
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-1">
-              <span className="text-[11px] text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
                 📈 예상 조회수
               </span>
               <div className="flex items-baseline gap-1">
-                <span className="text-xl font-black text-white font-mono">
+                <span className="text-xl font-black text-zinc-900 dark:text-white font-mono">
                   {views.toLocaleString()}
                 </span>
-                <span className="text-xs text-zinc-400 font-bold">
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-bold">
                   회 ({formatViewsKorean(views)} 뷰)
                 </span>
               </div>
@@ -258,9 +258,9 @@ export default function RevenueSimulator() {
                 step={10000}
                 value={views}
                 onChange={(e) => setViews(Number(e.target.value))}
-                className={`w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer focus:outline-none ${platformConfig.accentColor}`}
+                className={`w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer focus:outline-none ${platformConfig.accentColor}`}
               />
-              <div className="flex justify-between text-[10px] text-zinc-600 font-mono mt-1.5">
+              <div className="flex justify-between text-[10px] text-zinc-400 dark:text-zinc-600 font-mono mt-1.5">
                 <span>1만 회</span>
                 <span>500만 회</span>
                 <span>1,000만 회</span>
@@ -269,7 +269,7 @@ export default function RevenueSimulator() {
 
             {/* 퀵 뷰 선택 단추 */}
             <div className="flex flex-wrap gap-1.5 pt-1">
-              <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider self-center mr-1">
+              <span className="text-[9px] text-zinc-550 dark:text-zinc-500 font-bold uppercase tracking-wider self-center mr-1">
                 빠른 설정:
               </span>
               {QUICK_VIEWS.map((preset) => (
@@ -278,8 +278,8 @@ export default function RevenueSimulator() {
                   onClick={() => setViews(preset.value)}
                   className={`px-2.5 py-1 rounded-lg border text-[10px] font-bold transition-all cursor-pointer ${
                     views === preset.value
-                      ? "bg-zinc-800 border-zinc-700 text-emerald-400 shadow-sm"
-                      : "bg-zinc-900/50 border-zinc-800/60 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700"
+                      ? "bg-zinc-200 border-zinc-300 text-emerald-650 shadow-sm dark:bg-zinc-805 dark:border-zinc-700 dark:text-emerald-400"
+                      : "bg-white border-zinc-200 text-zinc-400 hover:text-zinc-700 hover:border-zinc-300 dark:bg-zinc-900/50 dark:border-zinc-800/60 dark:text-zinc-500 dark:hover:text-zinc-300 dark:hover:border-zinc-700"
                   }`}
                 >
                   {preset.label}
@@ -291,11 +291,11 @@ export default function RevenueSimulator() {
           {/* 결과 대시보드 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             {/* 예상 조회수 순수익 */}
-            <div className="bg-zinc-900/30 border border-zinc-850 rounded-2xl p-4 sm:p-5 relative overflow-hidden group hover:border-emerald-500/20 transition-all">
+            <div className="bg-zinc-50/50 border border-zinc-200 hover:border-emerald-500/30 dark:bg-zinc-900/30 dark:border-zinc-850 rounded-2xl p-4 sm:p-5 relative overflow-hidden group hover:border-emerald-500/20 transition-all">
               <div className="absolute top-0 right-0 p-3 opacity-10">
                 <Coins className="w-16 h-16 text-emerald-400" />
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-bold mb-2">
+              <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-bold mb-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 💵 예상 조회수 순수익 (RPM)
               </div>
@@ -309,28 +309,28 @@ export default function RevenueSimulator() {
                   transition={{ duration: 0.15 }}
                   className="space-y-1"
                 >
-                  <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 font-mono filter drop-shadow-[0_0_12px_rgba(52,211,153,0.15)]">
+                  <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 dark:from-emerald-400 dark:to-teal-300 font-mono filter drop-shadow-[0_0_12px_rgba(52,211,153,0.15)]">
                     {formatCurrency(calculations.netRevenueMin)}
-                    <span className="text-sm font-semibold text-zinc-500 mx-1.5 font-sans">~</span>
+                    <span className="text-sm font-semibold text-zinc-405 dark:text-zinc-500 mx-1.5 font-sans">~</span>
                     {formatCurrency(calculations.netRevenueMax)}
                   </div>
-                  <div className="text-[10px] sm:text-xs text-emerald-500/80 font-semibold font-sans">
+                  <div className="text-[10px] sm:text-xs text-emerald-600 dark:text-emerald-400/80 font-semibold font-sans">
                     {formatCurrencyKorean(calculations.netRevenueMin)} ~ {formatCurrencyKorean(calculations.netRevenueMax)}
                   </div>
                 </motion.div>
               </AnimatePresence>
 
-              <div className="text-[10px] text-zinc-500 mt-3.5 leading-normal">
+              <div className="text-[10px] text-zinc-550 dark:text-zinc-500 mt-3.5 leading-normal">
                 조회수당 정산 비율({platformConfig.rpmMin}원 ~ {platformConfig.rpmMax}원) 및 채널 카테고리 가중치를 곱해 산출된 기본 플랫폼 정산 액수입니다.
               </div>
             </div>
 
             {/* 추천 브랜드 협찬 단가 */}
-            <div className="bg-zinc-900/30 border border-zinc-850 rounded-2xl p-4 sm:p-5 relative overflow-hidden group hover:border-cyan-500/20 transition-all">
+            <div className="bg-zinc-50/50 border border-zinc-200 hover:border-cyan-500/30 dark:bg-zinc-900/30 dark:border-zinc-850 rounded-2xl p-4 sm:p-5 relative overflow-hidden group hover:border-cyan-500/20 transition-all">
               <div className="absolute top-0 right-0 p-3 opacity-10">
                 <Sparkles className="w-16 h-16 text-cyan-400" />
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-bold mb-2">
+              <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-bold mb-2">
                 <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
                 🤝 추천 브랜드 협찬 단가 (PPL)
               </div>
@@ -344,26 +344,26 @@ export default function RevenueSimulator() {
                   transition={{ duration: 0.15 }}
                   className="space-y-1"
                 >
-                  <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-300 font-mono filter drop-shadow-[0_0_12px_rgba(34,211,238,0.15)]">
+                  <div className="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 dark:from-cyan-400 dark:to-blue-300 font-mono filter drop-shadow-[0_0_12px_rgba(34,211,238,0.15)]">
                     {formatCurrency(calculations.sponsorMin)}
-                    <span className="text-sm font-semibold text-zinc-500 mx-1.5 font-sans">~</span>
+                    <span className="text-sm font-semibold text-zinc-405 dark:text-zinc-500 mx-1.5 font-sans">~</span>
                     {formatCurrency(calculations.sponsorMax)}
                   </div>
-                  <div className="text-[10px] sm:text-xs text-cyan-400/80 font-semibold font-sans">
+                  <div className="text-[10px] sm:text-xs text-cyan-600 dark:text-cyan-400/80 font-semibold font-sans">
                     {formatCurrencyKorean(calculations.sponsorMin)} ~ {formatCurrencyKorean(calculations.sponsorMax)}
                   </div>
                 </motion.div>
               </AnimatePresence>
 
-              <div className="text-[10px] text-zinc-500 mt-3.5 leading-normal">
+              <div className="text-[10px] text-zinc-550 dark:text-zinc-500 mt-3.5 leading-normal">
                 플랫폼 신뢰도 지수({platformConfig.sponsorIndex}x) 및 마케팅 시장 가치를 반영해, 브랜드 광고주 협상 시 제안 가능한 합리적인 1회 계약 몸값 범위입니다.
               </div>
             </div>
           </div>
 
           {/* 마케팅 가이드 하단 문구 */}
-          <div className="flex items-start gap-2 bg-zinc-900/40 border border-zinc-900 rounded-xl p-3 text-xs text-zinc-400 mt-4 leading-relaxed">
-            <span className="text-emerald-400 shrink-0">💡 팁:</span>
+          <div className="flex items-start gap-2 bg-zinc-50/50 border border-zinc-200 text-zinc-600 dark:bg-zinc-900/40 dark:border-zinc-900 dark:text-zinc-400 p-3 rounded-xl text-xs mt-4 leading-relaxed">
+            <span className="text-emerald-600 dark:text-emerald-400 shrink-0 font-bold">💡 팁:</span>
             <span>
               <strong>테크·IT</strong> 및 <strong>비즈니스·재테크</strong> 카테고리는 타 카테고리 대비 구매 전환율이 높아 광고 단가가 높게 책정됩니다. 실제 제작 단가는 제작 난이도 및 크리에이터의 팔로워 인지도에 따라 상이할 수 있습니다.
             </span>

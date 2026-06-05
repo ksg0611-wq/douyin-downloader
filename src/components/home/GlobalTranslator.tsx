@@ -44,12 +44,12 @@ function MarkdownRenderer({ text }: { text: string }) {
     );
     const [header, ...body] = parsed;
     elements.push(
-      <div key={`tbl-${key}`} className="overflow-x-auto my-3 rounded-xl border border-zinc-800">
+      <div key={`tbl-${key}`} className="overflow-x-auto my-3 rounded-xl border border-zinc-200 dark:border-zinc-800">
         <table className="w-full text-left border-collapse min-w-[420px]">
           <thead>
-            <tr className="bg-violet-950/40 border-b border-zinc-700">
+            <tr className="bg-violet-50/50 dark:bg-violet-950/40 border-b border-zinc-200 dark:border-zinc-700">
               {header?.map((h, j) => (
-                <th key={j} className="px-3 py-2.5 text-[11px] font-black text-violet-300 whitespace-nowrap">
+                <th key={j} className="px-3 py-2.5 text-[11px] font-black text-violet-850 dark:text-violet-300 whitespace-nowrap">
                   {h}
                 </th>
               ))}
@@ -57,9 +57,9 @@ function MarkdownRenderer({ text }: { text: string }) {
           </thead>
           <tbody>
             {body.map((row, i) => (
-              <tr key={i} className="border-b border-zinc-800/60 hover:bg-violet-950/10 transition-colors">
+              <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800/60 hover:bg-zinc-50 dark:hover:bg-violet-950/10 transition-colors">
                 {row.map((cell, j) => (
-                  <td key={j} className="px-3 py-2.5 text-xs text-zinc-300 leading-relaxed">
+                  <td key={j} className="px-3 py-2.5 text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
                     {cell}
                   </td>
                 ))}
@@ -84,31 +84,31 @@ function MarkdownRenderer({ text }: { text: string }) {
 
     if (line.startsWith("## ")) {
       elements.push(
-        <h2 key={i} className="text-sm font-black text-white mt-5 mb-3 flex items-center gap-2 border-b border-zinc-800 pb-2">
-          <BookOpen className="w-3.5 h-3.5 text-violet-400 shrink-0" />
+        <h2 key={i} className="text-sm font-black text-zinc-900 dark:text-white mt-5 mb-3 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          <BookOpen className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400 shrink-0" />
           {line.slice(3)}
         </h2>
       );
     } else if (line.startsWith("# ")) {
-      elements.push(<h1 key={i} className="text-base font-black text-white mt-4 mb-2">{line.slice(2)}</h1>);
+      elements.push(<h1 key={i} className="text-base font-black text-zinc-900 dark:text-white mt-4 mb-2">{line.slice(2)}</h1>);
     } else if (line.startsWith("---")) {
-      elements.push(<hr key={i} className="border-zinc-800 my-4" />);
+      elements.push(<hr key={i} className="border-zinc-200 dark:border-zinc-800 my-4" />);
     } else if (line.startsWith("> ")) {
       elements.push(
-        <blockquote key={i} className="border-l-2 border-violet-500/50 pl-3 text-violet-200/80 italic text-xs my-2">
+        <blockquote key={i} className="border-l-2 border-violet-500 pl-3 text-zinc-800 dark:border-l-2 dark:border-violet-500/50 dark:pl-3 dark:text-violet-200/80 italic text-xs my-2">
           {line.slice(2)}
         </blockquote>
       );
     } else if (line.startsWith("- ") || line.startsWith("* ")) {
-      elements.push(<li key={i} className="text-xs text-zinc-300 ml-4 list-disc leading-relaxed">{line.slice(2)}</li>);
+      elements.push(<li key={i} className="text-xs text-zinc-705 dark:text-zinc-300 ml-4 list-disc leading-relaxed">{line.slice(2)}</li>);
     } else if (line.trim() === "") {
       elements.push(<div key={i} className="h-1.5" />);
     } else {
       const html = line
-        .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
-        .replace(/`(.+?)`/g, '<code class="bg-zinc-800 text-cyan-300 px-1 py-0.5 rounded text-[10px] font-mono">$1</code>');
+        .replace(/\*\*(.+?)\*\*/g, '<strong class="text-zinc-950 dark:text-white font-bold">$1</strong>')
+        .replace(/`(.+?)`/g, '<code class="bg-zinc-100 dark:bg-zinc-800 text-cyan-600 dark:text-cyan-300 px-1 py-0.5 rounded text-[10px] font-mono">$1</code>');
       elements.push(
-        <p key={i} className="text-xs text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />
+        <p key={i} className="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />
       );
     }
   });
@@ -178,16 +178,16 @@ export default function GlobalTranslator() {
           <Globe className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h2 className="text-lg font-black text-white tracking-tight">
+          <h2 className="text-lg font-black text-zinc-900 dark:text-white tracking-tight">
             🌐 다국어 숏폼 제목 번역 & 마케팅 피드백
           </h2>
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-550 dark:text-zinc-500">
             Gemini AI가 현지 감성으로 의역 — 영어 · 일본어 · 베트남어 × 3가지 바이럴 스타일
           </p>
         </div>
       </div>
 
-      <div className="bg-zinc-950/60 border border-zinc-800 rounded-2xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+      <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-800 rounded-2xl p-5 sm:p-6 backdrop-blur-xl shadow-xl dark:shadow-2xl relative overflow-hidden">
         {/* 배경 글로우 */}
         <div className="absolute top-0 right-0 w-56 h-56 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-56 h-56 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -204,7 +204,7 @@ export default function GlobalTranslator() {
                 onKeyDown={(e) => { if (e.key === "Enter" && e.ctrlKey) handleTranslate(); }}
                 placeholder="번역할 한국어 숏폼 제목 또는 내용을 입력하세요&#10;(예: 단 3분 만에 완성하는 매운 불닭 라면 레시피)&#10;Ctrl+Enter로 바로 분석"
                 rows={3}
-                className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-violet-500/60 resize-none font-sans leading-relaxed transition-colors"
+                className="w-full bg-zinc-50 border border-zinc-250 dark:bg-zinc-900 dark:border-zinc-700 rounded-xl px-4 py-3.5 text-sm text-zinc-800 placeholder-zinc-400 dark:text-zinc-100 dark:placeholder-zinc-505 focus:outline-none focus:border-violet-500/60 resize-none font-sans leading-relaxed transition-colors"
               />
             </div>
           </div>
@@ -232,13 +232,13 @@ export default function GlobalTranslator() {
 
         {/* 퀵 샘플 */}
         <div className="flex flex-wrap gap-1.5 mb-5">
-          <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider self-center mr-1">샘플:</span>
+          <span className="text-[10px] text-zinc-500 dark:text-zinc-600 font-bold uppercase tracking-wider self-center mr-1">샘플:</span>
           {QUICK_SAMPLES.map((s, i) => (
             <button
               key={i}
               onClick={() => handleTranslate(s)}
               disabled={isLoading}
-              className="px-2.5 py-1 rounded-full bg-zinc-800/80 hover:bg-zinc-700 border border-zinc-700/60 text-zinc-400 hover:text-zinc-100 text-[10px] font-medium transition-all cursor-pointer disabled:opacity-50 max-w-[180px] truncate"
+              className="px-2.5 py-1 rounded-full bg-zinc-105 hover:bg-zinc-200 border border-zinc-200 text-zinc-650 hover:text-zinc-900 dark:bg-zinc-800/80 dark:hover:bg-zinc-700 dark:border-zinc-700/60 dark:text-zinc-400 dark:hover:text-zinc-100 text-[10px] font-medium transition-all cursor-pointer disabled:opacity-50 max-w-[180px] truncate"
             >
               {s}
             </button>
@@ -252,7 +252,7 @@ export default function GlobalTranslator() {
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-start gap-2 bg-amber-950/40 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300 mb-4 leading-relaxed"
+              className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 dark:bg-amber-950/40 dark:border-amber-500/30 dark:text-amber-300 mb-4 leading-relaxed"
             >
               <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
               <span>{error}</span>
@@ -270,7 +270,7 @@ export default function GlobalTranslator() {
               className="space-y-3"
             >
               {/* 로딩 애니메이션 배너 */}
-              <div className="bg-violet-950/30 border border-violet-500/20 rounded-xl p-4 flex items-center gap-4">
+              <div className="bg-violet-50 border border-violet-100 dark:bg-violet-950/30 dark:border-violet-500/20 rounded-xl p-4 flex items-center gap-4">
                 <div className="flex items-end gap-0.5 h-7 shrink-0">
                   {[0.5, 0.8, 1, 0.7, 0.9, 0.6, 1, 0.8].map((h, i) => (
                     <div
@@ -281,13 +281,13 @@ export default function GlobalTranslator() {
                   ))}
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-violet-300">AI가 3개 언어 × 3가지 바이럴 스타일을 생성 중...</p>
-                  <p className="text-[10px] text-zinc-500 mt-0.5">약 10~20초 소요됩니다. 잠시만 기다려 주세요 ☕</p>
+                  <p className="text-xs font-bold text-violet-850 dark:text-violet-300">AI가 3개 언어 × 3가지 바이럴 스타일을 생성 중...</p>
+                  <p className="text-[10px] text-zinc-500 dark:text-zinc-500 mt-0.5">약 10~20초 소요됩니다. 잠시만 기다려 주세요 ☕</p>
                 </div>
               </div>
               {/* 스켈레톤 */}
-              <div className="h-8 bg-zinc-800/50 rounded-xl animate-pulse w-2/3" />
-              <div className="h-32 bg-zinc-800/30 rounded-xl animate-pulse" />
+              <div className="h-8 bg-zinc-100 dark:bg-zinc-800/50 rounded-xl animate-pulse w-2/3" />
+              <div className="h-32 bg-zinc-50 dark:bg-zinc-800/30 rounded-xl animate-pulse" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -303,7 +303,7 @@ export default function GlobalTranslator() {
               className="space-y-4"
             >
               {/* 성공 배지 */}
-              <div className="flex items-center gap-2 text-xs text-emerald-400 font-bold">
+              <div className="flex items-center gap-2 text-xs text-emerald-650 dark:text-emerald-400 font-bold">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>3개 언어 × 3가지 스타일 바이럴 타이틀 생성 완료!</span>
               </div>
@@ -316,8 +316,8 @@ export default function GlobalTranslator() {
                     onClick={() => setActiveTab(tab.key)}
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                       activeTab === tab.key
-                        ? "bg-violet-600/20 border-violet-500/50 text-violet-200 shadow-sm shadow-violet-500/10"
-                        : "bg-zinc-800/60 border-zinc-700/60 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                        ? "bg-violet-50 border-violet-200 text-violet-700 dark:bg-violet-600/20 dark:border-violet-500/50 dark:text-violet-200 shadow-sm"
+                        : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300 hover:text-zinc-800 dark:bg-zinc-800/60 dark:border-zinc-700/60 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-200"
                     }`}
                   >
                     <span>{tab.flag}</span>
@@ -335,11 +335,11 @@ export default function GlobalTranslator() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -8 }}
                   transition={{ duration: 0.18 }}
-                  className="bg-zinc-900/40 border border-zinc-800/60 rounded-xl overflow-hidden"
+                  className="bg-zinc-50/50 border border-zinc-200 dark:bg-zinc-900/40 dark:border-zinc-800/60 rounded-xl overflow-hidden"
                 >
                   {/* 탭 헤더 바 */}
-                  <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-900/60 border-b border-zinc-800/50">
-                    <span className="text-xs font-black text-zinc-300 flex items-center gap-1.5">
+                  <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-100/80 border-b border-zinc-250 dark:bg-zinc-900/60 dark:border-zinc-800/50">
+                    <span className="text-xs font-black text-zinc-800 dark:text-zinc-300 flex items-center gap-1.5">
                       {LANG_TABS.find(t => t.key === activeTab)?.flag}
                       {LANG_TABS.find(t => t.key === activeTab)?.label}
                     </span>
@@ -347,8 +347,8 @@ export default function GlobalTranslator() {
                       onClick={() => handleCopy(activeTab, currentSection)}
                       className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-all cursor-pointer ${
                         copiedKey === activeTab
-                          ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
-                          : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-600"
+                          ? "bg-emerald-50 border-emerald-250 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
+                          : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-850 hover:border-zinc-300 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white dark:hover:border-zinc-600"
                       }`}
                     >
                       {copiedKey === activeTab ? (
@@ -372,7 +372,7 @@ export default function GlobalTranslator() {
 
               {/* 언어별 개별 복사 빠른 버튼 */}
               <div className="space-y-2">
-                <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">언어별 빠른 복사</p>
+                <p className="text-[10px] text-zinc-500 dark:text-zinc-650 font-bold uppercase tracking-wider">언어별 빠른 복사</p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {LANG_TABS.map((tab) => (
                     <button
@@ -380,8 +380,8 @@ export default function GlobalTranslator() {
                       onClick={() => handleCopy(`quick-${tab.key}`, result.sections[tab.key])}
                       className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                         copiedKey === `quick-${tab.key}`
-                          ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
-                          : "bg-zinc-800/60 border-zinc-700/60 text-zinc-400 hover:border-violet-500/40 hover:text-violet-200 hover:bg-violet-600/10"
+                          ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
+                          : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300 hover:text-zinc-850 hover:bg-zinc-50 dark:bg-zinc-800/60 dark:border-zinc-700/60 dark:text-zinc-400 dark:hover:border-violet-500/40 dark:hover:text-violet-200 dark:hover:bg-violet-600/10"
                       }`}
                     >
                       {copiedKey === `quick-${tab.key}` ? (
@@ -398,7 +398,7 @@ export default function GlobalTranslator() {
               {/* 재번역 버튼 */}
               <button
                 onClick={() => handleTranslate()}
-                className="w-full py-2.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-zinc-200 font-bold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="w-full py-2.5 bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 text-zinc-600 hover:text-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 dark:hover:border-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 font-bold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <RefreshCcw className="w-3.5 h-3.5" />
                 <span>다시 생성하기</span>

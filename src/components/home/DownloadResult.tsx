@@ -180,15 +180,15 @@ export default function DownloadResult({
       .split("\n")
       .map((line, i) => {
         // H2
-        if (line.startsWith("## ")) return <h2 key={i} className="text-sm font-black text-cyan-300 mt-4 mb-2 flex items-center gap-1.5"><BookOpen className="w-3.5 h-3.5 shrink-0" />{line.slice(3)}</h2>;
+        if (line.startsWith("## ")) return <h2 key={i} className="text-sm font-black text-cyan-600 dark:text-cyan-300 mt-4 mb-2 flex items-center gap-1.5"><BookOpen className="w-3.5 h-3.5 shrink-0" />{line.slice(3)}</h2>;
         // H3
-        if (line.startsWith("### ")) return <h3 key={i} className="text-xs font-bold text-purple-300 mt-3 mb-1.5">{line.slice(4)}</h3>;
+        if (line.startsWith("### ")) return <h3 key={i} className="text-xs font-bold text-purple-600 dark:text-purple-300 mt-3 mb-1.5">{line.slice(4)}</h3>;
         // H1
-        if (line.startsWith("# ")) return <h1 key={i} className="text-base font-black text-white mt-4 mb-2">{line.slice(2)}</h1>;
+        if (line.startsWith("# ")) return <h1 key={i} className="text-base font-black text-zinc-900 dark:text-white mt-4 mb-2">{line.slice(2)}</h1>;
         // 구분선
-        if (line.startsWith("---") || line.startsWith("***")) return <hr key={i} className="border-zinc-700 my-3" />;
+        if (line.startsWith("---") || line.startsWith("***")) return <hr key={i} className="border-zinc-200 dark:border-zinc-700 my-3" />;
         // 인용문
-        if (line.startsWith("> ")) return <blockquote key={i} className="border-l-2 border-yellow-500/60 pl-3 text-yellow-300/80 italic text-xs my-1">{line.slice(2)}</blockquote>;
+        if (line.startsWith("> ")) return <blockquote key={i} className="border-l-2 border-yellow-500 pl-3 text-yellow-750 dark:border-l-2 dark:border-yellow-500/60 dark:text-yellow-300/80 italic text-xs my-1">{line.slice(2)}</blockquote>;
         // 테이블 행
         if (line.startsWith("|") && line.endsWith("|")) {
           const cells = line.split("|").filter((c) => c.trim() !== "");
@@ -196,23 +196,23 @@ export default function DownloadResult({
           if (isSeparator) return null;
           const isHeader = i > 0 ? false : true;
           return (
-            <tr key={i} className="border-b border-zinc-800">
+            <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800">
               {cells.map((cell, j) => (
-                <td key={j} className="px-2.5 py-1.5 text-[11px] text-zinc-300 leading-relaxed">{cell.trim()}</td>
+                <td key={j} className="px-2.5 py-1.5 text-[11px] text-zinc-700 dark:text-zinc-300 leading-relaxed">{cell.trim()}</td>
               ))}
             </tr>
           );
         }
         // 불릿 리스트
-        if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} className="text-xs text-zinc-300 ml-3 list-disc leading-relaxed">{line.slice(2)}</li>;
+        if (line.startsWith("- ") || line.startsWith("* ")) return <li key={i} className="text-xs text-zinc-700 dark:text-zinc-300 ml-3 list-disc leading-relaxed">{line.slice(2)}</li>;
         // 번호 리스트
-        if (/^\d+\. /.test(line)) return <li key={i} className="text-xs text-zinc-300 ml-3 list-decimal leading-relaxed">{line.replace(/^\d+\. /, "")}</li>;
+        if (/^\d+\. /.test(line)) return <li key={i} className="text-xs text-zinc-700 dark:text-zinc-300 ml-3 list-decimal leading-relaxed">{line.replace(/^\d+\. /, "")}</li>;
         // 빈 줄
         if (line.trim() === "") return <div key={i} className="h-1" />;
         // 굵은 텍스트 처리 (인라인)
-        const boldProcessed = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white font-bold">$1</strong>');
+        const boldProcessed = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-zinc-950 dark:text-white font-bold">$1</strong>');
         // 일반 텍스트
-        return <p key={i} className="text-xs text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: boldProcessed }} />;
+        return <p key={i} className="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: boldProcessed }} />;
       })
       .filter(Boolean);
   };
@@ -226,17 +226,17 @@ export default function DownloadResult({
       id="download-result-panel" 
       className="max-w-4xl mx-auto my-8"
     >
-      <div className="bg-gradient-to-b from-zinc-900/90 to-zinc-950 border-2 border-cyan-500/20 rounded-2xl overflow-hidden shadow-2xl relative">
+      <div className="bg-white dark:bg-gradient-to-b dark:from-zinc-900/90 dark:to-zinc-950 border-2 border-zinc-200 dark:border-cyan-500/20 rounded-2xl overflow-hidden shadow-xl dark:shadow-2xl relative">
         
-        <div className="absolute top-0 right-0 w-24 h-24 bg-[#00f2fe]/10 rounded-full blur-xl" />
-        <div className="absolute top-0 left-0 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-br-2xl border-r border-b border-cyan-400/30">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-[#00f2fe]/5 dark:bg-[#00f2fe]/10 rounded-full blur-xl" />
+        <div className="absolute top-0 left-0 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-br-2xl border-r border-b border-zinc-200 dark:border-cyan-400/30">
           ANALYZED SUCCESSFUL • 워터마크 없음
         </div>
 
         <div className="p-4 sm:p-6 md:p-8 pt-10 md:pt-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
           
           <div className="md:col-span-5 flex flex-col items-center">
-            <div className="relative w-full max-w-[280px] aspect-[9/16] rounded-xl overflow-hidden border border-zinc-800 group shadow-lg bg-black">
+            <div className="relative w-full max-w-[280px] aspect-[9/16] rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 group shadow-lg bg-black">
               <img 
                 src={analysisResult.thumbnail} 
                 alt="Video Thumbnail" 
@@ -268,7 +268,7 @@ export default function DownloadResult({
               </div>
             </div>
 
-            <div className="w-full max-w-[280px] mt-3.5 flex items-center justify-between text-xs text-zinc-400 px-1 font-mono">
+            <div className="w-full max-w-[280px] mt-3.5 flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 px-1 font-mono">
               <span>비디오 용량: <strong>{analysisResult.fileSize}</strong></span>
               <span>포맷: <strong>MP4(MPEG-4)</strong></span>
             </div>
@@ -281,50 +281,50 @@ export default function DownloadResult({
                 <img 
                   src={analysisResult.creatorAvatar} 
                   alt="Creator avatar" 
-                  className="w-8 h-8 rounded-full border border-zinc-800 object-cover" 
+                  className="w-8 h-8 rounded-full border border-zinc-200 dark:border-zinc-800 object-cover" 
                 />
                 <div>
-                  <h4 className="text-sm font-bold text-zinc-200 leading-none">{analysisResult.creatorName}</h4>
+                  <h4 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 leading-none">{analysisResult.creatorName}</h4>
                   <span className="text-[10px] text-zinc-500">Douyin Creator ID Verified</span>
                 </div>
               </div>
 
-              <h3 className="text-base sm:text-lg font-bold text-white leading-normal mb-3">
+              <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white leading-normal mb-3">
                 {analysisResult.title}
               </h3>
 
-              <div className="grid grid-cols-3 gap-2 bg-zinc-900 border border-zinc-800/60 rounded-lg p-2.5 text-center text-xs">
+              <div className="grid grid-cols-3 gap-2 bg-zinc-50 border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800/60 rounded-lg p-2.5 text-center text-xs">
                 <div>
-                  <span className="block text-zinc-500 text-[10px]">좋아요</span>
+                  <span className="block text-zinc-500 dark:text-zinc-400 text-[10px]">좋아요</span>
                   <span className="font-bold text-rose-500 font-mono">{analysisResult.likes}</span>
                 </div>
                 <div>
-                  <span className="block text-zinc-500 text-[10px]">댓글수</span>
-                  <span className="font-bold text-cyan-400 font-mono">{analysisResult.comments}</span>
+                  <span className="block text-zinc-500 dark:text-zinc-400 text-[10px]">댓글수</span>
+                  <span className="font-bold text-cyan-500 dark:text-cyan-400 font-mono">{analysisResult.comments}</span>
                 </div>
                 <div>
-                  <span className="block text-zinc-500 text-[10px]">공유수</span>
-                  <span className="font-bold text-purple-400 font-mono">{analysisResult.shares}</span>
+                  <span className="block text-zinc-500 dark:text-zinc-400 text-[10px]">공유수</span>
+                  <span className="font-bold text-purple-500 dark:text-purple-400 font-mono">{analysisResult.shares}</span>
                 </div>
               </div>
             </div>
 
             {downloadProgress !== null && (
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
-                <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+              <div className="bg-zinc-50 border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 rounded-xl p-4">
+                <div className="flex items-center justify-between text-xs text-zinc-650 dark:text-zinc-400 mb-2">
                   <span className="flex items-center gap-2 font-medium">
-                    <RefreshCcw className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                    <RefreshCcw className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400 animate-spin" />
                     {downloadType === "video" ? "워터마크 마스킹 제거 MP4 비디오 렌더링 중..." : "오리지널 오디오 MP3 디코딩 중..."}
                   </span>
-                  <span className="font-mono font-bold text-cyan-400">{downloadProgress}%</span>
+                  <span className="font-mono font-bold text-cyan-500 dark:text-cyan-400">{downloadProgress}%</span>
                 </div>
-                <div className="w-full bg-zinc-950 h-2.5 rounded-full overflow-hidden border border-zinc-800">
+                <div className="w-full bg-zinc-200/80 dark:bg-zinc-950 h-2.5 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                   <div 
                     className="bg-gradient-to-r from-cyan-400 via-indigo-500 to-rose-500 h-full rounded-full transition-all duration-300"
                     style={{ width: `${downloadProgress}%` }}
                   />
                 </div>
-                <p className="text-[10px] text-zinc-500 mt-1.5 text-right">
+                <p className="text-[10px] text-zinc-550 dark:text-zinc-500 mt-1.5 text-right">
                   자동 다운로드 트리거 패킷이 완료되면 파일 저정 다이얼로그가 자동 실행됩니다.
                 </p>
               </div>
@@ -334,9 +334,9 @@ export default function DownloadResult({
               <motion.div 
                 initial={{ scale: 0.98, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 rounded-xl p-3 text-xs flex items-start gap-2.5"
+                className="bg-emerald-50 border border-emerald-200 text-emerald-800 dark:bg-emerald-950/40 dark:border-emerald-500/30 dark:text-emerald-300 rounded-xl p-3 text-xs flex items-start gap-2.5"
               >
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <div>
                   <strong>다운로드 시뮬레이션 성공!</strong> 파일이 로컬 기기로 정상 이송되었습니다. 워터마크가 완전히 소거된 무손실 최고해상도 원본 파일 형태입니다.
                 </div>
@@ -344,7 +344,7 @@ export default function DownloadResult({
             )}
 
             <div className="space-y-4">
-              <h5 className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">
+              <h5 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest px-1">
                 ⚡ Creator Toolbox (크리에이터 툴박스)
               </h5>
               
@@ -366,7 +366,7 @@ export default function DownloadResult({
                   {/* 2. MP3 Audio Extraction Button */}
                   <button
                     onClick={() => triggerDownloadAction("audio")}
-                    className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs sm:text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
+                    className="relative overflow-hidden bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 text-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 dark:hover:border-zinc-700 dark:text-zinc-100 font-extrabold text-xs sm:text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
                   >
                     <Music className="w-4 h-4 text-[#fe0979]" />
                     <span>오디오(MP3)만 추출하기</span>
@@ -378,11 +378,11 @@ export default function DownloadResult({
                     <button
                       onClick={handleDownloadThumbnail}
                       disabled={thumbnailProgress}
-                      className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                      className="relative overflow-hidden bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 text-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 dark:hover:border-zinc-700 dark:text-zinc-100 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
                     >
                       {thumbnailProgress ? (
                         <>
-                          <RefreshCcw className="w-4 h-4 text-purple-400 animate-spin" />
+                          <RefreshCcw className="w-4 h-4 text-purple-500 dark:text-purple-400 animate-spin" />
                           <span>다운로드 중...</span>
                         </>
                       ) : (
@@ -397,9 +397,9 @@ export default function DownloadResult({
                     <button
                       id="thumbnail-editor-open-btn"
                       onClick={() => setShowEditor(true)}
-                      className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                      className="relative overflow-hidden bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 text-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 dark:hover:border-zinc-700 dark:text-zinc-100 font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all"
                     >
-                      <Palette className="w-3.5 h-3.5 text-zinc-300" />
+                      <Palette className="w-3.5 h-3.5 text-zinc-650 dark:text-zinc-300" />
                       <span>🎨 썸네일 자막 합성</span>
                     </button>
                   </div>
@@ -433,7 +433,7 @@ export default function DownloadResult({
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="flex items-start gap-2.5 bg-amber-950/40 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300"
+                      className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 text-amber-800 dark:bg-amber-950/40 dark:border-amber-500/30 dark:text-amber-300 rounded-xl p-3 text-xs"
                     >
                       <span className="text-base leading-none shrink-0 mt-0.5">💡</span>
                       <p className="leading-relaxed">{captionError}</p>
@@ -445,22 +445,22 @@ export default function DownloadResult({
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="border border-zinc-800/80 bg-zinc-900/40 rounded-xl p-4 space-y-3 relative overflow-hidden"
+                    className="border border-zinc-200 bg-zinc-100/50 dark:border-zinc-800/80 dark:bg-zinc-900/40 rounded-xl p-4 space-y-3 relative overflow-hidden"
                   >
-                    <div className="flex items-center justify-between border-b border-zinc-800/60 pb-2">
-                      <span className="text-xs font-bold text-zinc-300 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                    <div className="flex items-center justify-between border-b border-zinc-250 dark:border-zinc-800/60 pb-2">
+                      <span className="text-xs font-bold text-zinc-800 dark:text-zinc-300 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
                         AI 추천 바이럴 카피
                       </span>
                       <button
                         onClick={handleCopyText}
-                        className="p-1.5 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+                        className="p-1.5 px-3 rounded-lg bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-655 hover:text-zinc-900 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold"
                         title="텍스트 복사하기"
                       >
                         {isCopied ? (
                           <>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-emerald-400 font-bold">복사됨</span>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                            <span className="text-emerald-550 dark:text-emerald-400 font-bold">복사됨</span>
                           </>
                         ) : (
                           <>
@@ -470,7 +470,7 @@ export default function DownloadResult({
                         )}
                       </button>
                     </div>
-                    <div className="text-xs sm:text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/60 border border-zinc-850 p-3.5 rounded-lg font-sans">
+                    <div className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-50/50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-850 p-3.5 rounded-lg font-sans">
                       {captionText}
                     </div>
                   </motion.div>
@@ -507,7 +507,7 @@ export default function DownloadResult({
                       initial={{ opacity: 0, y: -4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="flex items-start gap-2.5 bg-amber-950/40 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300"
+                      className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 text-amber-800 dark:bg-amber-950/40 dark:border-amber-500/30 dark:text-amber-300 rounded-xl p-3 text-xs"
                     >
                       <span className="text-base leading-none shrink-0 mt-0.5">💡</span>
                       <p className="leading-relaxed">{scriptError}</p>
@@ -524,7 +524,7 @@ export default function DownloadResult({
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="bg-teal-950/40 border border-teal-500/30 rounded-xl p-4 flex flex-col items-center gap-3">
+                      <div className="bg-teal-50/50 border border-teal-200 dark:bg-teal-950/40 dark:border-teal-500/30 rounded-xl p-4 flex flex-col items-center gap-3">
                         {/* 파형 애니메이션 */}
                         <div className="flex items-end gap-0.5 h-8">
                           {[0.4, 0.7, 1, 0.8, 0.5, 0.9, 0.6, 1, 0.7, 0.4, 0.8, 0.5].map((h, i) => (
@@ -540,10 +540,10 @@ export default function DownloadResult({
                           ))}
                         </div>
                         <div className="text-center">
-                          <p className="text-xs font-bold text-teal-300">AI가 영상의 음성을 분석하고 번역하는 중입니다...</p>
-                          <p className="text-[10px] text-zinc-500 mt-0.5">약 10~20초 소요됩니다. 잠시만 기다려 주세요 ☕</p>
+                          <p className="text-xs font-bold text-teal-850 dark:text-teal-300">AI가 영상의 음성을 분석하고 번역하는 중입니다...</p>
+                          <p className="text-[10px] text-zinc-505 dark:text-zinc-500 mt-0.5">약 10~20초 소요됩니다. 잠시만 기다려 주세요 ☕</p>
                         </div>
-                        <div className="w-full bg-zinc-900 rounded-full h-1 overflow-hidden">
+                        <div className="w-full bg-zinc-200 dark:bg-zinc-900 rounded-full h-1 overflow-hidden">
                           <div className="h-full bg-gradient-to-r from-teal-500 to-cyan-400 rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '60%' }} />
                         </div>
                       </div>
@@ -558,24 +558,24 @@ export default function DownloadResult({
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="border border-teal-500/25 bg-gradient-to-b from-teal-950/20 to-zinc-950/40 rounded-xl overflow-hidden"
+                      className="border border-teal-200 dark:border-teal-500/25 bg-gradient-to-b from-teal-50/30 to-zinc-50/10 dark:from-teal-950/20 dark:to-zinc-950/40 rounded-xl overflow-hidden"
                     >
                       {/* 헤더 바 */}
-                      <div className="flex items-center justify-between px-4 py-2.5 border-b border-teal-500/20 bg-teal-950/30">
-                        <span className="text-xs font-black text-teal-300 flex items-center gap-1.5">
-                          <BookOpen className="w-3.5 h-3.5 text-teal-400" />
+                      <div className="flex items-center justify-between px-4 py-2.5 border-b border-teal-100 dark:border-teal-500/20 bg-teal-50/60 dark:bg-teal-950/30">
+                        <span className="text-xs font-black text-teal-850 dark:text-teal-300 flex items-center gap-1.5">
+                          <BookOpen className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                           📜 AI 번역 대본 & 마케팅 요약본
                         </span>
                         <div className="flex items-center gap-1.5">
                           {/* 복사 버튼 */}
                           <button
                             onClick={handleCopyScript}
-                            className="p-1.5 px-2.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-[11px] font-bold"
+                            className="p-1.5 px-2.5 rounded-lg bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-650 hover:text-zinc-900 dark:bg-zinc-900/80 dark:hover:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-[11px] font-bold"
                           >
                             {isScriptCopied ? (
                               <>
-                                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                                <span className="text-emerald-400">복사됨</span>
+                                <CheckCircle2 className="w-3 h-3 text-emerald-500 dark:text-emerald-400" />
+                                <span className="text-emerald-550 dark:text-emerald-400">복사됨</span>
                               </>
                             ) : (
                               <>
@@ -587,7 +587,7 @@ export default function DownloadResult({
                           {/* 접기/펼치기 버튼 */}
                           <button
                             onClick={() => setScriptExpanded(p => !p)}
-                            className="p-1.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white transition-all cursor-pointer"
+                            className="p-1.5 rounded-lg bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-650 hover:text-zinc-900 dark:bg-zinc-900/80 dark:hover:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white transition-all cursor-pointer"
                           >
                             {scriptExpanded
                               ? <ChevronUp className="w-3.5 h-3.5" />
@@ -617,7 +617,7 @@ export default function DownloadResult({
                                 const flushTable = (key: string) => {
                                   if (tableRows.length > 0) {
                                     elements.push(
-                                      <div key={`tbl-${key}`} className="overflow-x-auto my-3 rounded-lg border border-zinc-800">
+                                      <div key={`tbl-${key}`} className="overflow-x-auto my-3 rounded-lg border border-zinc-250 dark:border-zinc-800">
                                         <table className="w-full text-left border-collapse">
                                           <tbody>{tableRows}</tbody>
                                         </table>
@@ -636,18 +636,18 @@ export default function DownloadResult({
                                     const cells = line.split("|").filter((c) => c.trim() !== "");
                                     if (!tableHeaderParsed) {
                                       tableRows.push(
-                                        <tr key={i} className="bg-teal-950/40 border-b border-zinc-700">
+                                        <tr key={i} className="bg-teal-50/50 dark:bg-teal-950/40 border-b border-zinc-200 dark:border-zinc-700">
                                           {cells.map((c, j) => (
-                                            <th key={j} className="px-3 py-2 text-[11px] font-black text-teal-300 whitespace-nowrap">{c.trim()}</th>
+                                            <th key={j} className="px-3 py-2 text-[11px] font-black text-teal-850 dark:text-teal-300 whitespace-nowrap">{c.trim()}</th>
                                           ))}
                                         </tr>
                                       );
                                       tableHeaderParsed = true;
                                     } else {
                                       tableRows.push(
-                                        <tr key={i} className="border-b border-zinc-800/60 hover:bg-teal-950/10 transition-colors">
+                                        <tr key={i} className="border-b border-zinc-200 dark:border-zinc-800/60 hover:bg-zinc-55 dark:hover:bg-teal-950/10 transition-colors">
                                           {cells.map((c, j) => (
-                                            <td key={j} className="px-3 py-2 text-[11px] text-zinc-300 leading-relaxed">{c.trim()}</td>
+                                            <td key={j} className="px-3 py-2 text-[11px] text-zinc-700 dark:text-zinc-300 leading-relaxed">{c.trim()}</td>
                                           ))}
                                         </tr>
                                       );
@@ -658,26 +658,26 @@ export default function DownloadResult({
                                     flushTable(String(i));
                                     // 일반 마크다운 렌더링
                                     if (line.startsWith("## ")) {
-                                      elements.push(<h2 key={i} className="text-sm font-black text-cyan-300 mt-5 mb-2 flex items-center gap-1.5 border-b border-cyan-500/20 pb-1.5"><BookOpen className="w-3.5 h-3.5 shrink-0" />{line.slice(3)}</h2>);
+                                      elements.push(<h2 key={i} className="text-sm font-black text-cyan-600 dark:text-cyan-300 mt-5 mb-2 flex items-center gap-1.5 border-b border-cyan-100 dark:border-cyan-500/20 pb-1.5"><BookOpen className="w-3.5 h-3.5 shrink-0" />{line.slice(3)}</h2>);
                                     } else if (line.startsWith("### ")) {
-                                      elements.push(<h3 key={i} className="text-xs font-bold text-teal-300 mt-3 mb-1.5">{line.slice(4)}</h3>);
+                                      elements.push(<h3 key={i} className="text-xs font-bold text-teal-700 dark:text-teal-300 mt-3 mb-1.5">{line.slice(4)}</h3>);
                                     } else if (line.startsWith("# ")) {
-                                      elements.push(<h1 key={i} className="text-base font-black text-white mt-4 mb-2">{line.slice(2)}</h1>);
+                                      elements.push(<h1 key={i} className="text-base font-black text-zinc-950 dark:text-white mt-4 mb-2">{line.slice(2)}</h1>);
                                     } else if (line.startsWith("> ")) {
-                                      elements.push(<blockquote key={i} className="border-l-2 border-yellow-500/60 pl-3 text-yellow-300/80 italic text-xs my-1.5">{line.slice(2)}</blockquote>);
+                                      elements.push(<blockquote key={i} className="border-l-2 border-yellow-500 pl-3 text-yellow-750 dark:border-l-2 dark:border-yellow-500/60 dark:text-yellow-300/80 italic text-xs my-1.5">{line.slice(2)}</blockquote>);
                                     } else if (line.startsWith("---")) {
-                                      elements.push(<hr key={i} className="border-zinc-700/60 my-3" />);
+                                      elements.push(<hr key={i} className="border-zinc-200 dark:border-zinc-700/60 my-3" />);
                                     } else if (line.startsWith("- ") || line.startsWith("* ")) {
-                                      elements.push(<li key={i} className="text-xs text-zinc-300 ml-4 list-disc leading-relaxed">{line.slice(2)}</li>);
+                                      elements.push(<li key={i} className="text-xs text-zinc-700 dark:text-zinc-300 ml-4 list-disc leading-relaxed">{line.slice(2)}</li>);
                                     } else if (/^\d+\.\s/.test(line)) {
-                                      elements.push(<li key={i} className="text-xs text-zinc-300 ml-4 list-decimal leading-relaxed">{line.replace(/^\d+\.\s/, "")}</li>);
+                                      elements.push(<li key={i} className="text-xs text-zinc-700 dark:text-zinc-300 ml-4 list-decimal leading-relaxed">{line.replace(/^\d+\.\s/, "")}</li>);
                                     } else if (line.trim() === "") {
                                       elements.push(<div key={i} className="h-1.5" />);
                                     } else {
                                       const html = line
-                                        .replace(/\*\*(.+?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
-                                        .replace(/`(.+?)`/g, '<code class="bg-zinc-800 text-cyan-300 px-1 py-0.5 rounded text-[10px] font-mono">$1</code>');
-                                      elements.push(<p key={i} className="text-xs text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />);
+                                        .replace(/\*\*(.+?)\*\*/g, '<strong class="text-zinc-950 dark:text-white font-bold">$1</strong>')
+                                        .replace(/`(.+?)`/g, '<code class="bg-zinc-100 dark:bg-zinc-800 text-cyan-600 dark:text-cyan-300 px-1 py-0.5 rounded text-[10px] font-mono">$1</code>');
+                                      elements.push(<p key={i} className="text-xs text-zinc-650 dark:text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />);
                                     }
                                   }
                                 });
@@ -696,14 +696,14 @@ export default function DownloadResult({
               {/* Reset/New analysis button */}
               <button
                 onClick={handleReset}
-                className="w-full bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-800 text-zinc-400 hover:text-zinc-200 font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="w-full bg-white hover:bg-zinc-50 border border-zinc-200 hover:border-zinc-300 text-zinc-605 hover:text-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-900 dark:border-zinc-900 dark:hover:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <RefreshCcw className="w-4 h-4" />
                 <span>다른 동영상 링크 분석하기</span>
               </button>
             </div>
 
-            <div className="bg-zinc-950 border border-zinc-900 rounded-lg p-3 text-[11px] text-zinc-500 leading-relaxed">
+            <div className="bg-zinc-100/50 border border-zinc-200 dark:bg-zinc-950 dark:border-zinc-900 rounded-lg p-3 text-[11px] text-zinc-500 dark:text-zinc-500 leading-relaxed">
               💡 <strong>알림:</strong> Douyin(抖音)의 고화질 원본 비디오 파일은 해외 CDN 가속 망에 직접 업 링크되어 다운로드 속도가 대폭 향상되었습니다. 오프라인 상태에서도 언제든지 비디오 미리보기 재생이 가능합니다.
             </div>
 
