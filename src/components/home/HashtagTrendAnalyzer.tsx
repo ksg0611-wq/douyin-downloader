@@ -143,7 +143,7 @@ export default function HashtagTrendAnalyzer() {
   };
 
   return (
-    <section id="hashtag-trend-analyzer" className="max-w-4xl mx-auto mt-12">
+    <section id="hashtag-trend-analyzer" className="max-w-4xl mx-auto">
       {/* 섹션 헤더 */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-violet-500/20">

@@ -20,11 +20,46 @@ import FAQSection from "@/components/home/FAQSection";
 import HashtagTrendAnalyzer from "@/components/home/HashtagTrendAnalyzer";
 import GlobalTranslator from "@/components/home/GlobalTranslator";
 import RevenueSimulator from "@/components/home/RevenueSimulator";
+import ToolModal from "@/components/home/ToolModal";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
 
+const TOOLS = [
+  {
+    id: "hashtag",
+    title: "실시간 해시태그 트렌드 분석기",
+    titleEn: "Real-time Hashtag Trend Analyzer",
+    desc: "중국/글로벌 해시태그 유입량, 경쟁도, 연관 태그를 정밀 분석하여 영상 노출 확률을 극대화합니다.",
+    descEn: "Analyze hashtag search volumes, competition levels, and related keywords to maximize video reach.",
+    icon: "📊",
+    badge: "AI",
+    badgeColor: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/30",
+  },
+  {
+    id: "translator",
+    title: "다국어 숏폼 제목 번역",
+    titleEn: "Global Title Translator",
+    desc: "해외 인기 숏폼 문법에 최적화된 영어, 일본어, 베트남어 제목 번역과 AI 바이럴 피드백을 제공합니다.",
+    descEn: "Translate and optimize video titles into English, Japanese, and Vietnamese using viral marketing patterns.",
+    icon: "🌐",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
+  {
+    id: "revenue",
+    title: "숏폼 예상 수익 시뮬레이터",
+    titleEn: "Revenue Simulator",
+    desc: "조회수와 카테고리를 설정하여 순수익 및 브랜드 협찬 광고 제안 단가를 즉시 시뮬레이션합니다.",
+    descEn: "Simulate estimated ad revenue and branded sponsorship negotiation rates based on views and categories.",
+    icon: "💰",
+    badge: "POPULAR",
+    badgeColor: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30",
+  }
+];
+
 export default function Home() {
+  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -424,14 +459,72 @@ export default function Home() {
           }} 
         />
 
-        {/* 2단계: 해시태그 트렌드 분석기 */}
-        <HashtagTrendAnalyzer />
+        {/* Available Tools (크리에이터 필수 도구) 카드형 그리드 */}
+        <section id="available-tools" className="max-w-4xl mx-auto mt-14 mb-10 px-2 sm:px-0">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1.5 h-6 bg-rose-500 rounded-full" />
+            <h2 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
+              {lang === "ko" ? "Available Tools (크리에이터 필수 도구)" : "Available Tools (Creator Toolbox)"}
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {TOOLS.map((tool) => (
+              <div
+                key={tool.id}
+                onClick={() => setActiveTool(tool.id as any)}
+                className="group relative bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+              >
+                <div className="space-y-4">
+                  {/* Card Top: Icon & Badge */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-3xl select-none">{tool.icon}</span>
+                    <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full tracking-wider uppercase ${tool.badgeColor}`}>
+                      {tool.badge}
+                    </span>
+                  </div>
+                  
+                  {/* Card Middle: Title & Description */}
+                  <div className="space-y-2">
+                    <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-rose-500 dark:group-hover:text-rose-450 transition-colors">
+                      {lang === "ko" ? tool.title : tool.titleEn}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-3">
+                      {lang === "ko" ? tool.desc : tool.descEn}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Card Bottom: Button */}
+                <div className="mt-6 flex justify-end">
+                  <button className="flex items-center gap-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-rose-500 dark:group-hover:text-rose-450 transition-colors cursor-pointer">
+                    {lang === "ko" ? "도구 실행하기" : "Launch Tool"}
+                    <span className="text-base group-hover:translate-x-1 transition-transform">➔</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        {/* 3단계: 다국어 숏폼 제목 번역 & 마케팅 피드백 */}
-        <GlobalTranslator />
-
-        {/* 3단계: 숏폼 예상 수익 & 광고 단가 시뮬레이터 */}
-        <RevenueSimulator />
+        {/* Tool Modals */}
+        <ToolModal
+          isOpen={activeTool !== null}
+          onClose={() => setActiveTool(null)}
+          title={
+            activeTool === "hashtag"
+              ? (lang === "ko" ? "실시간 해시태그 트렌드 분석기" : "Real-time Hashtag Trend Analyzer")
+              : activeTool === "translator"
+              ? (lang === "ko" ? "다국어 숏폼 제목 번역" : "Global Title Translator")
+              : activeTool === "revenue"
+              ? (lang === "ko" ? "숏폼 예상 수익 시뮬레이터" : "Revenue Simulator")
+              : ""
+          }
+        >
+          {activeTool === "hashtag" && <HashtagTrendAnalyzer />}
+          {activeTool === "translator" && <GlobalTranslator />}
+          {activeTool === "revenue" && <RevenueSimulator />}
+        </ToolModal>
 
         <FAQSection 
           expandedFaqId={expandedFaqId} 
