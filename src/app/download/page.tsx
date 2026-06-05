@@ -18,6 +18,7 @@ import FeaturesGuide from "@/components/home/FeaturesGuide";
 import DownloadHistory from "@/components/home/DownloadHistory";
 import FAQSection from "@/components/home/FAQSection";
 import HashtagTrendAnalyzer from "@/components/home/HashtagTrendAnalyzer";
+import GlobalTranslator from "@/components/home/GlobalTranslator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -424,6 +425,9 @@ export default function Home() {
 
         {/* 2단계: 해시태그 트렌드 분석기 */}
         <HashtagTrendAnalyzer />
+
+        {/* 3단계: 다국어 숏폼 제목 번역 & 마케팅 피드백 */}
+        <GlobalTranslator />
 
         <FAQSection 
           expandedFaqId={expandedFaqId} 
