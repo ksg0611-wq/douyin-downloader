@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import { Video, Play, Download, Music, RefreshCcw, CheckCircle2 } from "lucide-react";
+import { Video, Play, Download, Music, RefreshCcw, CheckCircle2, Image as ImageIcon } from "lucide-react";
 import { VideoMock } from "../../types";
 import CPABanner from "../CPABanner";
 import { CPA_ADS } from "@/data/ads";
@@ -24,6 +24,34 @@ export default function DownloadResult({
   triggerDownloadAction,
   handleReset
 }: DownloadResultProps) {
+  const [thumbnailProgress, setThumbnailProgress] = React.useState<boolean>(false);
+
+  const handleDownloadThumbnail = async () => {
+    if (!analysisResult.thumbnail) return;
+    setThumbnailProgress(true);
+    try {
+      const proxyUrl = `/api/download?url=${encodeURIComponent(analysisResult.thumbnail)}&filename=${encodeURIComponent(`${analysisResult.id}_thumbnail.jpg`)}`;
+      const response = await fetch(proxyUrl);
+      if (!response.ok) throw new Error("Thumbnail download failed");
+      
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `${analysisResult.id}_thumbnail.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error(err);
+      window.open(analysisResult.thumbnail, "_blank");
+    } finally {
+      setThumbnailProgress(false);
+    }
+  };
+
   return (
     <motion.section 
       initial={{ opacity: 0, y: 30 }}
@@ -150,37 +178,64 @@ export default function DownloadResult({
               </motion.div>
             )}
 
-            <div className="space-y-2.5">
-              <button
-                onClick={() => triggerDownloadAction("video")}
-                className="w-full relative overflow-hidden bg-gradient-to-r from-[#00f2fe] to-[#4facfe] hover:brightness-110 active:scale-[0.99] text-zinc-950 font-extrabold text-sm sm:text-base py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-xl shadow-cyan-950/20 cursor-pointer transition-all"
-              >
-                <div className="absolute inset-0 bg-white/10 hover:bg-transparent pointer-events-none" />
-                <Download className="w-5 h-5" />
-                <span>MP4 다운로드 (워터마크 없음) - 초고화질 HD</span>
-                <span className="bg-zinc-950 text-cyan-300 text-[10px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase">
-                  {analysisResult.fileSize}
-                </span>
-              </button>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="space-y-4">
+              <h5 className="text-xs font-bold text-zinc-400 uppercase tracking-widest px-1">
+                ⚡ Creator Toolbox (크리에이터 툴박스)
+              </h5>
+              
+              <div className="grid grid-cols-1 gap-2.5">
+                {/* 1. MP4 Video Download Button */}
                 <button
-                  onClick={() => triggerDownloadAction("audio")}
-                  className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-200 font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  onClick={() => triggerDownloadAction("video")}
+                  className="w-full relative overflow-hidden bg-gradient-to-r from-[#00f2fe] via-[#00c6ff] to-[#0072ff] hover:brightness-110 active:scale-[0.99] text-zinc-950 font-extrabold text-sm sm:text-base py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-xl shadow-cyan-950/20 cursor-pointer transition-all"
                 >
-                  <Music className="w-4 h-4 text-[#fe0979]" />
-                  <span>MP3 오디오 음원 추출</span>
-                  <span className="text-[10px] text-zinc-500 font-mono">({analysisResult.audioSize})</span>
+                  <div className="absolute inset-0 bg-white/10 hover:bg-transparent pointer-events-none" />
+                  <Video className="w-5 h-5 text-zinc-950" />
+                  <span>MP4 비디오 다운로드 (워터마크 제로)</span>
+                  <span className="bg-zinc-950 text-cyan-300 text-[10px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase">
+                    {analysisResult.fileSize}
+                  </span>
                 </button>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {/* 2. MP3 Audio Extraction Button */}
+                  <button
+                    onClick={() => triggerDownloadAction("audio")}
+                    className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs sm:text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  >
+                    <Music className="w-4 h-4 text-[#fe0979]" />
+                    <span>오디오(MP3)만 추출하기</span>
+                  </button>
 
-                <button
-                  onClick={handleReset}
-                  className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
-                >
-                  <RefreshCcw className="w-4 h-4" />
-                  <span>다른 동영상 링크 분석하기</span>
-                </button>
+                  {/* 3. HD Thumbnail Download Button */}
+                  <button
+                    onClick={handleDownloadThumbnail}
+                    disabled={thumbnailProgress}
+                    className="relative overflow-hidden bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-100 font-extrabold text-xs sm:text-sm py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  >
+                    {thumbnailProgress ? (
+                      <>
+                        <RefreshCcw className="w-4 h-4 text-purple-400 animate-spin" />
+                        <span>썸네일 다운로드 중...</span>
+                      </>
+                    ) : (
+                      <>
+                        <ImageIcon className="w-4 h-4 text-purple-400" />
+                        <span>고화질 썸네일(JPG) 다운로드</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
+
+              {/* Reset/New analysis button */}
+              <button
+                onClick={handleReset}
+                className="w-full bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 hover:border-zinc-800 text-zinc-400 hover:text-zinc-200 font-bold text-xs py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all"
+              >
+                <RefreshCcw className="w-4 h-4" />
+                <span>다른 동영상 링크 분석하기</span>
+              </button>
             </div>
 
             <div className="bg-zinc-950 border border-zinc-900 rounded-lg p-3 text-[11px] text-zinc-500 leading-relaxed">
