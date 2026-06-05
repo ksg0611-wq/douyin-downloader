@@ -117,7 +117,7 @@ export default function DownloaderCore({
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-              {lang === "ko" ? "샤오홍수 (Xiaohongshu)" : "Xiaohongshu"}
+              {lang === "ko" ? "샤오홍슈 (Xiaohongshu)" : "Xiaohongshu"}
             </button>
           </div>
 

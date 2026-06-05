@@ -237,8 +237,8 @@ export default function Home() {
 
     // 예외 처리:
     if (platform === "xiaohongshu" && (url.includes("douyin.com") || url.includes("v.douyin"))) {
-      setErrorMessage(lang === "ko" ? "올바른 샤오홍수 링크가 아닙니다." : "Not a valid Xiaohongshu link.");
-      showToast(lang === "ko" ? "올바른 샤오홍수 링크가 아닙니다." : "Not a valid Xiaohongshu link.");
+      setErrorMessage(lang === "ko" ? "올바른 샤오홍슈 링크가 아닙니다." : "Not a valid Xiaohongshu link.");
+      showToast(lang === "ko" ? "올바른 샤오홍슈 링크가 아닙니다." : "Not a valid Xiaohongshu link.");
       return;
     }
 
@@ -361,7 +361,7 @@ export default function Home() {
       <Header lang={lang} setLang={setLang} />
 
       <main id="app-main" className="flex-grow max-w-6xl w-full mx-auto px-4 py-6 md:py-10 z-10">
-        <AdBanner position="top" />
+        {/* <AdBanner position="top" /> */} {/* 구글 애드센스 승인 완료 시 주석 해제하여 활성화 */}
 
         <HeroSection lang={lang} />
 

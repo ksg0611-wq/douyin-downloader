@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "URL이 제공되지 않았습니다." }, { status: 400 });
     }
 
-    // 샤오홍수(Xiaohongshu) 링크 처리 로직
+    // 샤오홍슈(Xiaohongshu) 링크 처리 로직
     if (platform === "xiaohongshu" || url.includes("xiaohongshu.com") || url.includes("xhslink.com")) {
       const hash = Math.abs(url.split("").reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0));
       
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ 
         success: true, 
         data: selectedMock,
-        warning: "샤오홍수 주소 분석에 성공하였습니다. (워터마크 제로 필터 적용 완료)"
+        warning: "샤오홍슈 주소 분석에 성공하였습니다. (워터마크 제로 필터 적용 완료)"
       });
     }
 

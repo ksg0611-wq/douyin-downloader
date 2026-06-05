@@ -31,7 +31,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           transition={{ delay: 0.1, duration: 0.5 }}
           className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight"
         >
-          도우인 · 샤오홍수 비디오 <br className="sm:hidden" />
+          도우인 · 샤오홍슈 비디오 <br className="sm:hidden" />
           <span className="bg-gradient-to-r from-[#00f2fe] via-purple-400 to-[#fe0979] bg-clip-text text-transparent">
             워터마크 없는 초고화질
           </span> 다운로드
@@ -52,7 +52,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
 
       <p className="text-zinc-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed">
         {lang === "ko" 
-          ? "동영상 링크 주소 한 번의 클릭만으로 도우인(Douyin)과 샤오홍수(Xiaohongshu) 동영상의 브랜드 로고와 워터마크가 완전히 배제된 깔끔한 원본 고화질 버전을 즉시 다운로드 해 드립니다."
+          ? "동영상 링크 주소 한 번의 클릭만으로 도우인(Douyin)과 샤오홍슈(Xiaohongshu) 동영상의 브랜드 로고와 워터마크가 완전히 배제된 깔끔한 원본 고화질 버전을 즉시 다운로드 해 드립니다."
           : "With just one click of the video link, instantly download clean, original high-definition videos with brand logos and watermarks completely removed from Douyin and Xiaohongshu."}
       </p>
     </div>
