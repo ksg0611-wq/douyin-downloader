@@ -9,8 +9,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { message: "API_KEY_MISSING" } }, { status: 500 });
     }
 
-    // 한국 등 아시아 국가에서는 v1에서 1.5 모델이 404 → v1beta가 유일한 정답
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // gemini-1.5-flash/2.0-flash는 2026년 폐기됨 → 최신 gemini-3.5-flash 사용
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(targetUrl, {
       method: 'POST',
