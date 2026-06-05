@@ -46,7 +46,7 @@ export default function Header({ theme = "dark", lang = "ko", setLang }: HeaderP
         {/* Navigation Section */}
         <nav className="flex items-center gap-2 sm:gap-4">
           <Link 
-            href="/"
+            href="/blog"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               isDark 
                 ? "text-zinc-400 hover:text-white hover:bg-zinc-900" 
@@ -57,7 +57,7 @@ export default function Header({ theme = "dark", lang = "ko", setLang }: HeaderP
             <span className="hidden sm:inline">{lang === "ko" ? "블로그" : "Blog"}</span>
           </Link>
           <Link 
-            href="/download"
+            href="/"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               isDark 
                 ? "bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20" 
