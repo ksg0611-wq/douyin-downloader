@@ -25,13 +25,13 @@ export default function Header({ theme = "dark", lang = "ko", setLang }: HeaderP
         <div className="flex items-center gap-2.5">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className={`relative flex items-center justify-center w-9 h-9 rounded-xl overflow-hidden border ${isDark ? 'bg-black border-zinc-800' : 'bg-gray-100 border-gray-300 group-hover:border-gray-400'} transition-colors`}>
-              <span className="absolute -left-0.5 text-[#00f2fe] font-black text-xl select-none">抖</span>
-              <span className="absolute right-0.5 text-[#fe0979] font-black text-xl select-none">音</span>
+              <span className="absolute left-1.5 text-[#00f2fe] font-black text-lg select-none">S</span>
+              <span className="absolute right-1.5 text-[#fe0979] font-black text-lg select-none">P</span>
               <div className="absolute inset-0 bg-gradient-to-tr from-[#fe0979]/10 to-[#00f2fe]/10" />
             </div>
             <div>
               <h1 className={`text-base sm:text-lg font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r flex items-center gap-1.5 ${isDark ? 'from-zinc-100 via-zinc-200 to-zinc-400' : 'from-gray-900 via-gray-800 to-gray-600'}`}>
-                Douyin Tool
+                ShortsPack
                 <span className="bg-gradient-to-r from-rose-500 to-cyan-400 text-[10px] text-white font-extrabold px-1.5 py-0.5 rounded uppercase tracking-widest leading-none scale-90">
                   PRO
                 </span>

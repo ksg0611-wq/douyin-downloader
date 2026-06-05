@@ -16,7 +16,7 @@ export default function TermsOfService() {
           <section className="space-y-3">
             <h2 className="text-lg font-bold text-zinc-900">제 1 조 (목적)</h2>
             <p>
-              본 약관은 Douyin Downloader(이하 '회사')이 제공하는 Douyin 비디오 다운로드 및 관련 정보 서비스(이하 '서비스')의 이용조건 및 절차, 회사와 회원 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+              본 약관은 ShortsPack Pro(이하 '회사')이 제공하는 숏폼 비디오 다운로드 및 관련 정보 서비스(이하 '서비스')의 이용조건 및 절차, 회사와 회원 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
             </p>
           </section>
 

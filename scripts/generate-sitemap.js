@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const baseUrl = 'https://douyin-downloader-amber.vercel.app';
+const baseUrl = 'https://shortspack.com';
 const postsDirectory = path.join(process.cwd(), 'content/posts');
 const publicDirectory = path.join(process.cwd(), 'public');
 
