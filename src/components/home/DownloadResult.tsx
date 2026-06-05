@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import { Video, Play, Download, Music, RefreshCcw, CheckCircle2, Image as ImageIcon } from "lucide-react";
+import { Video, Play, Download, Music, RefreshCcw, CheckCircle2, Image as ImageIcon, Sparkles, Copy, Check } from "lucide-react";
 import { VideoMock } from "../../types";
 import CPABanner from "../CPABanner";
 import { CPA_ADS } from "@/data/ads";
@@ -13,6 +13,7 @@ interface DownloadResultProps {
   setPreviewVideo: (val: VideoMock | null) => void;
   triggerDownloadAction: (type: "video" | "audio") => void;
   handleReset: () => void;
+  showToast?: (msg: string) => void;
 }
 
 export default function DownloadResult({
@@ -22,9 +23,13 @@ export default function DownloadResult({
   downloadType,
   setPreviewVideo,
   triggerDownloadAction,
-  handleReset
+  handleReset,
+  showToast
 }: DownloadResultProps) {
   const [thumbnailProgress, setThumbnailProgress] = React.useState<boolean>(false);
+  const [captionText, setCaptionText] = React.useState<string>("");
+  const [isGenerating, setIsGenerating] = React.useState<boolean>(false);
+  const [isCopied, setIsCopied] = React.useState<boolean>(false);
 
   const handleDownloadThumbnail = async () => {
     if (!analysisResult.thumbnail) return;
@@ -49,6 +54,48 @@ export default function DownloadResult({
       window.open(analysisResult.thumbnail, "_blank");
     } finally {
       setThumbnailProgress(false);
+    }
+  };
+
+  const handleGenerateCaption = async () => {
+    setIsGenerating(true);
+    setCaptionText("");
+    try {
+      const response = await fetch("/api/generate-caption", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: analysisResult.title }),
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Failed to generate caption");
+      }
+      setCaptionText(data.text);
+      if (showToast) {
+        showToast("AI 바이럴 캡션이 생성되었습니다! ✨");
+      }
+    } catch (err: any) {
+      console.error(err);
+      if (showToast) {
+        showToast("잠시 후 다시 시도해 주세요.");
+      } else {
+        alert("잠시 후 다시 시도해 주세요.");
+      }
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleCopyText = async () => {
+    try {
+      await navigator.clipboard.writeText(captionText);
+      setIsCopied(true);
+      if (showToast) {
+        showToast("클립보드에 복사되었습니다! 📋");
+      }
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -226,6 +273,62 @@ export default function DownloadResult({
                     )}
                   </button>
                 </div>
+              </div>
+
+              {/* AI Caption Section */}
+              <div className="space-y-3">
+                <button
+                  onClick={handleGenerateCaption}
+                  disabled={isGenerating}
+                  className="w-full py-3.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:brightness-110 active:scale-[0.99] text-white font-extrabold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-indigo-950/20 disabled:opacity-75 disabled:cursor-not-allowed"
+                >
+                  {isGenerating ? (
+                    <>
+                      <RefreshCcw className="w-4 h-4 animate-spin text-white" />
+                      <span>생성 중...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 text-white animate-pulse" />
+                      <span>✨ AI 바이럴 캡션 및 해시태그 생성하기</span>
+                    </>
+                  )}
+                </button>
+
+                {captionText && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="border border-zinc-800/80 bg-zinc-900/40 rounded-xl p-4 space-y-3 relative overflow-hidden"
+                  >
+                    <div className="flex items-center justify-between border-b border-zinc-800/60 pb-2">
+                      <span className="text-xs font-bold text-zinc-300 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                        AI 추천 바이럴 카피
+                      </span>
+                      <button
+                        onClick={handleCopyText}
+                        className="p-1.5 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+                        title="텍스트 복사하기"
+                      >
+                        {isCopied ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-emerald-400 font-bold">복사됨</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>복사하기</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <div className="text-xs sm:text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/60 border border-zinc-850 p-3.5 rounded-lg font-sans">
+                      {captionText}
+                    </div>
+                  </motion.div>
+                )}
               </div>
 
               {/* Reset/New analysis button */}

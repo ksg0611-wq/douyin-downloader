@@ -273,6 +273,7 @@ export default function Home() {
               setPreviewVideo={setPreviewVideo} 
               triggerDownloadAction={triggerDownloadAction}
               handleReset={handleReset}
+              showToast={showToast}
             />
           )}
         </AnimatePresence>
