@@ -67,10 +67,14 @@ export default function DownloadResult({
         body: JSON.stringify({ title: analysisResult.title }),
       });
       const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || "Failed to generate caption");
+      if (!response.ok) {
+        throw new Error(data.error?.message || data.error || "Failed to generate caption");
       }
-      setCaptionText(data.text);
+      const text = data.caption || data.text;
+      if (!text) {
+        throw new Error("No caption returned");
+      }
+      setCaptionText(text);
       if (showToast) {
         showToast("AI 바이럴 캡션이 생성되었습니다! ✨");
       }
