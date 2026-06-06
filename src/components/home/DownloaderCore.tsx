@@ -39,28 +39,10 @@ export default function DownloaderCore({
   setPlatform,
   lang = "ko"
 }: DownloaderCoreProps) {
-  const [count, setCount] = React.useState(0);
+  const [count, setCount] = React.useState(3424);
 
   React.useEffect(() => {
-    // 0에서 3420까지 1초간 부드럽게 상승하는 CountUp 효과
-    const target = 3420;
-    const duration = 1000; // 1초
-    const stepTime = 15;
-    const steps = duration / stepTime;
-    const increment = Math.ceil(target / steps);
-    
-    let current = 0;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(current);
-      }
-    }, stepTime);
-
-    // 3~7초 간격으로 +1 또는 +2씩 실시간으로 추가되는 타이머 (라이브 시뮬레이션)
+    // 3424에서 시작해 3~7초 간격으로 +1 또는 +2씩 실시간으로 추가되는 타이머 (라이브 시뮬레이션)
     let dynamicTimer: NodeJS.Timeout;
     const scheduleNextAddition = () => {
       const delay = Math.floor(Math.random() * 4000) + 3000;
@@ -71,12 +53,9 @@ export default function DownloaderCore({
       }, delay);
     };
 
-    setTimeout(() => {
-      scheduleNextAddition();
-    }, duration);
+    scheduleNextAddition();
 
     return () => {
-      clearInterval(timer);
       clearTimeout(dynamicTimer);
     };
   }, []);
@@ -122,31 +101,33 @@ export default function DownloaderCore({
           </div>
 
           {/* 실시간 라이브 트래픽 카운터 배너 */}
-          <div className="mb-5 p-3 rounded-xl bg-zinc-100 border border-zinc-200 dark:bg-zinc-900/30 dark:border-zinc-900/60 flex items-center justify-center gap-2 relative overflow-hidden backdrop-blur-sm">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent animate-pulse" />
-            <span className="flex h-2 w-2 relative shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-            </span>
-            <p className="text-xs sm:text-sm font-semibold text-zinc-800 dark:text-zinc-300 tracking-wide">
-              {lang === "ko" ? (
-                <>
-                  🔥 오늘 전 세계 크리에이터가 다운로드한 영상:{" "}
-                  <span className="font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-rose-600 dark:from-cyan-400 dark:to-rose-400">
-                    {count.toLocaleString()}
-                  </span>
-                  개
-                </>
-              ) : (
-                <>
-                  🔥 Total videos downloaded by creators worldwide today:{" "}
-                  <span className="font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-rose-600 dark:from-cyan-400 dark:to-rose-400">
-                    {count.toLocaleString()}
-                  </span>
-                </>
-              )}
-            </p>
-          </div>
+          {count > 0 && (
+            <div className="mb-5 p-3 rounded-xl bg-zinc-100 border border-zinc-200 dark:bg-zinc-900/30 dark:border-zinc-900/60 flex items-center justify-center gap-2 relative overflow-hidden backdrop-blur-sm">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent animate-pulse" />
+              <span className="flex h-2 w-2 relative shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+              </span>
+              <p className="text-xs sm:text-sm font-semibold text-zinc-800 dark:text-zinc-300 tracking-wide">
+                {lang === "ko" ? (
+                  <>
+                    🔥 누적 다운로드된 영상:{" "}
+                    <span className="font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-rose-600 dark:from-cyan-400 dark:to-rose-400">
+                      {count.toLocaleString()}
+                    </span>
+                    개
+                  </>
+                ) : (
+                  <>
+                    🔥 Cumulative videos downloaded:{" "}
+                    <span className="font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-rose-600 dark:from-cyan-400 dark:to-rose-400">
+                      {count.toLocaleString()}
+                    </span>
+                  </>
+                )}
+              </p>
+            </div>
+          )}
 
           <label htmlFor="url-input" className="block text-xs font-bold uppercase tracking-wider text-zinc-850 dark:text-zinc-400 mb-2 px-1 flex items-center justify-between">
             <span>
@@ -242,6 +223,15 @@ export default function DownloaderCore({
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* 법적 면책 문구 (Disclaimer) */}
+          <p className="text-xs text-gray-500 mt-3 text-center leading-relaxed">
+            {lang === "ko" ? (
+              "⚠️ 본 서비스는 개인의 학습, 벤치마킹 및 포트폴리오 분석 목적으로만 제공됩니다. 다운로드한 영상의 저작권 침해 및 무단 재업로드로 인해 발생하는 모든 법적 책임은 사용자 본인에게 있습니다."
+            ) : (
+              "⚠️ This service is provided only for personal learning, benchmarking, and portfolio analysis purposes. All legal responsibilities arising from copyright infringement and unauthorized re-uploading of downloaded videos lie with the user."
+            )}
+          </p>
         </div>
 
         <div className="mt-6 border-t border-zinc-200 dark:border-zinc-900 pt-4">

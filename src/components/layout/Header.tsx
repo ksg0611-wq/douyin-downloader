@@ -149,7 +149,7 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
               </button>
               <button
                 onClick={() => setLang("en")}
-                className={`px-2 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                className={`hidden px-2 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
                   lang === "en"
                     ? "bg-[#00f2fe]/20 text-[#00f2fe] border border-[#00f2fe]/30 font-extrabold"
                     : "text-zinc-500 hover:text-zinc-300"

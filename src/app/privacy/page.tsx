@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
               이용자는 회사의 서비스를 이용하시며 발생하는 모든 개인정보보호 관련 민원을 개인정보보호책임자 혹은 담당부서로 신고하실 수 있습니다.
             </p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
-              <li>이메일: support@example.com</li>
+              <li>이메일: contact@shortspack.com</li>
               <li>시행일자: 2026년 5월 25일</li>
             </ul>
           </section>
