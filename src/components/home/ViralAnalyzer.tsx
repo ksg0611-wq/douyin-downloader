@@ -367,6 +367,31 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
         )}
       </div>
 
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 AI 바이럴 영상 역설계 분석기의 필요성</h4>
+          <p>
+            수많은 숏폼 영상 중 어떤 영상이 왜 알고리즘의 선택을 받았는지 파악하는 것은 성공적인 크리에이터 활동의 핵심입니다. 이 도구는 성공한 영상들의 구조적 패턴을 해체하여 누구나 쉽게 분석하고 벤치마킹할 수 있도록 돕습니다. 시청자들의 이목을 끄는 디테일과 이탈 방지 구간 설계 기법을 추출하여, 신규 기획 단계에서의 불확실성을 드라마틱하게 해소해 줍니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (대본 확보):</strong> 분석하고자 하는 인기 숏폼 영상의 자막이나 화면 연출 흐름을 텍스트로 자세하게 받아적어 준비합니다.</li>
+            <li><strong>2단계 (AI 분석 호출):</strong> 준비한 텍스트를 위 입력 창에 넣고 '역설계 분석 시작하기' 버튼을 누릅니다.</li>
+            <li><strong>3단계 (기획 접목):</strong> 추출된 3초 후킹 기법과 전개 방식을 벤치마킹하여 내 채널만의 변형 아이디어 카드를 골라 콘텐츠 제작에 적용합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            성공한 대본을 분석할 때는 단순히 텍스트만 복사하는 것이 아니라, 영상에서 사용한 트랜지션 효과나 자막의 배치, 배경음악의 템포(BPM) 변화까지 함께 메모해 두는 것이 좋습니다. AI가 추천하는 변형 아이디어 중 자신의 주력 분야와 가장 궁합이 잘 맞는 형태 1가지를 타겟하여 시리즈물로 기획하면, 알고리즘 피드에 추천으로 묶여 조회수를 연속해서 흡수할 수 있습니다.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

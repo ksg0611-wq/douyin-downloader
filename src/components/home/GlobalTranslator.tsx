@@ -409,13 +409,39 @@ export default function GlobalTranslator() {
 
         {/* 빈 상태 */}
         {!result && !isLoading && !error && (
-          <div className="text-center py-8 text-zinc-600">
+          <div className="text-center py-8 text-zinc-500 dark:text-zinc-600">
             <Globe className="w-10 h-10 mx-auto mb-3 opacity-25" />
             <p className="text-sm font-medium">한국어 제목을 입력하거나 샘플을 클릭하면</p>
             <p className="text-xs mt-1">영어 · 일본어 · 베트남어로 바이럴 번역이 시작됩니다</p>
           </div>
         )}
       </div>
+
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 다국어 숏폼 제목 번역의 필요성</h4>
+          <p>
+            숏폼 영상 플랫폼(틱톡, 유튜브 쇼츠, 인스타그램 릴스 등)은 글로벌 알고리즘을 통해 전 세계 시청자에게 쉽게 도달할 수 있는 크로스보더 채널의 성격을 띠고 있습니다. 단순히 일반 번역기로 제목을 직역하면 현지 유저의 문화적 맥락이나 유머 코드를 반영하지 못해 클릭률(CTR)과 도달 범위가 현저히 떨어집니다. 이 다국어 숏폼 제목 번역 도구는 현지 원어민이 사용하는 바이럴 스타일의 표현을 반영하고 종합 전략을 제공하여 글로벌 시청자의 시선을 순식간에 사로잡는 데 도움을 줍니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (한국어 제목 입력):</strong> 내가 제작한 숏폼 영상의 핵심 주제 또는 기존 한국어 제목을 입력창에 작성합니다.</li>
+            <li><strong>2단계 (글로벌 바이럴 분석):</strong> '글로벌 바이럴 분석 시작' 버튼을 누르면 AI가 각 언어별(영어, 일본어, 베트남어) 바이럴 타이틀 스타일과 현지화 팁이 담긴 종합 전략을 제공합니다.</li>
+            <li><strong>3단계 (현지 맞춤 업로드):</strong> 제공된 번역 제목 중 내 영상 톤앤매너에 어울리는 최적의 키워드를 복사하여 타겟 국가의 업로드 메타데이터로 적용합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            해외 타겟팅 숏폼 영상을 기획할 때는 제목뿐만 아니라 자막이나 영상 초반 오디오에도 번역된 주요 키워드를 함께 시각적으로 배치하는 것이 알고리즘 유입을 높이는 핵심 비결입니다. 예를 들어 영어권 유저를 타겟팅할 때는 강렬한 의성어(WOW, POV)나 질문형 문장을 썸네일과 제목에 적절히 노출시키고, 일본어권 유저를 공략할 때는 공감을 불러일으키는 문구나 호기심을 유발하는 말줄임표(...) 표현을 활용하면 더욱 효과적입니다.
+          </p>
+        </div>
+      </div>
+
     </section>
   );
 }

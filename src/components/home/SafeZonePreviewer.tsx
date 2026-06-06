@@ -511,6 +511,32 @@ export default function SafeZonePreviewer({ lang = "ko" }: SafeZonePreviewerProp
         </div>
 
       </div>
+
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 숏폼 안전 영역 프리뷰어의 필요성</h4>
+          <p>
+            숏폼 비디오(틱톡, 유튜브 쇼츠, 인스타그램 릴스, 도우인 등)는 세로형(9:16) 화면 비율을 100% 활용해 몰입감을 선사하지만, 각 플랫폼이 제공하는 기본 UI 오버레이(프로필 아이콘, 하트, 댓글 버튼, 설명 텍스트, 음원 정보, 상단 네비게이션)로 인해 영상의 일부 영역이 필수적으로 가려지게 됩니다. 만약 비디오의 핵심 텍스트 자막이나 브랜드 로고가 이 가림 영역 내에 배치된다면 가독성이 떨어져 이탈율이 크게 치솟고, 알고리즘 피드 노출에도 부정적 피드백을 받게 됩니다. 본 숏폼 안전 영역 프리뷰어는 복잡한 수치 계산 없이 자신이 디자인한 카드뉴스나 썸네일, 영상 스크린샷을 업로드하여 각 채널별 차폐 영역을 간편하게 테스트할 수 있는 크리에이터 필수 유틸리티입니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (이미지 업로드):</strong> 제작한 숏폼 썸네일 이미지, 시안용 스크린샷, 또는 비디오 프레임을 드래그 앤 드롭하여 업로드합니다.</li>
+            <li><strong>2단계 (플랫폼 및 투명도 선택):</strong> 우측 스마트폰 목업에서 비교해 볼 타겟 플랫폼(틱톡, 쇼츠, 릴스, 도우인)을 지정하고, 가이드라인 오버레이 투명도 슬라이더를 조절합니다.</li>
+            <li><strong>3단계 (자막 위치 조정):</strong> 붉은색 차폐 영역에 겹치지 않는 중앙의 '안전 영역(Safe Zone)' 범위 내에 타이틀 자막 및 브랜드 로고가 안전하게 포함되었는지 확인하고 수정합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            플랫폼별로 하단 텍스트 정보량이 상이하며, 특히 중국 도우인(Douyin)이나 공동 구매 배너가 들어간 영상의 경우 우측 하단의 노출 영역 차단이 매우 심해집니다. 따라서 다양한 크로스보더 채널에 동일 비디오를 동시에 배포할 경우에는 가장 차단 영역이 좁은 릴스/쇼츠 기준보다는, 보수적으로 틱톡/도우인 기준의 가이드를 기준으로 잡아 화면 상하단 15%, 우측 20%의 여백을 완벽하게 확보하는 것을 강력하게 권장합니다.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

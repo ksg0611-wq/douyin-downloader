@@ -318,6 +318,32 @@ export default function BPMCalculator({ lang = "ko" }: BPMCalculatorProps) {
         </div>
 
       </div>
+
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 숏폼 BGM 컷편집 계산기의 필요성</h4>
+          <p>
+            숏폼 영상(쇼츠, 릴스, 틱톡)의 중독성과 시청 지속 시간(Retention)을 결정짓는 가장 강력한 요소 중 하나는 배경 음악(BGM)의 비트와 비주얼 화면 전환(컷편집)의 완벽한 일치성입니다. 음악의 드럼 킥이나 멜로디 박자에 딱 맞춰 화면이 넘어가는 이른바 '비트싱크' 편집은 시청자에게 극도의 시각적·청각적 쾌감을 유발하지만, 수동으로 타임라인 프레임을 보며 초 단위를 맞추는 작업은 매우 번거롭고 시간이 오래 걸립니다. 이 BGM 컷편집 계산기는 사용자가 음악을 들으며 간단히 화면을 두드리는 것만으로도 실시간 음원의 정확한 분당 비트수(BPM)를 도출하고, 이에 매핑되는 1비트, 0.5비트, 0.25비트 단위의 세밀한 편집 프레임 타임값을 밀리초(ms) 단위까지 즉시 계산해 주는 강력한 프로덕션 보조 도구입니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (음악 재생 및 탭):</strong> 편집에 사용할 배경 음악(BGM)을 틀어두고, 비트의 템포(박자)에 맞춰 중앙의 빨간색 'TAP' 버튼을 리드미컬하게 4회 이상 연속 클릭합니다.</li>
+            <li><strong>2단계 (BPM 및 싱크초 확인):</strong> 화면 상단에 측정된 실시간 BPM 지수를 확인하고, 오른쪽에 연산된 1비트 컷, 0.5비트 컷, 0.25비트 컷에 해당하는 정확한 싱크 시간(초)을 대조합니다.</li>
+            <li><strong>3단계 (컷편집 적용):</strong> 우측 복사 버튼을 눌러 소수점 3자리 피드 초 값을 복사한 뒤, 프리미어 프로나 캡컷(CapCut) 등 편집 프로그램의 클립 길이 설정 창에 입력하여 정밀 비트싱크 컷편집을 완성합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-250 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            일반적인 숏폼 편집에서는 처음부터 끝까지 1비트 컷으로만 편집하면 영상이 다소 단조롭게 느껴질 수 있습니다. 평조의 인트로 영역에서는 1비트 컷 단위로 여유 있게 컷을 전환하다가, 영상의 하이라이트(드롭) 구간이나 빠른 속도의 제품 소개 영역에서는 0.5비트 컷이나 0.25비트 컷으로 전환 주기를 급격히 좁혀 줌으로써 시청자의 몰입도와 알고리즘 도달 지수를 극대화할 수 있습니다.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

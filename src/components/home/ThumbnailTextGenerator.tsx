@@ -306,6 +306,31 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
         )}
       </div>
 
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 0.1초 시선 강탈 썸네일 텍스트 생성기의 필요성</h4>
+          <p>
+            숏폼 영상의 성공을 결정짓는 핵심 지표 중 하나는 바로 피드 노출 시 유저가 영상을 클릭하는 확률(클릭률, CTR)입니다. 이 도구는 유저들의 스크롤을 0.1초 만에 멈추게 만들 수 있도록 자극적이고 호기심을 극대화하는 매운맛 카피와 전문성 및 핵심 정보 혜택을 명확히 제시하는 순한맛 카피 10종을 즉시 디자인하여 크리에이터의 유입률 고민을 해결해 줍니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (핵심 키워드 입력):</strong> 제작할 동영상의 핵심 주제나 제목 후보를 입력 창에 간결하게 작성합니다.</li>
+            <li><strong>2단계 (카피 뽑기):</strong> '썸네일 텍스트 뽑아보기' 버튼을 눌러 AI가 제안하는 10가지 컨셉을 확인합니다.</li>
+            <li><strong>3단계 (썸네일 제작):</strong> 내 영상의 분위기에 어울리는 카피를 복사하여 썸네일(커버) 디자인의 중심에 크게 배치합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            썸네일 텍스트를 배치할 때는 폰트 크기를 매우 크게 하고 배경색과 뚜렷한 보색 대비를 이루게 설정하여 가독성을 극대화해야 합니다. 모바일 화면 크기는 생각보다 작기 때문에 텍스트가 12자를 넘지 않도록 간결하게 구성하는 것이 효과적이며, 제목과 썸네일 텍스트의 내용을 다르게 구성하여 호기심과 정보를 유기적으로 매칭시키는 것이 클릭을 유도하는 검증된 마케팅 기법입니다.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

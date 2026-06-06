@@ -432,6 +432,32 @@ export default function HashtagTrendAnalyzer() {
           </div>
         )}
       </div>
+
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 실시간 해시태그 트렌드 분석기의 필요성</h4>
+          <p>
+            해시태그는 숏폼 알고리즘 시스템이 영상의 카테고리를 분류하고 관심사가 일치하는 적절한 유저 풀에게 도달시키는 이정표 역할을 합니다. 매 순간 검색량과 제작 비디오 비율이 변동하므로, 트렌드를 놓치지 않는 스마트한 해시태그 선택이 노출량을 극대화합니다. 이 도구는 주요 SNS 플랫폼의 해시태그 데이터를 실시간 분석하고, 경쟁 강도와 트렌드 지수 및 동시 추천 해시태그 목록을 추출해 크리에이터의 해시태그 선정 실패 위험을 예방합니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (태그 입력):</strong> 내 영상의 주요 분야나 타겟 타운 키워드를 샵 기호(#) 없이 입력합니다.</li>
+            <li><strong>2단계 (인사이트 조회):</strong> '트렌드 분석' 버튼을 누르면 제공되는 7일 트렌드 조회수 추이와 마케팅인사이트 카드를 확인합니다.</li>
+            <li><strong>3단계 (해시태그 조합):</strong> 함께 쓰기 좋은 연관 해시태그 중 경쟁 강도가 낮거나 트렌드 지수가 높은 태그를 선택 조합하여 영상 업로드 시 작성합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            해시태그를 작성할 때는 조회수가 너무 높은 메가 키워드(경쟁 강도 '상')로만 도배하는 것보다, 내 카테고리에 알맞은 틈새 키워드(경쟁 강도 '중' 혹은 '하')와 1:2의 비율로 혼합하여 구성하는 것이 노출에 유리합니다. 초기 업로드 단계에서는 경쟁이 덜한 해시태그 카테고리에서 먼저 상위 랭킹을 차지한 후, 점진적으로 메가 키워드 피드 영역으로 노출을 확대시키는 계단식 성장 전략을 권장합니다.
+          </p>
+        </div>
+      </div>
+
     </section>
   );
 }

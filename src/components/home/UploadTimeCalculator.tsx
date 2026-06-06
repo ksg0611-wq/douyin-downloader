@@ -327,6 +327,31 @@ export default function UploadTimeCalculator({ lang = "ko" }: UploadTimeCalculat
         )}
       </div>
 
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 글로벌 크로스보더 최적 업로드 타임 계산기의 필요성</h4>
+          <p>
+            글로벌 숏폼 시장은 각 국가별 시차와 통근/여가 시간 등의 라이프사이클에 따라 트래픽이 몰리는 시간대(골든 아워)가 완전히 다릅니다. 국내에서 제작한 영상을 해외 타겟 플랫폼에 무작정 한국 시각에 업로드하면 초반 트래픽 획득에 크게 불리해집니다. 이 도구는 타겟하려는 해외 국가의 모바일 사용 피크 타임을 인공지능이 계산하여 한국 시간(KST) 예약 업로드 최적 시점으로 환산해 줍니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (선택):</strong> 진입하고자 하는 목표 해외 타겟 국가와 해당 국가에서 주력으로 활용할 숏폼 플랫폼을 선택합니다.</li>
+            <li><strong>2단계 (시간 산출):</strong> '최적 업로드 시간 계산하기' 버튼을 눌러 피크 분석 스케줄을 조회합니다.</li>
+            <li><strong>3단계 (예약 발행):</strong> 산출된 한국 시간(KST)을 바탕으로 플랫폼 관리자 페이지에서 예약 업로드(Schedule Upload)를 설정하여 발행합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            추천된 예약 업로드 시간보다 30분~1시간 전에 미리 업로드를 예약하는 것이 시스템 파이프라인 상 안전합니다. 숏폼 플랫폼의 인공지능 알고리즘이 비디오 화질 인코딩 및 유해성 검사를 거쳐 유저 피드에 노출시키기까지 평균 20~40분의 렌더링 검사 대기 시간이 발생하기 때문입니다. 또한, 타겟 국가의 공휴일이나 연휴 시즌에는 주말 트래픽 패턴이 적용되므로 계절성과 트렌드 이벤트를 함께 고려해 스케줄링해야 효과적입니다.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

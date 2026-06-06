@@ -305,6 +305,31 @@ export default function AlgoHookGenerator({ lang = "ko" }: AlgoHookGeneratorProp
         )}
       </div>
 
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 알고리즘 폭발 CTA & 댓글 유도 멘트 생성기의 필요성</h4>
+          <p>
+            숏폼 알고리즘 시스템은 단순히 시청자가 영상을 조회하는 것뿐 아니라, 시청 후 얼마나 적극적인 인터랙션(좋아요, 저장, 공유, 댓글 작성 등)을 보이는지를 가장 큰 가중치로 판단합니다. 이 도구는 시청자들이 주도적으로 영상을 저장하거나 공유하게 만드는 강력한 종결부 멘트와, 댓글창 활성화를 이끌어내는 고정 댓글용 타겟 질문 세트를 제공하여 채널의 알고리즘 떡상 확률을 극대화합니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (콘텐츠 정의):</strong> 제작 예정인 영상의 전반적인 스토리라인이나 핵심 전달 가치를 입력창에 넣습니다.</li>
+            <li><strong>2단계 (치트키 출력):</strong> '알고리즘 치트키 뽑아보기' 버튼을 탭하여 AI 그로스 해킹 추천 리스트를 받아봅니다.</li>
+            <li><strong>3단계 (영상/댓글 적용):</strong> 출력된 CTA 문구를 영상 최후반부 3초 구간 음성 및 텍스트 자막으로 연출하고, 추천 질문을 첫 댓글에 작성 후 고정합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            아웃트로에 배치하는 CTA 멘트는 영상이 끝나기 직전 시청자가 화면을 이탈하지 않도록 시각적 카드나 화살표 모션 그래픽과 함께 제시하는 것이 중요합니다. 특히 고정 댓글의 질문은 단순히 예/아니오로 답할 수 있는 질문보다, 시청자 개개인의 생활 경험이나 찬반 논쟁을 부드럽게 이끌어낼 수 있는 질문을 선택해야 시청자들 간의 대화가 활발히 이어져 알고리즘 점수를 단시간에 급상승시킬 수 있습니다.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

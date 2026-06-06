@@ -307,6 +307,31 @@ export default function HookGenerator({ lang = "ko" }: HookGeneratorProps) {
         )}
       </div>
 
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 AI 3초 후킹 대본 생성기의 필요성</h4>
+          <p>
+            숏폼 영상(틱톡, 유튜브 쇼츠, 인스타그램 릴스)은 첫 3초 안에 시청자의 시선을 붙잡지 못하면 대부분의 오디언스가 즉시 스와이프하여 스킵(이탈)해 버립니다. 플랫폼 알고리즘 또한 비디오 초반의 이탈률을 기반으로 해당 영상의 가치를 평가하기 때문에, 첫 3초의 도입부 멘트(Hook)가 전체 노출 성과를 좌우한다고 해도 과언이 아닙니다. 이 AI 3초 후킹 대본 생성기는 시청 심리학에 근거한 세 가지 마케팅 스타일(도발적인 팩트 폭행, 감성적인 공감 유도, 호기심 극대화 질문)에 맞추어 시청자의 손가락을 멈추게 만들 강력한 첫 문장 스크립트를 즉시 생성하여 제공합니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (주제 입력):</strong> 내가 제작하고자 하는 숏폼 비디오의 핵심 주제나 해결하고 싶은 유저의 고민을 입력창에 명확히 작성합니다.</li>
+            <li><strong>2단계 (스타일 선택 및 복사):</strong> '대본 생성하기' 버튼을 누르면 연산된 3가지 후킹 대본 카드 중 영상의 기획 의도와 연출 방식에 가장 부합하는 문구를 선택해 복사합니다.</li>
+            <li><strong>3단계 (프로덕션 적용):</strong> 복사한 텍스트를 영상의 첫 3초 자막으로 크게 노출하고, 동시에 AI 내레이션이나 직접 보이스오버로 또렷하게 들려주어 시청 지속을 극대화합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            후킹 멘트는 단지 오디오로만 흘려보내는 것보다, 화면 정중앙이나 상단 안전 영역 내에 눈에 띄는 폰트와 원색 계열의 배경 박스를 조합하여 텍스트 자막으로 강력하게 동시에 뿌려주는 것이 효과적입니다. 예를 들어 '도발적인 팩트 폭행' 스타일의 후킹을 사용할 경우, 시청자가 미처 자막을 읽기도 전에 뇌리에 충격을 주는 이미지나 효과음을 배치하여 몰입을 유도하십시오.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

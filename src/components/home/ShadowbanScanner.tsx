@@ -306,6 +306,32 @@ export default function ShadowbanScanner({ lang = "ko" }: ShadowbanScannerProps)
         </div>
 
       </div>
+
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 섀도우밴 위험 단어 스캐너의 필요성</h4>
+          <p>
+            틱톡, 유튜브 쇼츠, 인스타그램 릴스, 도우인 등 글로벌 숏폼 알고리즘 시스템은 유해 콘텐츠와 허위 과장 광고를 스크리닝하기 위해 고도로 설계된 텍스트 필터 엔진을 탑재하고 있습니다. 영상 제목, 해시태그, 설명글, 심지어 오디오 자막(STT)에 '100% 수익보장', '다이어트 약', '무조건' 등 자극적인 홍보성이나 확증 편향적인 키워드가 반복 검출될 경우, 플랫폼은 별도의 경고 없이 해당 영상의 노출 지수를 즉각 제한하는 '섀도우밴(Shadowban)'을 작동시킵니다. 이 섀도우밴 위험 단어 스캐너는 크리에이터가 업로드 전 자신의 자막 및 메타데이터를 정밀 대조하여 알고리즘 제한 유발 단어를 실시간 감지하고 수정할 수 있게 유도하여 계정 지수 강등 피해를 미연에 방지합니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (텍스트 입력):</strong> 작성해 둔 숏폼 영상의 대본(Script), 제목(Title), 태그(Tags) 또는 본문 설명 텍스트를 입력창에 붙여넣습니다.</li>
+            <li><strong>2단계 (실시간 위험도 스캔):</strong> 우측 실시간 분석 결과 패널에서 감지된 섀도우밴 위험 단어의 개수와 위치(붉은색 마킹 처리)를 확인합니다.</li>
+            <li><strong>3단계 (단어 순화 및 복사):</strong> 붉은색으로 표기된 유해 가능성 단어를 자극성이 덜한 유의어 및 정보성 키워드로 수정한 뒤, '복사' 버튼을 눌러 최종 확정된 텍스트를 플랫폼에 업로드합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            플랫폼 심사 봇의 필터링을 우회하려면 극단적인 표현(예: '최고', '비밀', '공짜') 대신 완화된 우회 표현(예: '꿀팁', '핵심 정보', '무상 혜택')을 활용하는 것이 바람직합니다. 또한 사전에 섀도우밴 단어를 완전히 소거하고 정보성에 초점을 맞춘 텍스트를 작성하면, 알고리즘이 해당 콘텐츠를 '정보 제공성 양질 비디오'로 분류하여 초기 시청층(Seed Pool) 도달을 훨씬 매끄럽고 높게 제공해 줍니다.
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }

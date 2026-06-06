@@ -371,6 +371,32 @@ export default function RevenueSimulator() {
 
         </div>
       </div>
+
+      <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
+      
+      <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 space-y-4 leading-relaxed">
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">💡 숏폼 예상 수익 시뮬레이터의 필요성</h4>
+          <p>
+            숏폼 콘텐츠 크리에이터들은 안정적인 수익 모델을 수립하고 광고주와의 협상 테이블에서 자신만의 기준을 정립하기 위해 객관적인 단가 측정이 반드시 필요합니다. 조회수 기반의 플랫폼 정산금(RPM)과 브랜드 광고 제안료(PPL)는 카테고리별 잠재적 구매 전환율과 플랫폼 알고리즘 가중에 따라 큰 차이를 보입니다. 본 예상 수익 시뮬레이터는 이러한 시장의 다차원적 변수들을 직관적으로 연동해, 크리에이터 스스로 합리적인 가치를 입증하고 협상력을 높이도록 돕는 혁신적인 도구입니다.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">📖 100% 활용 가이드</h4>
+          <ol className="list-decimal list-inside space-y-1">
+            <li><strong>1단계 (기본 설정):</strong> 내가 타겟팅하는 주요 플랫폼(유튜브 쇼츠, 인스타그램 릴스, 틱톡)과 채널의 세부 카테고리를 설정합니다.</li>
+            <li><strong>2단계 (조회수 시뮬레이션):</strong> 슬라이더나 빠른 설정 버튼을 사용해 목표로 하거나 평균적으로 달성하는 조회수 구간을 입력합니다.</li>
+            <li><strong>3단계 (광고 단가 대조):</strong> 연산된 RPM 기반 순수익과 제안 가능한 브랜드 협찬 단가 결과를 대조하여 파트너십 제안용 프레젠테이션(제안서)이나 광고 제안 단가로 활용합니다.</li>
+          </ol>
+        </div>
+        <div>
+          <h4 className="font-bold text-zinc-850 dark:text-zinc-200 mb-1">🔥 크리에이터 실전 꿀팁</h4>
+          <p>
+            광고 브랜드 협찬 단가를 높이고 싶다면, 단순 조회수 외에 '댓글 반응률'과 '평균 시청 지속 시간' 데이터를 제안서에 포함시켜 콘텐츠의 몰입도를 증명하십시오. 특히 금융, 비즈니스, 테크와 같은 특정 카테고리는 소수의 조회수만으로도 훨씬 높은 구매력을 가진 오디언스를 보유하고 있어, 이를 어필할 경우 시뮬레이터 결과치보다 1.5~2배 수준의 프리미엄 PPL 단가를 확보할 수 있습니다.
+          </p>
+        </div>
+      </div>
+
     </section>
   );
 }
