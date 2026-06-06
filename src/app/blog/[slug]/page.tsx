@@ -2,9 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import CPABanner from "@/components/CPABanner";
 import BlogCTA from "@/components/home/BlogCTA";
-import { CPA_ADS } from "@/data/ads";
 import { getPostData } from "@/lib/posts";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
@@ -83,58 +81,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         {/* Markdown Content rendered via prose */}
         <article className="prose prose-zinc prose-rose dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-a:text-rose-600 hover:prose-a:text-rose-500 prose-img:rounded-xl">
-          {(() => {
-            // 두 번째 <h2> 태그(## )를 기준으로 분리 시도
-            const content = postData.content;
-            let part1 = content;
-            let part2 = "";
-            
-            const firstH2 = content.indexOf('\n## ');
-            if (firstH2 !== -1) {
-              const secondH2 = content.indexOf('\n## ', firstH2 + 1);
-              if (secondH2 !== -1) {
-                part1 = content.substring(0, secondH2);
-                part2 = content.substring(secondH2);
-              } else {
-                // H2가 하나뿐이거나 없으면 절반 지점의 단락 기준 분리
-                const mid = Math.floor(content.length / 2);
-                const splitIdx = content.indexOf('\n\n', mid) !== -1 ? content.indexOf('\n\n', mid) : mid;
-                part1 = content.substring(0, splitIdx);
-                part2 = content.substring(splitIdx);
-              }
-            } else {
-              const mid = Math.floor(content.length / 2);
-              const splitIdx = content.indexOf('\n\n', mid) !== -1 ? content.indexOf('\n\n', mid) : mid;
-              part1 = content.substring(0, splitIdx);
-              part2 = content.substring(splitIdx);
-            }
-
-            return (
-              <>
-                <ReactMarkdown>{part1}</ReactMarkdown>
-                
-                {part2 && (
-                  <div className="not-prose my-10 px-2 sm:px-4">
-                    <CPABanner ad={CPA_ADS.blog_middle} type="horizontal" />
-                  </div>
-                )}
-                
-                {part2 && <ReactMarkdown>{part2}</ReactMarkdown>}
-              </>
-            );
-          })()}
+          <ReactMarkdown>{postData.content}</ReactMarkdown>
         </article>
 
         <BlogCTA category={postData.category} />
 
-        {/* CPA Banner (Card Type) */}
-        <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
-          <div className="text-center mb-6">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white">🎁 에디터 추천</h3>
-            <p className="text-sm text-zinc-550 dark:text-zinc-400 mt-1">블로그 독자만을 위한 특별한 혜택을 확인해 보세요!</p>
-          </div>
-          <CPABanner ad={CPA_ADS.main_cpa} type="card" />
-        </div>
       </main>
 
       <div className="bg-white dark:bg-[#060609] border-t border-zinc-200 dark:border-zinc-900">
