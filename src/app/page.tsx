@@ -27,6 +27,7 @@ import HookGenerator from "@/components/home/HookGenerator";
 import ViralAnalyzer from "@/components/home/ViralAnalyzer";
 import ThumbnailTextGenerator from "@/components/home/ThumbnailTextGenerator";
 import AlgoHookGenerator from "@/components/home/AlgoHookGenerator";
+import UploadTimeCalculator from "@/components/home/UploadTimeCalculator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -59,6 +60,16 @@ const TOOLS = [
     desc: "영상의 주제만 입력하면, 시청자의 행동(저장, 공유, 좋아요, 댓글)을 폭발적으로 유도하는 아웃트로 CTA 멘트와 고정 댓글용 질문 10종을 AI가 제작합니다.",
     descEn: "Generate 10 attention-grabbing viral CTA phrases and pinning comment questions using Gemini AI.",
     icon: "📢",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
+  {
+    id: "upload-time-calculator",
+    title: "글로벌 최적 업로드 타임 계산기",
+    titleEn: "Global Upload Time Calculator",
+    desc: "타겟 국가와 숏폼 플랫폼을 선택하면, 현지 트래픽 집중 시간대 분석과 이에 맞춘 최적의 한국 기준(KST) 업로드 예약 시간을 계산해 줍니다.",
+    descEn: "Calculate the optimal upload time in KST by analyzing target country traffic peaks and time zones using Gemini AI.",
+    icon: "🌍",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
   },
@@ -135,7 +146,7 @@ const TOOLS = [
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
+  const [activeTool, setActiveTool] = useState<"viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -254,7 +265,7 @@ export default function Home() {
       const toolParam = params.get("tool");
       const scrollParam = params.get("scroll");
 
-      if (toolParam && ["viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
+      if (toolParam && ["viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "upload-time-calculator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
         setActiveTool(toolParam as any);
         setTimeout(() => {
           const el = document.getElementById("available-tools");
@@ -613,6 +624,8 @@ export default function Home() {
               ? (lang === "ko" ? "0.1초 시선 강탈 썸네일 텍스트 생성기" : "Thumbnail Copy Generator")
               : activeTool === "algo-hook-generator"
               ? (lang === "ko" ? "알고리즘 폭발 CTA & 댓글 유도 멘트 생성기" : "Algo CTA & Comment Generator")
+              : activeTool === "upload-time-calculator"
+              ? (lang === "ko" ? "글로벌 최적 업로드 타임 계산기" : "Global Upload Time Calculator")
               : activeTool === "hashtag"
               ? (lang === "ko" ? "실시간 해시태그 트렌드 분석기" : "Real-time Hashtag Trend Analyzer")
               : activeTool === "translator"
@@ -633,6 +646,7 @@ export default function Home() {
           {activeTool === "viral-analyzer" && <ViralAnalyzer lang={lang} />}
           {activeTool === "thumbnail-text-generator" && <ThumbnailTextGenerator lang={lang} />}
           {activeTool === "algo-hook-generator" && <AlgoHookGenerator lang={lang} />}
+          {activeTool === "upload-time-calculator" && <UploadTimeCalculator lang={lang} />}
           {activeTool === "hashtag" && <HashtagTrendAnalyzer />}
           {activeTool === "translator" && <GlobalTranslator />}
           {activeTool === "revenue" && <RevenueSimulator />}

@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/viral-analyzer", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/thumbnail-text-generator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/algo-hook-generator", changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: "/upload-time-calculator", changeFrequency: "monthly" as const, priority: 0.8 },
   ];
 
   const staticUrls = staticRoutes.map((route) => ({
