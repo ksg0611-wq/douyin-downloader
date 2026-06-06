@@ -29,11 +29,11 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-950 dark:text-white"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black tracking-tight leading-tight text-zinc-950 dark:text-white break-keep"
         >
-          도우인 · 샤오홍슈 <br className="sm:hidden" />
+          도우인·샤오홍슈 <br className="sm:hidden" />
           <span className="bg-gradient-to-r from-blue-600 via-purple-650 to-rose-600 dark:from-[#00f2fe] dark:via-purple-400 dark:to-[#fe0979] bg-clip-text text-transparent">
-            클린 비디오 분석 및 저장
+            클린 비디오 분석·저장
           </span>
         </motion.h2>
       ) : (
@@ -41,7 +41,7 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-zinc-950 dark:text-white"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black tracking-tight leading-tight text-zinc-950 dark:text-white break-keep"
         >
           Douyin & Xiaohongshu <br className="sm:hidden" />
           <span className="bg-gradient-to-r from-blue-600 via-purple-650 to-rose-600 dark:from-[#00f2fe] dark:via-purple-400 dark:to-[#fe0979] bg-clip-text text-transparent">
