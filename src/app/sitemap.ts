@@ -18,6 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/thumbnail-text-generator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/algo-hook-generator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/upload-time-calculator", changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: "/sponsor-pitch-generator", changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: "/tools/sponsor-pitch-generator", changeFrequency: "monthly" as const, priority: 0.8 },
   ];
 
   const staticUrls = staticRoutes.map((route) => ({

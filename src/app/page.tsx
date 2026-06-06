@@ -28,11 +28,22 @@ import ViralAnalyzer from "@/components/home/ViralAnalyzer";
 import ThumbnailTextGenerator from "@/components/home/ThumbnailTextGenerator";
 import AlgoHookGenerator from "@/components/home/AlgoHookGenerator";
 import UploadTimeCalculator from "@/components/home/UploadTimeCalculator";
+import SponsorPitchGenerator from "@/components/home/SponsorPitchGenerator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
 
 const TOOLS = [
+  {
+    id: "sponsor-pitch-generator",
+    title: "브랜드 협찬(광고) 제안서 자동 생성기",
+    titleEn: "AI Sponsor Pitch Generator",
+    desc: "내 채널의 주제와 시청자층, 타겟 브랜드를 입력하면 브랜드 마케터의 마음을 사로잡을 정밀한 비즈니스 협찬 콜드 메일 제안서를 AI가 자동 생성합니다.",
+    descEn: "Enter channel topics, target audience, and brand to auto-generate highly customized business sponsor pitch emails using Gemini AI.",
+    icon: "💌",
+    badge: "PRO",
+    badgeColor: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30",
+  },
   {
     id: "viral-analyzer",
     title: "AI 바이럴 영상 역설계 분석기",
@@ -146,7 +157,7 @@ const TOOLS = [
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
+  const [activeTool, setActiveTool] = useState<"sponsor-pitch-generator" | "viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -265,7 +276,7 @@ export default function Home() {
       const toolParam = params.get("tool");
       const scrollParam = params.get("scroll");
 
-      if (toolParam && ["viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "upload-time-calculator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
+      if (toolParam && ["sponsor-pitch-generator", "viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "upload-time-calculator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
         setActiveTool(toolParam as any);
         setTimeout(() => {
           const el = document.getElementById("available-tools");
@@ -618,7 +629,9 @@ export default function Home() {
           isOpen={activeTool !== null}
           onClose={() => setActiveTool(null)}
           title={
-            activeTool === "viral-analyzer"
+            activeTool === "sponsor-pitch-generator"
+              ? (lang === "ko" ? "💰 브랜드 협찬(광고) 제안서 자동 생성기" : "💰 AI Sponsor Pitch Generator")
+              : activeTool === "viral-analyzer"
               ? (lang === "ko" ? "AI 바이럴 영상 역설계 분석기" : "AI Viral Video Analyzer")
               : activeTool === "thumbnail-text-generator"
               ? (lang === "ko" ? "0.1초 시선 강탈 썸네일 텍스트 생성기" : "Thumbnail Copy Generator")
@@ -643,6 +656,7 @@ export default function Home() {
               : ""
           }
         >
+          {activeTool === "sponsor-pitch-generator" && <SponsorPitchGenerator lang={lang} />}
           {activeTool === "viral-analyzer" && <ViralAnalyzer lang={lang} />}
           {activeTool === "thumbnail-text-generator" && <ThumbnailTextGenerator lang={lang} />}
           {activeTool === "algo-hook-generator" && <AlgoHookGenerator lang={lang} />}
