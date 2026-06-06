@@ -24,11 +24,22 @@ import SafeZonePreviewer from "@/components/home/SafeZonePreviewer";
 import BPMCalculator from "@/components/home/BPMCalculator";
 import ShadowbanScanner from "@/components/home/ShadowbanScanner";
 import HookGenerator from "@/components/home/HookGenerator";
+import ViralAnalyzer from "@/components/home/ViralAnalyzer";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
 
 const TOOLS = [
+  {
+    id: "viral-analyzer",
+    title: "AI 바이럴 영상 역설계 분석기",
+    titleEn: "AI Viral Video Analyzer",
+    desc: "인기 숏폼 비디오의 대본을 입력하면, 100만 조회수의 후킹 기법, 이탈 방지 전개 방식, CTA 전략 및 채널 맞춤형 변형 아이디어를 AI가 즉시 역설계합니다.",
+    descEn: "Analyze scripts of popular shorts to reverse engineer hooking points, retention tactics, and custom channel ideas.",
+    icon: "🧠",
+    badge: "🔥 HOT",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
   {
     id: "hashtag",
     title: "실시간 해시태그 트렌드 분석기",
@@ -102,7 +113,7 @@ const TOOLS = [
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
+  const [activeTool, setActiveTool] = useState<"viral-analyzer" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -221,7 +232,7 @@ export default function Home() {
       const toolParam = params.get("tool");
       const scrollParam = params.get("scroll");
 
-      if (toolParam && ["hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
+      if (toolParam && ["viral-analyzer", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
         setActiveTool(toolParam as any);
         setTimeout(() => {
           const el = document.getElementById("available-tools");
@@ -574,7 +585,9 @@ export default function Home() {
           isOpen={activeTool !== null}
           onClose={() => setActiveTool(null)}
           title={
-            activeTool === "hashtag"
+            activeTool === "viral-analyzer"
+              ? (lang === "ko" ? "AI 바이럴 영상 역설계 분석기" : "AI Viral Video Analyzer")
+              : activeTool === "hashtag"
               ? (lang === "ko" ? "실시간 해시태그 트렌드 분석기" : "Real-time Hashtag Trend Analyzer")
               : activeTool === "translator"
               ? (lang === "ko" ? "다국어 숏폼 제목 번역" : "Global Title Translator")
@@ -591,6 +604,7 @@ export default function Home() {
               : ""
           }
         >
+          {activeTool === "viral-analyzer" && <ViralAnalyzer lang={lang} />}
           {activeTool === "hashtag" && <HashtagTrendAnalyzer />}
           {activeTool === "translator" && <GlobalTranslator />}
           {activeTool === "revenue" && <RevenueSimulator />}

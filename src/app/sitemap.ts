@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/bpm-calculator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/shadowban-scanner", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/hook-generator", changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: "/viral-analyzer", changeFrequency: "monthly" as const, priority: 0.8 },
   ];
 
   const staticUrls = staticRoutes.map((route) => ({
