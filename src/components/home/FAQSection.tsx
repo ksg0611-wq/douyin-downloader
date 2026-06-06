@@ -17,7 +17,7 @@ export default function FAQSection({ expandedFaqId, setExpandedFaqId }: FAQSecti
           자주 묻는 질문 (FAQ)
         </h3>
         <p className="text-xs text-zinc-555 dark:text-zinc-500 mt-1">
-          워터마크 제어 처리 장치와 보안 규정에 관해 가장 많은 질문들을 모았습니다.
+          클린 비디오 추출 및 벤치마킹 시스템에 관해 가장 많은 질문들을 모았습니다.
         </p>
       </div>
 

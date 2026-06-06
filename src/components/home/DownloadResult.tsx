@@ -228,7 +228,7 @@ export default function DownloadResult({
         
         <div className="absolute top-0 right-0 w-24 h-24 bg-[#00f2fe]/5 dark:bg-[#00f2fe]/10 rounded-full blur-xl" />
         <div className="absolute top-0 left-0 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-br-2xl border-r border-b border-zinc-200 dark:border-cyan-400/30">
-          ANALYZED SUCCESSFUL • 워터마크 없음
+          ANALYZED SUCCESSFUL • 클린 버전 추출 완료
         </div>
 
         <div className="p-4 sm:p-6 md:p-8 pt-10 md:pt-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
@@ -312,7 +312,7 @@ export default function DownloadResult({
                 <div className="flex items-center justify-between text-xs text-zinc-650 dark:text-zinc-400 mb-2">
                   <span className="flex items-center gap-2 font-medium">
                     <RefreshCcw className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400 animate-spin" />
-                    {downloadType === "video" ? "워터마크 마스킹 제거 MP4 비디오 렌더링 중..." : "오리지널 오디오 MP3 디코딩 중..."}
+                    {downloadType === "video" ? "클린 버전 MP4 비디오 렌더링 중..." : "오리지널 오디오 MP3 디코딩 중..."}
                   </span>
                   <span className="font-mono font-bold text-cyan-500 dark:text-cyan-400">{downloadProgress}%</span>
                 </div>
@@ -336,7 +336,7 @@ export default function DownloadResult({
               >
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <strong>다운로드 시뮬레이션 성공!</strong> 파일이 로컬 기기로 정상 이송되었습니다. 워터마크가 완전히 소거된 무손실 최고해상도 원본 파일 형태입니다.
+                  <strong>다운로드 시뮬레이션 성공!</strong> 파일이 로컬 기기로 정상 이송되었습니다. 불필요한 레이블 요소가 소거된 무손실 최고해상도 원본 파일 형태입니다.
                 </div>
               </motion.div>
             )}
@@ -354,7 +354,7 @@ export default function DownloadResult({
                 >
                   <div className="absolute inset-0 bg-white/10 hover:bg-transparent pointer-events-none" />
                   <Video className="w-5 h-5 text-zinc-950" />
-                  <span>MP4 비디오 다운로드 (워터마크 제로)</span>
+                  <span>MP4 비디오 다운로드 (클린 버전)</span>
                   <span className="bg-zinc-950 text-cyan-300 text-[10px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase">
                     {analysisResult.fileSize}
                   </span>

@@ -9,7 +9,7 @@ export default function FeaturesGuide() {
           Douyin 비디오 저장하는 법 (초간단 3초 가이드)
         </h3>
         <p className="text-[11px] text-zinc-555 dark:text-zinc-500 mt-0.5">
-          앱 설치나 가입 없이 동영상의 링크 주소 하나만으로 워터마크가 완벽히 없는 MP4 원본 저장이 가능합니다.
+          링크 주소 입력만으로 크리에이터 벤치마킹을 위한 고화질 비디오 소스를 즉시 분석하고 저장할 수 있습니다.
         </p>
       </div>
 
@@ -36,7 +36,7 @@ export default function FeaturesGuide() {
             주소 입력 및 분석 시작
           </h4>
           <p className="text-[11px] text-zinc-650 dark:text-zinc-400 leading-normal">
-            복사한 주소를 본 사이트 주소창에 넣은 다음, <strong>[워터마크 제거 & 다운로드]</strong> 파란 버튼을 클릭하십시오. 인공지능이 약 2초간 보안 분석을 수행합니다.
+            복사한 주소를 본 사이트 주소창에 넣은 다음, <strong>[다운로드]</strong> 파란 버튼을 클릭하십시오. 인공지능이 약 2초간 보안 분석을 수행합니다.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default function FeaturesGuide() {
           </div>
           <h4 className="font-bold text-zinc-800 dark:text-zinc-200 text-xs mb-1 flex items-center gap-1">
             <Download className="w-3.5 h-3.5 text-emerald-400" />
-            워터마크 제어 MP4 다운로드
+            클린 버전 MP4 다운로드
           </h4>
           <p className="text-[11px] text-zinc-650 dark:text-zinc-400 leading-normal">
             우회 분석이 종료되면 비디오 정보 카드와 함께 파일 사이즈가 표시됩니다. <strong>[MP4 다운로드]</strong>를 클릭해 최고화질(HD) 파일로 저장하십시오.

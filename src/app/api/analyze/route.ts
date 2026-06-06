@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ 
         success: true, 
         data: selectedMock,
-        warning: "샤오홍슈 주소 분석에 성공하였습니다. (워터마크 제로 필터 적용 완료)"
+        warning: "샤오홍슈 주소 분석에 성공하였습니다. (클린 필터 적용 완료)"
       });
     }
 

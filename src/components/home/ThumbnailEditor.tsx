@@ -233,7 +233,7 @@ export default function ThumbnailEditor({
     ctx.shadowColor = "transparent";
     ctx.shadowBlur = 0;
 
-    // 10) 워터마크 (우하단 소형)
+    // 10) 로고 (우하단 소형)
     ctx.font = `bold 20px "Apple SD Gothic Neo", sans-serif`;
     ctx.textAlign = "right";
     ctx.fillStyle = "rgba(255,255,255,0.45)";

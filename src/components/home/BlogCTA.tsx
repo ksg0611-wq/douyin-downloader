@@ -10,9 +10,9 @@ interface BlogCTAProps {
 
 export default function BlogCTA({ category = "" }: BlogCTAProps) {
   // Determine CTA text, description, icon, and link based on the category
-  let title = "워터마크 없는 초고화질 숏폼 다운로더";
-  let desc = "도우인, 샤오홍슈의 인기 영상을 워터마크 없이 무손실 원본 그대로 다운로드하여 벤치마킹을 시작해 보세요.";
-  let btnText = "🚀 지금 바로 워터마크 없이 다운로드하기";
+  let title = "크리에이터 레퍼런스용 원본 화질 저장 도구";
+  let desc = "도우인, 샤오홍슈의 인기 영상을 무손실 클린 원본 그대로 분석 및 저장하여 벤치마킹을 시작해 보세요.";
+  let btnText = "🚀 지금 바로 클린 버전 추출하기";
   let link = "/?scroll=downloader";
   let icon = <Download className="w-5 h-5 text-white animate-bounce" />;
   let gradient = "from-[#00f2fe] via-[#5c64ff] to-[#fe0979]";
