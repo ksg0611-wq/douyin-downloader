@@ -215,6 +215,32 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    // 4. URL 쿼리 파라미터 처리 (블로그 CTA 등에서 유입 시 해당 툴 즉시 활성화 및 스크롤)
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const toolParam = params.get("tool");
+      const scrollParam = params.get("scroll");
+
+      if (toolParam && ["hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
+        setActiveTool(toolParam as any);
+        setTimeout(() => {
+          const el = document.getElementById("available-tools");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 300);
+      } else if (scrollParam === "downloader") {
+        setTimeout(() => {
+          const el = document.getElementById("downloader-core");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 300);
+      }
+    }
+  }, []);
+
   const saveToHistory = async (video: VideoMock) => {
     const userId = localStorage.getItem("douyin_guest_user_id") || guestUserId;
 

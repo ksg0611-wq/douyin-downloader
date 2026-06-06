@@ -1,7 +1,9 @@
 import React from "react";
+import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CPABanner from "@/components/CPABanner";
+import BlogCTA from "@/components/home/BlogCTA";
 import { CPA_ADS } from "@/data/ads";
 import { getPostData } from "@/lib/posts";
 import ReactMarkdown from "react-markdown";
@@ -11,6 +13,30 @@ import Link from "next/link";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const postData = getPostData(slug);
+
+  if (!postData) {
+    return {
+      title: "포스트를 찾을 수 없습니다 | ShortsPack Pro",
+    };
+  }
+
+  return {
+    title: `${postData.title} | ShortsPack Pro`,
+    description: postData.summary,
+    openGraph: {
+      title: `${postData.title} | ShortsPack Pro`,
+      description: postData.summary,
+      url: `https://shortspack.com/blog/${slug}`,
+      type: "article",
+      locale: "ko_KR",
+      siteName: "ShortsPack Pro",
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -98,6 +124,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             );
           })()}
         </article>
+
+        <BlogCTA category={postData.category} />
 
         {/* CPA Banner (Card Type) */}
         <div className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800">
