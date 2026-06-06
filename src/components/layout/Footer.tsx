@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex items-center gap-4">
           <Link href="/terms" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">이용약관</Link>
           <Link href="/privacy" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">개인정보처리방침</Link>
-          <a href="mailto:contact@shortspack.com" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">문의하기</a>
+          <a href="mailto:ksg0611@gmail.com" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">문의하기</a>
         </div>
       </div>
     </footer>

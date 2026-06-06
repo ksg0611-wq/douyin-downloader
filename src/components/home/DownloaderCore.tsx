@@ -36,7 +36,7 @@ export default function DownloaderCore({
   setPlatform,
   lang = "ko"
 }: DownloaderCoreProps) {
-  const [count, setCount] = React.useState(3424);
+  const [count, setCount] = React.useState(3427);
 
   React.useEffect(() => {
     // 3424에서 시작해 3~7초 간격으로 +1 또는 +2씩 실시간으로 추가되는 타이머 (라이브 시뮬레이션)
@@ -222,7 +222,7 @@ export default function DownloaderCore({
           </AnimatePresence>
 
           {/* 법적 면책 문구 (Disclaimer) */}
-          <p className="text-xs text-gray-500 mt-3 text-center leading-relaxed">
+          <p className="text-xs text-gray-500 text-center mt-2 leading-relaxed">
             {lang === "ko" ? (
               "⚠️ 본 서비스는 개인의 학습, 벤치마킹 및 포트폴리오 분석 목적으로만 제공됩니다. 다운로드한 영상의 저작권 침해 및 무단 재업로드로 인해 발생하는 모든 법적 책임은 사용자 본인에게 있습니다."
             ) : (

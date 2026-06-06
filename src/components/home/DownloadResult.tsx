@@ -2,8 +2,6 @@ import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Video, Play, Music, RefreshCcw, CheckCircle2, Sparkles, Copy, FileText, BookOpen, ChevronDown, ChevronUp, Palette } from "lucide-react";
 import { VideoMock } from "../../types";
-import CPABanner from "../CPABanner";
-import { CPA_ADS } from "@/data/ads";
 import ThumbnailEditor from "./ThumbnailEditor";
 
 interface DownloadResultProps {
@@ -711,10 +709,7 @@ export default function DownloadResult({
         </div>
       </div>
       
-      {/* Result Banner Slot */}
-      <div className="mt-6 w-full max-w-4xl mx-auto">
-        <CPABanner ad={CPA_ADS.download_result} type="horizontal" />
-      </div>
+
 
       {/* 🎨 썸네일 커버 에디터 모달 */}
       <ThumbnailEditor
