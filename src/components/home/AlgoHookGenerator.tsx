@@ -13,6 +13,7 @@ import {
   Zap
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface AlgoHookGeneratorProps {
   lang?: "ko" | "en";
@@ -46,6 +47,7 @@ export default function AlgoHookGenerator({ lang = "ko" }: AlgoHookGeneratorProp
     }
 
     setIsLoading(true);
+    sendGAEvent({ event: 'generate_click', value: 'algo_hook_generator' });
     setError("");
     setResult(null);
 
@@ -76,6 +78,7 @@ export default function AlgoHookGenerator({ lang = "ko" }: AlgoHookGeneratorProp
   const handleCopy = async (key: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      sendGAEvent({ event: 'copy_click', value: 'algo_hook_generator' });
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1500);
     } catch (e) {

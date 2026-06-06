@@ -15,6 +15,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface ViralAnalyzerProps {
   lang?: "ko" | "en";
@@ -57,6 +58,7 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
     }
 
     setIsLoading(true);
+    sendGAEvent({ event: 'generate_click', value: 'viral_analyzer' });
     setError("");
     setResult(null);
 
@@ -87,6 +89,7 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
   const handleCopy = async (key: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      sendGAEvent({ event: 'copy_click', value: 'viral_analyzer' });
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1500);
     } catch (e) {

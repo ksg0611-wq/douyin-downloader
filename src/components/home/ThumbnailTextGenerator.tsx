@@ -13,6 +13,7 @@ import {
   Zap
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface ThumbnailTextGeneratorProps {
   lang?: "ko" | "en";
@@ -47,6 +48,7 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
     }
 
     setIsLoading(true);
+    sendGAEvent({ event: 'generate_click', value: 'thumbnail_text_generator' });
     setError("");
     setResult(null);
 
@@ -77,6 +79,7 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
   const handleCopy = async (key: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      sendGAEvent({ event: 'copy_click', value: 'thumbnail_text_generator' });
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1500);
     } catch (e) {

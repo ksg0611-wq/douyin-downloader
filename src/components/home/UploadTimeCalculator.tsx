@@ -14,6 +14,7 @@ import {
   Info
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface UploadTimeCalculatorProps {
   lang?: "ko" | "en";
@@ -52,6 +53,7 @@ export default function UploadTimeCalculator({ lang = "ko" }: UploadTimeCalculat
 
   const handleCalculate = async () => {
     setIsLoading(true);
+    sendGAEvent({ event: 'generate_click', value: 'upload_time_calculator' });
     setError("");
     setResult(null);
 
@@ -79,6 +81,7 @@ export default function UploadTimeCalculator({ lang = "ko" }: UploadTimeCalculat
   const handleCopy = async (key: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      sendGAEvent({ event: 'copy_click', value: 'upload_time_calculator' });
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1500);
     } catch (e) {
