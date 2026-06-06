@@ -396,11 +396,7 @@ export default function Home() {
     }
   };
 
-  const handleQuickDemo = (demoUrl: string) => {
-    setUrl(demoUrl);
-    setErrorMessage("");
-    showToast(lang === "ko" ? "데모 주소가 입력되었습니다. '다운로드'를 클릭하세요!" : "Demo URL entered. Click 'Download'!");
-  };
+
 
   const triggerDownloadAction = (type: "video" | "audio") => {
     if (!analysisResult) return;
@@ -482,7 +478,6 @@ export default function Home() {
           isAnalyzing={isAnalyzing} 
           handleAnalyze={handleAnalyze} 
           handlePaste={handlePaste} 
-          handleQuickDemo={handleQuickDemo}
           analysisStep={analysisStep}
           platform={platform}
           setPlatform={setPlatform}

@@ -1,7 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Link as LinkIcon, X, Clipboard, Download, RefreshCcw, AlertCircle, Flame, Sparkles, CheckCircle2 } from "lucide-react";
-import { MOCK_VIDEOS } from "../../data";
+import { Link as LinkIcon, X, Clipboard, Download, RefreshCcw, AlertCircle, Sparkles, CheckCircle2 } from "lucide-react";
 
 interface DownloaderCoreProps {
   url: string;
@@ -11,7 +10,6 @@ interface DownloaderCoreProps {
   isAnalyzing: boolean;
   handleAnalyze: () => void;
   handlePaste: () => void;
-  handleQuickDemo: (url: string) => void;
   analysisStep: number;
   platform: "douyin" | "xiaohongshu";
   setPlatform: (val: "douyin" | "xiaohongshu") => void;
@@ -33,7 +31,6 @@ export default function DownloaderCore({
   isAnalyzing,
   handleAnalyze,
   handlePaste,
-  handleQuickDemo,
   analysisStep,
   platform,
   setPlatform,
@@ -232,35 +229,6 @@ export default function DownloaderCore({
               "⚠️ This service is provided only for personal learning, benchmarking, and portfolio analysis purposes. All legal responsibilities arising from copyright infringement and unauthorized re-uploading of downloaded videos lie with the user."
             )}
           </p>
-        </div>
-
-        <div className="mt-6 border-t border-zinc-200 dark:border-zinc-900 pt-4">
-          <p className="text-[11px] font-bold text-zinc-750 dark:text-zinc-550 uppercase tracking-widest flex items-center gap-1.5 mb-2 px-1">
-            <Flame className="w-3 text-rose-500 animate-bounce" />
-            테스트용 Douyin 원클릭 샘플 링크 (직접 클릭해 하단에서 테스트 가능)
-          </p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-            {MOCK_VIDEOS.map((v, idx) => (
-              <button
-                key={v.id}
-                onClick={() => handleQuickDemo(v.url)}
-                className="text-left bg-white hover:bg-zinc-55 border border-zinc-200 dark:bg-zinc-900/60 dark:hover:bg-zinc-900 dark:border-zinc-800/80 dark:hover:border-zinc-700 p-2.5 rounded-lg text-xs leading-normal transition-all group flex items-start gap-2 max-w-full overflow-hidden shadow-sm dark:shadow-none"
-              >
-                <span className="w-5 h-5 rounded bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 text-[10px] font-bold flex items-center justify-center shrink-0 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-700 group-hover:text-[#00f2fe] transition-all">
-                  {idx + 1}
-                </span>
-                <div className="truncate">
-                  <div className="font-semibold text-zinc-850 group-hover:text-rose-600 dark:text-zinc-300 dark:group-hover:text-white truncate">
-                    {v.creatorName}
-                  </div>
-                  <div className="text-[10px] text-zinc-700 dark:text-zinc-500 truncate mt-0.5">
-                    {v.title}
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
         </div>
 
         <AnimatePresence>
