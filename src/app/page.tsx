@@ -26,6 +26,7 @@ import ShadowbanScanner from "@/components/home/ShadowbanScanner";
 import HookGenerator from "@/components/home/HookGenerator";
 import ViralAnalyzer from "@/components/home/ViralAnalyzer";
 import ThumbnailTextGenerator from "@/components/home/ThumbnailTextGenerator";
+import AlgoHookGenerator from "@/components/home/AlgoHookGenerator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -48,6 +49,16 @@ const TOOLS = [
     desc: "영상의 주제만 입력하면, 숏폼 피드 노출 시 유저들의 클릭률을 폭발시키는 매운맛/순한맛 썸네일 텍스트 카피 10종을 AI가 즉시 제작합니다.",
     descEn: "Generate 10 attention-grabbing thumbnail text copy ideas (spicy and mild) using Gemini AI.",
     icon: "🧲",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
+  {
+    id: "algo-hook-generator",
+    title: "알고리즘 폭발 CTA & 댓글 유도 멘트 생성기",
+    titleEn: "Algo CTA & Comment Generator",
+    desc: "영상의 주제만 입력하면, 시청자의 행동(저장, 공유, 좋아요, 댓글)을 폭발적으로 유도하는 아웃트로 CTA 멘트와 고정 댓글용 질문 10종을 AI가 제작합니다.",
+    descEn: "Generate 10 attention-grabbing viral CTA phrases and pinning comment questions using Gemini AI.",
+    icon: "📢",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
   },
@@ -124,7 +135,7 @@ const TOOLS = [
 ];
 
 export default function Home() {
-  const [activeTool, setActiveTool] = useState<"viral-analyzer" | "thumbnail-text-generator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
+  const [activeTool, setActiveTool] = useState<"viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -243,7 +254,7 @@ export default function Home() {
       const toolParam = params.get("tool");
       const scrollParam = params.get("scroll");
 
-      if (toolParam && ["viral-analyzer", "thumbnail-text-generator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
+      if (toolParam && ["viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
         setActiveTool(toolParam as any);
         setTimeout(() => {
           const el = document.getElementById("available-tools");
@@ -600,6 +611,8 @@ export default function Home() {
               ? (lang === "ko" ? "AI 바이럴 영상 역설계 분석기" : "AI Viral Video Analyzer")
               : activeTool === "thumbnail-text-generator"
               ? (lang === "ko" ? "0.1초 시선 강탈 썸네일 텍스트 생성기" : "Thumbnail Copy Generator")
+              : activeTool === "algo-hook-generator"
+              ? (lang === "ko" ? "알고리즘 폭발 CTA & 댓글 유도 멘트 생성기" : "Algo CTA & Comment Generator")
               : activeTool === "hashtag"
               ? (lang === "ko" ? "실시간 해시태그 트렌드 분석기" : "Real-time Hashtag Trend Analyzer")
               : activeTool === "translator"
@@ -619,6 +632,7 @@ export default function Home() {
         >
           {activeTool === "viral-analyzer" && <ViralAnalyzer lang={lang} />}
           {activeTool === "thumbnail-text-generator" && <ThumbnailTextGenerator lang={lang} />}
+          {activeTool === "algo-hook-generator" && <AlgoHookGenerator lang={lang} />}
           {activeTool === "hashtag" && <HashtagTrendAnalyzer />}
           {activeTool === "translator" && <GlobalTranslator />}
           {activeTool === "revenue" && <RevenueSimulator />}
