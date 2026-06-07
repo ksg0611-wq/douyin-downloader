@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/blog", changeFrequency: "weekly" as const, priority: 0.8 },
     { url: "/privacy", changeFrequency: "monthly" as const, priority: 0.5 },
     { url: "/terms", changeFrequency: "monthly" as const, priority: 0.5 },
+    { url: "/about", changeFrequency: "monthly" as const, priority: 0.5 },
     { url: "/safe-zone", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/bpm-calculator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/shadowban-scanner", changeFrequency: "monthly" as const, priority: 0.8 },
