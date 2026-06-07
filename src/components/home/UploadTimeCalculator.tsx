@@ -11,10 +11,15 @@ import {
   Globe,
   Clock,
   Zap,
-  Info
+  Info,
+  FolderHeart,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { useAuth } from "@/context/AuthContext";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 interface UploadTimeCalculatorProps {
   lang?: "ko" | "en";
@@ -50,6 +55,45 @@ export default function UploadTimeCalculator({ lang = "ko" }: UploadTimeCalculat
   const [result, setResult] = useState<CalculatedTimeData | null>(null);
   const [error, setError] = useState<string>("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const { user, signInWithGoogle } = useAuth();
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const handleSaveToToolbox = async () => {
+    if (!result) return;
+    if (!user) {
+      alert("로그인 후 이용할 수 있는 기능입니다.");
+      try {
+        await signInWithGoogle();
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await addDoc(collection(db, "users", user.uid, "history"), {
+        toolId: "upload-time-calculator",
+        toolName: "글로벌 최적 업로드 타임 계산기",
+        inputData: {
+          country,
+          platform
+        },
+        resultData: result,
+        createdAt: serverTimestamp()
+      });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2000);
+      alert("내 도구상자에 저장되었습니다!");
+    } catch (err) {
+      console.error(err);
+      alert("저장에 실패했습니다. 다시 시도해 주세요.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleCalculate = async () => {
     setIsLoading(true);
@@ -225,7 +269,28 @@ export default function UploadTimeCalculator({ lang = "ko" }: UploadTimeCalculat
 
         {/* 결과 카드 렌더링 */}
         {!isLoading && result && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-4">
+            <div className="flex justify-end">
+              <button
+                onClick={handleSaveToToolbox}
+                disabled={isSaving}
+                className={`py-2 px-3.5 rounded-xl border text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm ${
+                  saveSuccess
+                    ? "bg-teal-50 border-teal-200 text-teal-800 dark:bg-teal-500/20 dark:border-teal-500/40 dark:text-teal-300"
+                    : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white"
+                }`}
+              >
+                {isSaving ? (
+                  <RefreshCcw className="w-4 h-4 animate-spin" />
+                ) : saveSuccess ? (
+                  <Check className="w-4 h-4 text-emerald-500 animate-scale" />
+                ) : (
+                  <FolderHeart className="w-4 h-4 text-rose-500" />
+                )}
+                <span>{isSaving ? "저장 중..." : saveSuccess ? "도구상자 저장됨" : "도구상자에 전체 결과 저장"}</span>
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             {/* 1. 현지 골든 아워 */}
             <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[180px] relative overflow-hidden group">
@@ -318,7 +383,8 @@ export default function UploadTimeCalculator({ lang = "ko" }: UploadTimeCalculat
             </div>
 
           </div>
-        )}
+        </div>
+      )}
 
         {/* 결과 없을 때 안내 */}
         {!result && !isLoading && (

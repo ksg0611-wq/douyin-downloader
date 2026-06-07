@@ -10,10 +10,15 @@ import {
   Info,
   Send,
   Sparkles,
-  FileText
+  FileText,
+  FolderHeart,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { useAuth } from "@/context/AuthContext";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 interface SponsorPitchGeneratorProps {
   lang?: "ko" | "en";
@@ -60,6 +65,46 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
   const [error, setError] = useState("");
   const [copiedAll, setCopiedAll] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  
+  const { user, signInWithGoogle } = useAuth();
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const handleSaveToToolbox = async () => {
+    if (!result) return;
+    if (!user) {
+      alert("로그인 후 이용할 수 있는 기능입니다.");
+      try {
+        await signInWithGoogle();
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await addDoc(collection(db, "users", user.uid, "history"), {
+        toolId: "sponsor-pitch-generator",
+        toolName: "브랜드 협찬(광고) 제안서 자동 생성기",
+        inputData: {
+          channelTopic: channelTopic.trim(),
+          targetAudience: targetAudience.trim(),
+          targetBrand: targetBrand.trim(),
+        },
+        resultData: result,
+        createdAt: serverTimestamp()
+      });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2000);
+      alert("내 도구상자에 저장되었습니다!");
+    } catch (err) {
+      console.error(err);
+      alert("저장에 실패했습니다. 다시 시도해 주세요.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleGenerate = async (presetData?: typeof PRESETS[number]) => {
     const topicVal = presetData ? presetData.topic : channelTopic.trim();
@@ -320,18 +365,38 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
                 </div>
               </div>
 
-              {/* 전체 복사하기 버튼 */}
-              <button
-                onClick={handleCopyAll}
-                className={`py-2 px-3.5 rounded-xl border text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm shrink-0 self-start sm:self-center ${
-                  copiedAll
-                    ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
-                    : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white"
-                }`}
-              >
-                {copiedAll ? <CheckCircle2 className="w-4 h-4 animate-scale" /> : <Copy className="w-4 h-4" />}
-                <span>{copiedAll ? "전체 제안서 복사됨" : "전체 복사하기"}</span>
-              </button>
+              {/* 기능 버튼 영역 */}
+              <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+                <button
+                  onClick={handleSaveToToolbox}
+                  disabled={isSaving}
+                  className={`py-2 px-3.5 rounded-xl border text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm ${
+                    saveSuccess
+                      ? "bg-teal-50 border-teal-200 text-teal-800 dark:bg-teal-500/20 dark:border-teal-500/40 dark:text-teal-300"
+                      : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white"
+                  }`}
+                >
+                  {isSaving ? (
+                    <RefreshCcw className="w-4 h-4 animate-spin" />
+                  ) : saveSuccess ? (
+                    <Check className="w-4 h-4 text-emerald-500 animate-scale" />
+                  ) : (
+                    <FolderHeart className="w-4 h-4 text-rose-500" />
+                  )}
+                  <span>{isSaving ? "저장 중..." : saveSuccess ? "도구상자 저장됨" : "도구상자에 저장"}</span>
+                </button>
+                <button
+                  onClick={handleCopyAll}
+                  className={`py-2 px-3.5 rounded-xl border text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm ${
+                    copiedAll
+                      ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
+                      : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white"
+                  }`}
+                >
+                  {copiedAll ? <CheckCircle2 className="w-4 h-4 animate-scale" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiedAll ? "전체 제안서 복사됨" : "전체 복사하기"}</span>
+                </button>
+              </div>
             </div>
 
             {/* 이메일 본문 영역 */}

@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { BookOpen, DownloadCloud } from "lucide-react";
+import { BookOpen, DownloadCloud, FolderHeart, LogIn, LogOut } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 interface HeaderProps {
   theme?: "light" | "dark";
@@ -12,6 +13,7 @@ interface HeaderProps {
 
 export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
   const [activeTheme, setActiveTheme] = React.useState<"light" | "dark">("light");
+  const { user, loading, signInWithGoogle, logout } = useAuth();
 
   React.useEffect(() => {
     // HTML class를 기준으로 동적 감지
@@ -90,6 +92,20 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
             <span className="hidden sm:inline">{lang === "ko" ? "다운로더" : "Downloader"}</span>
           </Link>
 
+          {user && (
+            <Link 
+              href="/my-toolbox"
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isDark 
+                  ? "text-rose-450 hover:text-white hover:bg-rose-500/10" 
+                  : "text-rose-600 hover:text-rose-900 hover:bg-rose-50"
+              }`}
+            >
+              <FolderHeart className="w-4 h-4 text-rose-500" />
+              <span className="hidden sm:inline">{lang === "ko" ? "내 도구상자" : "My Toolbox"}</span>
+            </Link>
+          )}
+
           <a 
             href="https://global-toolbox.com"
             target="_blank"
@@ -104,6 +120,34 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
             <span>🧰</span>
             <span className="hidden sm:inline">{lang === "ko" ? "글로벌 툴박스" : "Global Toolbox"}</span>
           </a>
+
+          {!loading && (
+            user ? (
+              <button
+                onClick={logout}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors border cursor-pointer ${
+                  isDark
+                    ? "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                    : "bg-gray-100 border-gray-200 text-gray-600 hover:bg-gray-200 hover:text-gray-950"
+                }`}
+              >
+                <LogOut className="w-3.5 h-3.5 text-red-500" />
+                <span className="hidden md:inline">{lang === "ko" ? "로그아웃" : "Logout"}</span>
+              </button>
+            ) : (
+              <button
+                onClick={signInWithGoogle}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors border cursor-pointer shadow-sm ${
+                  isDark
+                    ? "bg-white border-zinc-200 text-black hover:bg-zinc-100"
+                    : "bg-zinc-950 border-zinc-900 text-white hover:bg-zinc-900"
+                }`}
+              >
+                <LogIn className="w-3.5 h-3.5 animate-pulse" />
+                <span>{lang === "ko" ? "구글 로그인" : "Google Login"}</span>
+              </button>
+            )
+          )}
 
           {/* Light / Dark Mode Toggle Button */}
           <button

@@ -10,10 +10,15 @@ import {
   Lightbulb, 
   Megaphone,
   MessageSquare,
-  Zap
+  Zap,
+  FolderHeart,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { useAuth } from "@/context/AuthContext";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 interface AlgoHookGeneratorProps {
   lang?: "ko" | "en";
@@ -38,6 +43,44 @@ export default function AlgoHookGenerator({ lang = "ko" }: AlgoHookGeneratorProp
   const [result, setResult] = useState<GeneratedAlgoData | null>(null);
   const [error, setError] = useState<string>("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const { user, signInWithGoogle } = useAuth();
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const handleSaveToToolbox = async () => {
+    if (!result) return;
+    if (!user) {
+      alert("로그인 후 이용할 수 있는 기능입니다.");
+      try {
+        await signInWithGoogle();
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await addDoc(collection(db, "users", user.uid, "history"), {
+        toolId: "algo-hook-generator",
+        toolName: "알고리즘 폭발 CTA & 댓글 유도 멘트 생성기",
+        inputData: {
+          topic: topic.trim()
+        },
+        resultData: result,
+        createdAt: serverTimestamp()
+      });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2000);
+      alert("내 도구상자에 저장되었습니다!");
+    } catch (err) {
+      console.error(err);
+      alert("저장에 실패했습니다. 다시 시도해 주세요.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleGenerate = async (targetTopic?: string) => {
     const activeTopic = (targetTopic ?? topic).trim();
@@ -217,7 +260,28 @@ export default function AlgoHookGenerator({ lang = "ko" }: AlgoHookGeneratorProp
 
         {/* 결과 카드 렌더링 */}
         {!isLoading && result && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="flex justify-end">
+              <button
+                onClick={handleSaveToToolbox}
+                disabled={isSaving}
+                className={`py-2 px-3.5 rounded-xl border text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm ${
+                  saveSuccess
+                    ? "bg-teal-50 border-teal-200 text-teal-800 dark:bg-teal-500/20 dark:border-teal-500/40 dark:text-teal-300"
+                    : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white"
+                }`}
+              >
+                {isSaving ? (
+                  <RefreshCcw className="w-4 h-4 animate-spin" />
+                ) : saveSuccess ? (
+                  <Check className="w-4 h-4 text-emerald-500 animate-scale" />
+                ) : (
+                  <FolderHeart className="w-4 h-4 text-rose-500" />
+                )}
+                <span>{isSaving ? "저장 중..." : saveSuccess ? "도구상자 저장됨" : "도구상자에 전체 결과 저장"}</span>
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* 1. CTA 문구 컬럼 */}
             <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm space-y-4 relative overflow-hidden">
@@ -296,7 +360,8 @@ export default function AlgoHookGenerator({ lang = "ko" }: AlgoHookGeneratorProp
             </div>
 
           </div>
-        )}
+        </div>
+      )}
 
         {/* 결과 없을 때 안내 */}
         {!result && !isLoading && (
