@@ -8,6 +8,7 @@ export interface BlogPostMeta {
   id: string;
   title: string;
   summary: string;
+  description: string;
   date: string;
   category: string;
   readTime: string;
@@ -15,6 +16,28 @@ export interface BlogPostMeta {
 
 export interface BlogPostDetail extends BlogPostMeta {
   content: string;
+}
+
+// 마크다운 서식을 제거하고 순수 텍스트 본문에서 메타설명(description)을 추출하는 헬퍼 함수
+function extractDescription(content: string, maxLength = 160): string {
+  if (!content) return "";
+  
+  const cleanText = content
+    .replace(/<[^>]*>/g, "") // HTML 제거
+    .replace(/!\[.*?\]\(.*?\)/g, "") // 이미지 제거
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1") // 링크 텍스트만 추출
+    .replace(/(\*\*|__)(.*?)\1/g, "$2") // 볼드 제거
+    .replace(/(\*|_)(.*?)\1/g, "$2") // 이탤릭 제거
+    .replace(/~~(.*?)~~/g, "$1") // 취소선 제거
+    .replace(/`{1,3}([\s\S]*?)`{1,3}/g, "$1") // 코드 블록 기호 제거
+    .replace(/^#+\s+/gm, "") // 제목 샵(#) 기호 제거
+    .replace(/\s+/g, " ") // 다중 공백 단일화
+    .trim();
+
+  if (cleanText.length <= maxLength) {
+    return cleanText;
+  }
+  return cleanText.slice(0, maxLength) + "...";
 }
 
 // 모든 블로그 글의 메타데이터를 날짜순으로 정렬하여 가져오는 함수
@@ -39,12 +62,16 @@ export function getSortedPostsData(): BlogPostMeta[] {
       // gray-matter를 사용하여 포스트의 메타데이터 파싱
       const matterResult = matter(fileContents);
       const data = matterResult.data || {};
+      
+      // frontmatter에 요약문이 없으면 본문에서 추출
+      const resolvedSummary = data.summary || data.description || extractDescription(matterResult.content);
 
       // 데이터와 id 결합 (필수 값이 없을 경우를 대비한 fallback)
       return {
         id,
         title: data.title || "제목 없음",
-        summary: data.summary || "",
+        summary: resolvedSummary,
+        description: resolvedSummary,
         date: data.date || "2024. 01. 01",
         category: data.category || "Uncategorized",
         readTime: data.readTime || "1 min read",
@@ -75,11 +102,14 @@ export function getPostData(id: string): BlogPostDetail | null {
   const matterResult = matter(fileContents);
   const data = matterResult.data || {};
 
+  const resolvedSummary = data.summary || data.description || extractDescription(matterResult.content);
+
   return {
     id,
     content: matterResult.content,
     title: data.title || "제목 없음",
-    summary: data.summary || "",
+    summary: resolvedSummary,
+    description: resolvedSummary,
     date: data.date || "2024. 01. 01",
     category: data.category || "Uncategorized",
     readTime: data.readTime || "1 min read",

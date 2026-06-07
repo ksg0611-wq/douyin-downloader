@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BlogCTA from "@/components/home/BlogCTA";
-import { getPostData } from "@/lib/posts";
+import { getPostData, getSortedPostsData } from "@/lib/posts";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
@@ -11,6 +11,14 @@ import Link from "next/link";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
+}
+
+// Next.js 빌드 시점에 모든 포스팅 상세 페이지를 정적 경로(SSG)로 생성하기 위한 함수
+export async function generateStaticParams() {
+  const posts = getSortedPostsData();
+  return posts.map((post) => ({
+    slug: post.id,
+  }));
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
@@ -23,16 +31,29 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
+  const titleText = `${postData.title} | ShortsPack Pro`;
+  const descText = postData.description;
+
   return {
-    title: `${postData.title} | ShortsPack Pro`,
-    description: postData.summary,
+    title: titleText,
+    description: descText,
+    alternates: {
+      canonical: `https://shortspack.com/blog/${slug}`,
+    },
     openGraph: {
-      title: `${postData.title} | ShortsPack Pro`,
-      description: postData.summary,
+      title: titleText,
+      description: descText,
       url: `https://shortspack.com/blog/${slug}`,
       type: "article",
       locale: "ko_KR",
       siteName: "ShortsPack Pro",
+      publishedTime: postData.date ? new Date(postData.date.replace(/\./g, "-").replace(/\s/g, "")).toISOString() : undefined,
+      authors: ["Kim Sung-geun"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: titleText,
+      description: descText,
     },
   };
 }
