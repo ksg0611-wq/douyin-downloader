@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 글로벌 숏폼 알고리즘 전문가야. 사용자가 타겟 국가와 타겟 플랫폼을 입력하면, 해당 국가의 플랫폼 유저들이 가장 활발히 반응하는 피크 요일과 시간대를 분석해 줘. 
 그리고 이를 대한민국 서울 표준시(KST)로 정확하게 환산한 시간대를 계산해 줘.

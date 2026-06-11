@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
 
     // ── 1단계: 오디오 파일 fetch (실패 시 텍스트 폴백) ──
     let audioBase64: string | null = null;

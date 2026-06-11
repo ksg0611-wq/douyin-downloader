@@ -57,8 +57,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // gemini-3.5-flash (기존 프로젝트 모델 사용)
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    // gemini-2.0-flash-lite (기존 프로젝트 모델 사용)
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 글로벌 최고 수준의 숏폼 마케터야. 유저가 입력한 주제에 대해 시청자의 시선을 3초 안에 사로잡을 수 있는 숏폼 대본의 '첫 문장(Hook)'을 3가지 스타일(1. 도발적인 팩트 폭행, 2. 감성적인 공감 유도, 3. 호기심을 극대화하는 질문)로 작성해 줘. 
 결과는 반드시 각 스타일을 키(key)로 갖는 다음과 같은 JSON 형식으로만 반환해 줘. 마크다운 기호(예: \`\`\`json)나 다른 설명 텍스트는 절대로 앞뒤로 붙이지 말고, 중괄호로 시작해서 중괄호로 끝나는 순수 JSON 텍스트로만 대답해 줘.

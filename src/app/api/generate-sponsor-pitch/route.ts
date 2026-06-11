@@ -70,7 +70,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 탑티어 MCN 소속의 전문 비즈니스 매니저야. 사용자가 제공하는 채널 정보와 타겟 브랜드를 바탕으로, 해당 브랜드의 담당 마케터가 첫눈에 관심을 갖고 긍정적인 답변을 보낼 수 있는 수준 높은 [협찬 제안 콜드 메일(또는 DM)] 초안을 작성해 줘.
 결과는 반드시 아래의 지정된 JSON 키 형식으로만 구성해서 반환해 줘. 마크다운 기호(예: \`\`\`json)나 다른 설명 텍스트는 절대로 앞뒤로 붙이지 말고, 중괄호로 시작해서 중괄호로 끝나는 순수 JSON 텍스트로만 대답해 줘.

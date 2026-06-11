@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 숏폼 플랫폼(도우인, 틱톡, 쇼츠, 릴스)에서 클릭률을 폭발시키는 천재 카피라이터야. 사용자가 입력한 영상의 주제나 내용을 바탕으로, 썸네일(커버 이미지)에 적기 좋은 짧고 강렬하며 가독성이 뛰어난 텍스트 10개를 생성해 줘.
 요청 조건:

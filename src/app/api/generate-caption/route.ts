@@ -55,8 +55,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // gemini-3.5-flash (현재 최신 모델)
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    // gemini-2.0-flash-lite (현재 최신 모델)
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
 
     const body = JSON.stringify({
       contents: [{

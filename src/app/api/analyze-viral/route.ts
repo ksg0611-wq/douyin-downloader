@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 100만 조회수를 만드는 탑티어 숏폼 콘텐츠 기획자야. 사용자가 입력한 타겟 영상의 대본이나 내용을 분석해서 다음 4가지 항목을 구조화하여 답변해 줘.
 1. 3초 후킹 포인트 분석

@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
 [이 콘텐츠를 글로벌 피드에서 바이럴시키기 위한 핵심 전략을 2~3문장으로 한글로 정리]`;
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
     const body = JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
     });
