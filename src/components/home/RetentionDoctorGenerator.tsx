@@ -73,7 +73,7 @@ export default function RetentionDoctorGenerator({ lang = "ko" }: RetentionDocto
 
   // 1. Firestore real-time sync for retention doctor history
   useEffect(() => {
-    if (authLoading || !user?.uid) {
+    if (authLoading || !user || !user.uid || typeof user.uid !== 'string' || user.uid.trim() === "") {
       setHistoryList([]);
       return;
     }
