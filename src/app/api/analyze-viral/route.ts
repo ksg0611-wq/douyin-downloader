@@ -56,19 +56,21 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let content = '';
   try {
-    const { content } = await request.json();
+    const bodyObj = await request.json();
+    content = bodyObj.content || '';
 
-    // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환 및 Fallback 연동)
+    // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 200 OK 반환하되 Fallback 연동)
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
       console.warn(`[analyze-viral] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
       return NextResponse.json({
         success: true,
-        data: getFallbackData(content ? content.trim() : ''),
+        data: getFallbackData(content.trim()),
         fallback: true,
         fallbackReason: 'LOCAL_RATE_LIMIT',
-      }, { status: 429 });
+      }, { status: 200 }); 
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
@@ -81,13 +83,15 @@ export async function POST(request: Request) {
     }
 
     if (!apiKey) {
+      console.error('[analyze-viral] GEMINI_API_KEY 환경변수가 설정되지 않았습니다.');
       return NextResponse.json(
         { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' } },
         { status: 500 }
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    // 🟢 [최신화 완료] 최신 모델 스택인 gemini-2.5-flash-lite 로 엔드포인트 URL을 변경했습니다.
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 100만 조회수를 만드는 탑티어 숏폼 콘텐츠 기획자야. 사용자가 입력한 타겟 영상의 대본이나 내용을 분석해서 다음 4가지 항목을 구조화하여 답변해 줘.
 1. 3초 후킹 포인트 분석
@@ -113,7 +117,7 @@ export async function POST(request: Request) {
 분석할 내용:
 ${content}`;
 
-    const body = JSON.stringify({
+    const reqBody = JSON.stringify({
       contents: [{
         parts: [{
           text: prompt
@@ -124,17 +128,17 @@ ${content}`;
     let response: Response;
 
     try {
-      response = await callGeminiWithRetry(targetUrl, body);
+      response = await callGeminiWithRetry(targetUrl, reqBody);
     } catch (retryErr: any) {
       // 모든 재시도 소진 → Fallback 샘플 데이터 반환
       if (retryErr?.status === 429) {
         console.warn('[analyze-viral] 모든 재시도 소진 → Fallback 샘플 데이터 반환');
         return NextResponse.json({
           success: true,
-          data: getFallbackData(content),
+          data: getFallbackData(content.trim()),
           fallback: true,
           fallbackReason: 'RATE_LIMIT',
-        });
+        }, { status: 200 });
       }
       throw retryErr;
     }
@@ -144,20 +148,14 @@ ${content}`;
     if (!response.ok) {
       const status = response.status;
 
-      // 429/503 → Fallback 모드
-      if (status === 429 || status === 503) {
-        console.warn(`[analyze-viral] HTTP ${status} 수신 → Fallback 샘플 데이터 반환`);
-        return NextResponse.json({
-          success: true,
-          data: getFallbackData(content),
-          fallback: true,
-          fallbackReason: status === 429 ? 'RATE_LIMIT' : 'SERVICE_UNAVAILABLE',
-        });
-      }
-
-      const koreanMsg = toKoreanError(status, data.error?.message);
-      console.error(`[analyze-viral] Gemini API 오류 (${status}):`, data.error?.message);
-      return NextResponse.json({ error: { message: koreanMsg } }, { status });
+      // 429/503/기타 → Fallback 모드 (200 OK로 반환하여 콘솔 에러 방지)
+      console.warn(`[analyze-viral] Gemini API 오류 (${status}). Fallback 샘플 데이터 반환.`);
+      return NextResponse.json({
+        success: true,
+        data: getFallbackData(content.trim()),
+        fallback: true,
+        fallbackReason: `API_ERROR_${status}`,
+      }, { status: 200 });
     }
 
     const outputText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -182,24 +180,19 @@ ${content}`;
       console.warn("JSON parsing failed, falling back to backup extract", outputText);
       return NextResponse.json({
         success: true,
-        data: {
-          hook: "영상의 초반 3초에서 강한 의문이나 반전을 주어 시청자의 시선을 즉시 고정시켰습니다.",
-          body: "내용의 정보 밀도를 촘촘하게 유지하고 숏폼 특유의 빠른 템포와 컷편집 구조를 활용해 지루함을 없앴습니다.",
-          cta: "끝부분에 단순 저장이나 공유를 유도하는 명확한 한 줄 액션을 넣어 바이럴 지수를 끌어올렸습니다.",
-          ideas: [
-            "1단계 문제 제기를 우리 채널의 핵심 주제로 치환하여 인트로 기획하기",
-            "2단계 중간 단계의 해결 과정을 3가지 리스트 요약식으로 구성하여 가독성 높이기",
-            "3단계 시청자에게 직접 질문을 던지는 방식으로 댓글 반응률 유도하기"
-          ]
-        }
-      });
+        data: getFallbackData(content.trim()),
+        fallback: true,
+        fallbackReason: 'PARSE_ERROR',
+      }, { status: 200 });
     }
 
   } catch (error: any) {
-    const status = error?.status === 429 ? 429 : 500;
-    const message = status === 429
-      ? '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!'
-      : '⚠️ AI 서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.';
-    return NextResponse.json({ error: { message } }, { status });
+    console.error('[analyze-viral] 예외 발생:', error);
+    return NextResponse.json({
+      success: true,
+      data: getFallbackData(content.trim()),
+      fallback: true,
+      fallbackReason: 'SERVER_EXCEPTION',
+    }, { status: 200 });
   }
 }
