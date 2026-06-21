@@ -82,7 +82,7 @@ export default function TrendPlannerGenerator({ lang = "ko" }: TrendPlannerGener
 
   // 1. Firestore real-time sync for trend planner history
   useEffect(() => {
-    if (authLoading || !user) {
+    if (authLoading || !user?.uid) {
       setHistoryList([]);
       return;
     }
