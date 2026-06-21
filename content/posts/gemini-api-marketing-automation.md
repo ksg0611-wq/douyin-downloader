@@ -1,10 +1,10 @@
 ---
-
 title: "1인 마케터의 한계 돌파: Gemini API와 AI 스튜디오를 활용한 콘텐츠 자동화 시스템"
 date: "2026-06-02"
 category: "Marketing"
 tags: ["GeminiAPI", "구글AI스튜디오", "마케팅자동화", "퍼포먼스마케팅", "AI활용"]
 readTime: "6 min read"
+draft: true
 ---
 
 고단가 CPA(Cost Per Action) 마케팅이나 쇼핑몰 비즈니스를 운영하다 보면 필연적으로 '콘텐츠 생산의 병목 현상'에 부딪히게 됩니다. 아무리 뛰어난 마케터라도 하루에 수동으로 작성할 수 있는 광고 카피와 블로그 포스팅의 수는 제한적이기 때문입니다. 

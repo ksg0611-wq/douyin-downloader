@@ -1,10 +1,10 @@
 ---
-
 title: "월 10만 원으로 개발팀과 마케팅팀 세팅하기: 1인 에이전시의 완벽한 AI 툴 스택"
 date: "2026-06-02"
 category: "Marketing"
 tags: ["AI툴스택", "ChatGPT", "Claude", "Gemini", "Genspark", "생산성"]
 readTime: "6 min read"
+draft: true
 ---
 
 1인 광고 대행사나 퍼포먼스 마케팅 비즈니스를 운영하다 보면 기획, 카피라이팅, 데이터 분석, 심지어 웹앱 개발까지 혼자서 처리해야 하는 순간이 옵니다. 이때 모든 작업을 하나의 AI 툴에만 의존하는 것은 비효율적입니다. 

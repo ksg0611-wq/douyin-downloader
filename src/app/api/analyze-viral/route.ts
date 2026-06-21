@@ -1,8 +1,24 @@
 export const runtime = 'edge';
 
 import { NextResponse } from 'next/server';
+import { getClientIp, isRateLimited } from '@/lib/rateLimit';
 
 const MAX_RETRIES = 3;
+
+// ─── Fallback 샘플 데이터 ──────────────────────────────────────────────────────
+function getFallbackData(content: string) {
+  console.warn('[analyze-viral] ⚠️ FALLBACK MODE 활성화 - Google API 한도 초과로 샘플 데이터를 반환합니다.');
+  return {
+    hook: `[샘플] 영상의 초반 3초에서 강한 의문이나 반전을 주어 시청자의 시선을 즉시 고정시켰습니다. (입력내용 요약: ${content.substring(0, 10)}...)`,
+    body: "[샘플] 내용의 정보 밀도를 촘촘하게 유지하고 숏폼 특유의 빠른 템포와 컷편집 구조를 활용해 지루함을 없앴습니다.",
+    cta: "[샘플] 끝부분에 단순 저장이나 공유를 유도하는 명확한 한 줄 액션을 넣어 바이럴 지수를 끌어올렸습니다.",
+    ideas: [
+      "[샘플] 1단계 문제 제기를 우리 채널의 핵심 주제로 치환하여 인트로 기획하기",
+      "[샘플] 2단계 중간 단계의 해결 과정을 3가지 리스트 요약식으로 구성하여 가독성 높이기",
+      "[샘플] 3단계 시청자에게 직접 질문을 던지는 방식으로 댓글 반응률 유도하기"
+    ]
+  };
+}
 
 function toKoreanError(status: number, message?: string): string {
   if (status === 429 || status === 503) {
@@ -42,6 +58,19 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 export async function POST(request: Request) {
   try {
     const { content } = await request.json();
+
+    // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환 및 Fallback 연동)
+    const ip = getClientIp(request);
+    if (isRateLimited(ip)) {
+      console.warn(`[analyze-viral] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
+      return NextResponse.json({
+        success: true,
+        data: getFallbackData(content ? content.trim() : ''),
+        fallback: true,
+        fallbackReason: 'LOCAL_RATE_LIMIT',
+      }, { status: 429 });
+    }
+
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!content || !content.trim()) {
@@ -92,12 +121,43 @@ ${content}`;
       }]
     });
 
-    const response = await callGeminiWithRetry(targetUrl, body);
+    let response: Response;
+
+    try {
+      response = await callGeminiWithRetry(targetUrl, body);
+    } catch (retryErr: any) {
+      // 모든 재시도 소진 → Fallback 샘플 데이터 반환
+      if (retryErr?.status === 429) {
+        console.warn('[analyze-viral] 모든 재시도 소진 → Fallback 샘플 데이터 반환');
+        return NextResponse.json({
+          success: true,
+          data: getFallbackData(content),
+          fallback: true,
+          fallbackReason: 'RATE_LIMIT',
+        });
+      }
+      throw retryErr;
+    }
+
     const data = await response.json();
 
     if (!response.ok) {
-      const koreanMsg = toKoreanError(response.status, data.error?.message);
-      return NextResponse.json({ error: { message: koreanMsg } }, { status: response.status });
+      const status = response.status;
+
+      // 429/503 → Fallback 모드
+      if (status === 429 || status === 503) {
+        console.warn(`[analyze-viral] HTTP ${status} 수신 → Fallback 샘플 데이터 반환`);
+        return NextResponse.json({
+          success: true,
+          data: getFallbackData(content),
+          fallback: true,
+          fallbackReason: status === 429 ? 'RATE_LIMIT' : 'SERVICE_UNAVAILABLE',
+        });
+      }
+
+      const koreanMsg = toKoreanError(status, data.error?.message);
+      console.error(`[analyze-viral] Gemini API 오류 (${status}):`, data.error?.message);
+      return NextResponse.json({ error: { message: koreanMsg } }, { status });
     }
 
     const outputText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';

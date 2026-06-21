@@ -14,7 +14,8 @@ import {
   Brain,
   ChevronRight,
   FolderHeart,
-  Check
+  Check,
+  Info
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
@@ -58,6 +59,7 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
   const { user, signInWithGoogle } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isFallback, setIsFallback] = useState(false);
 
   const handleSaveToToolbox = async () => {
     if (!result) return;
@@ -66,8 +68,13 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
       try {
         await signInWithGoogle();
       } catch (err) {
-        console.error(err);
+        console.error("로그인 실패:", err);
       }
+      return;
+    }
+
+    if (!db) {
+      alert("Firebase 설정을 확인해 주세요.");
       return;
     }
 
@@ -80,14 +87,19 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
           content: content.trim()
         },
         resultData: result,
+        isFallback: isFallback,
         createdAt: serverTimestamp()
       });
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2000);
       alert("내 도구상자에 저장되었습니다!");
-    } catch (err) {
-      console.error(err);
-      alert("저장에 실패했습니다. 다시 시도해 주세요.");
+    } catch (err: any) {
+      console.error("[ViralAnalyzer] Firestore 저장 실패:", err);
+      if (err?.code === "permission-denied") {
+        alert("저장 권한이 없습니다. 로그인 상태를 확인해 주세요.");
+      } else {
+        alert("저장에 실패했습니다. 다시 시도해 주세요.");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -104,6 +116,7 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
     sendGAEvent({ event: 'generate_click', value: 'viral_analyzer' });
     setError("");
     setResult(null);
+    setIsFallback(false);
 
     try {
       const response = await fetch("/api/analyze-viral", {
@@ -119,6 +132,9 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
       }
 
       setResult(data.data);
+      if (data.fallback === true) {
+        setIsFallback(true);
+      }
       if (targetContent) {
         setContent(targetContent);
       }
@@ -236,6 +252,21 @@ export default function ViralAnalyzer({ lang = "ko" }: ViralAnalyzerProps) {
           </div>
         </div>
       </div>
+
+      {/* Fallback 모드 안내 배너 */}
+      <AnimatePresence>
+        {isFallback && result && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="p-4 rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-400 text-xs font-bold flex items-center gap-2 mb-4"
+          >
+            <Info className="w-4 h-4 text-amber-500 shrink-0" />
+            <span>⚠️ 현재 AI 서버 요청이 집중되어 샘플 데이터를 표시하고 있습니다. 잠시 후 다시 생성해 보세요!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 에러 상태 배너 */}
       <AnimatePresence>

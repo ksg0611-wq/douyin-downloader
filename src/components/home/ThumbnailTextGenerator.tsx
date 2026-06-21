@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Sparkles, 
   Copy, 
@@ -12,13 +12,28 @@ import {
   Magnet,
   Zap,
   FolderHeart,
-  Check
+  Check,
+  Info,
+  Trash2,
+  History,
+  ArrowRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  onSnapshot, 
+  query, 
+  where, 
+  orderBy, 
+  limit, 
+  deleteDoc, 
+  doc 
+} from "firebase/firestore";
 
 interface ThumbnailTextGeneratorProps {
   lang?: "ko" | "en";
@@ -45,9 +60,56 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
   const [error, setError] = useState<string>("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  const { user, signInWithGoogle } = useAuth();
+  const { user, loading: authLoading, signInWithGoogle } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isFallback, setIsFallback] = useState(false);
+
+  const [historyList, setHistoryList] = useState<any[]>([]);
+  const [isHistoryLoading, setIsHistoryLoading] = useState<boolean>(false);
+
+  // 1. Firestore real-time sync for thumbnail history
+  useEffect(() => {
+    // Firebase Auth 로딩 중이거나 유저가 없으면 리스너를 실행하지 않고 리턴
+    if (authLoading || !user) {
+      setHistoryList([]);
+      return;
+    }
+
+    if (!db) return;
+
+    setIsHistoryLoading(true);
+
+    // 인증이 완벽히 확인된 상태에서만 Firestore 리스닝 시작
+    const q = query(
+      collection(db, "thumbnail_history"),
+      where("userId", "==", user.uid),
+      orderBy("createdAt", "desc"),
+      limit(5)
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const list: any[] = [];
+        snapshot.forEach((docSnapshot) => {
+          const data = docSnapshot.data();
+          list.push({
+            id: docSnapshot.id,
+            ...data,
+          });
+        });
+        setHistoryList(list);
+        setIsHistoryLoading(false);
+      },
+      (err) => {
+        console.error("Firestore Sync Error:", err);
+        setIsHistoryLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [user, authLoading]);
 
   const handleSaveToToolbox = async () => {
     if (!result) return;
@@ -56,8 +118,13 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
       try {
         await signInWithGoogle();
       } catch (err) {
-        console.error(err);
+        console.error("로그인 실패:", err);
       }
+      return;
+    }
+
+    if (!db) {
+      alert("Firebase 설정을 확인해 주세요.");
       return;
     }
 
@@ -70,14 +137,19 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
           topic: topic.trim()
         },
         resultData: result,
+        isFallback: isFallback,
         createdAt: serverTimestamp()
       });
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2000);
       alert("내 도구상자에 저장되었습니다!");
-    } catch (err) {
-      console.error(err);
-      alert("저장에 실패했습니다. 다시 시도해 주세요.");
+    } catch (err: any) {
+      console.error("[ThumbnailTextGenerator] Firestore 저장 실패:", err);
+      if (err?.code === "permission-denied") {
+        alert("저장 권한이 없습니다. 로그인 상태를 확인해 주세요.");
+      } else {
+        alert("저장에 실패했습니다. 다시 시도해 주세요.");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -94,6 +166,7 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
     sendGAEvent({ event: 'generate_click', value: 'thumbnail_text_generator' });
     setError("");
     setResult(null);
+    setIsFallback(false);
 
     try {
       const response = await fetch("/api/generate-thumbnail-text", {
@@ -109,13 +182,62 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
       }
 
       setResult(data.data);
+      if (data.fallback === true) {
+        setIsFallback(true);
+      }
       if (targetTopic) {
         setTopic(targetTopic);
+      }
+
+      // 3. 썸네일 카피 생성 성공 시 Firestore 'thumbnail_history' 컬렉션에 자동 저장
+      if (db && user) {
+        try {
+          await addDoc(collection(db, "thumbnail_history"), {
+            userId: user.uid,
+            topic: activeTopic,
+            spicy: data.data.spicy,
+            mild: data.data.mild,
+            createdAt: serverTimestamp()
+          });
+        } catch (dbErr) {
+          console.error("Failed to auto-save to thumbnail_history:", dbErr);
+        }
       }
     } catch (err: any) {
       setError(err.message || "서버 통신 실패");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleLoadHistoryItem = (item: any) => {
+    setTopic(item.topic || "");
+    setResult({
+      spicy: item.spicy || [],
+      mild: item.mild || []
+    });
+    setIsFallback(false);
+    setError("");
+    // 퀵 스크롤
+    setTimeout(() => {
+      const el = document.getElementById("thumbnail-copy-generator-container");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 150);
+  };
+
+  const handleDeleteHistoryItem = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm("정말 이 생성 내역을 삭제하시겠습니까?")) return;
+
+    if (db) {
+      try {
+        await deleteDoc(doc(db, "thumbnail_history", id));
+      } catch (err) {
+        console.error("Failed to delete history item:", err);
+        alert("삭제에 실패했습니다. 다시 시도해 주세요.");
+      }
     }
   };
 
@@ -225,6 +347,21 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
           </div>
         </div>
       </div>
+
+      {/* Fallback 모드 안내 배너 */}
+      <AnimatePresence>
+        {isFallback && result && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="p-4 rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-400 text-xs font-bold flex items-center gap-2 mb-4"
+          >
+            <Info className="w-4 h-4 text-amber-500 shrink-0" />
+            <span>⚠️ 현재 AI 서버 요청이 집중되어 샘플 데이터를 표시하고 있습니다. 잠시 후 다시 생성해 보세요!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 에러 피드백 */}
       <AnimatePresence>
@@ -373,6 +510,78 @@ export default function ThumbnailTextGenerator({ lang = "ko" }: ThumbnailTextGen
           </div>
         )}
       </div>
+
+      {/* 4. 최근 생성 내역 UI (Firestore 실시간 동기화) */}
+      {user && (historyList.length > 0 || isHistoryLoading) && (
+        <section className="mt-8 max-w-4xl mx-auto">
+          <div className="bg-white border border-zinc-200 dark:bg-zinc-950/40 dark:border-zinc-900/80 rounded-2xl p-4 shadow-md relative overflow-hidden backdrop-blur-sm">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="flex items-center justify-between mb-3.5 border-b border-zinc-200 dark:border-zinc-900 pb-2.5 relative z-10">
+              <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest flex items-center gap-2">
+                <History className="w-4 h-4 text-indigo-500" />
+                🕒 최근 썸네일 카피 생성 내역 (실시간)
+              </h3>
+            </div>
+
+            {isHistoryLoading && historyList.length === 0 ? (
+              <div className="flex items-center justify-center py-6 gap-2 text-xs text-zinc-500 dark:text-zinc-550 font-medium">
+                <RefreshCcw className="w-4 h-4 animate-spin text-indigo-505" />
+                <span>생성 기록을 동기화하는 중...</span>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-2 relative z-10">
+                {historyList.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => handleLoadHistoryItem(item)}
+                    className="p-3 bg-zinc-50 hover:bg-zinc-100/80 border border-zinc-200 hover:border-zinc-300 dark:bg-zinc-900/20 dark:hover:bg-zinc-900/60 dark:border-zinc-900 dark:hover:border-zinc-800 rounded-xl flex items-center justify-between gap-4 cursor-pointer group transition-all duration-200"
+                  >
+                    <div className="min-w-0 flex-grow">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-extrabold text-indigo-500 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded">
+                          카피 10종
+                        </span>
+                        <span className="text-[10px] font-bold text-zinc-500">
+                          {item.createdAt?.toDate ? item.createdAt.toDate().toLocaleDateString("ko-KR", {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                          }) : ""}
+                        </span>
+                      </div>
+                      <h4 className="text-xs sm:text-sm font-bold text-zinc-850 dark:text-zinc-300 truncate mt-1 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors">
+                        {item.topic}
+                      </h4>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLoadHistoryItem(item);
+                        }}
+                        className="p-1 px-2.5 text-[10px] font-extrabold bg-white hover:bg-indigo-600 hover:text-white text-indigo-600 border border-indigo-200 hover:border-indigo-600 dark:bg-zinc-950/80 dark:hover:bg-indigo-650 dark:hover:text-white dark:text-indigo-400 dark:border-indigo-500/30 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+                      >
+                        <span>불러오기</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteHistoryItem(item.id, e)}
+                        className="p-1.5 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:text-zinc-600 dark:hover:text-rose-400 dark:hover:bg-rose-500/10 rounded-lg transition-all cursor-pointer"
+                        title="기록 삭제"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       <hr className="my-8 border-zinc-200 dark:border-zinc-800" />
       

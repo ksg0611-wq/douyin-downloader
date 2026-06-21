@@ -75,19 +75,23 @@ export function getSortedPostsData(): BlogPostMeta[] {
         date: data.date || "2024. 01. 01",
         category: data.category || "Uncategorized",
         readTime: data.readTime || "1 min read",
+        draft: data.draft === true || data.draft === "true",
       };
-    });
+    })
+    .filter(post => !post.draft); // draft 포스트 필터링
 
   // 날짜 기준으로 내림차순 정렬 (최신 글이 먼저 오도록)
-  return allPostsData.sort((a, b) => {
-    const dateA = a.date || "";
-    const dateB = b.date || "";
-    if (dateA < dateB) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
+  return allPostsData
+    .map(({ draft, ...rest }) => rest)
+    .sort((a, b) => {
+      const dateA = a.date || "";
+      const dateB = b.date || "";
+      if (dateA < dateB) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
 }
 
 // 특정 id(slug)를 가진 글의 상세 내용(본문 포함)을 가져오는 함수
@@ -101,6 +105,11 @@ export function getPostData(id: string): BlogPostDetail | null {
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const matterResult = matter(fileContents);
   const data = matterResult.data || {};
+
+  // draft 포스트인 경우 상세페이지 노출 방지
+  if (data.draft === true || data.draft === "true") {
+    return null;
+  }
 
   const resolvedSummary = data.summary || data.description || extractDescription(matterResult.content);
 

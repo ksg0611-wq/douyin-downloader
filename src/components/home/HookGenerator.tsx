@@ -10,9 +10,16 @@ import {
   ChevronRight,
   Flame,
   Lightbulb,
-  FileText
+  FileText,
+  FolderHeart,
+  Check,
+  Info
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { sendGAEvent } from "@next/third-parties/google";
+import { useAuth } from "@/context/AuthContext";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 interface HookGeneratorProps {
   lang?: "ko" | "en";
@@ -41,7 +48,60 @@ export default function HookGenerator({ lang = "ko" }: HookGeneratorProps) {
   const [result, setResult] = useState<HookData | null>(null);
   const [error, setError] = useState<string>("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [isFallback, setIsFallback] = useState<boolean>(false);
 
+  const { user, signInWithGoogle } = useAuth();
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // ─── Firestore 도구상자 저장 ────────────────────────────────────────────────────
+  const handleSaveToToolbox = async () => {
+    if (!result) return;
+
+    if (!user) {
+      alert("로그인 후 이용할 수 있는 기능입니다.");
+      try {
+        await signInWithGoogle();
+      } catch (err) {
+        console.error("로그인 실패:", err);
+      }
+      return;
+    }
+
+    if (!db) {
+      alert("Firebase 설정을 확인해 주세요.");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await addDoc(collection(db, "users", user.uid, "history"), {
+        toolId: "hook-generator",
+        toolName: "AI 3초 후킹(Hook) 대본 생성기",
+        inputData: {
+          topic: topic.trim()
+        },
+        resultData: result,
+        isFallback: isFallback,
+        createdAt: serverTimestamp()
+      });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2000);
+      alert("내 도구상자에 저장되었습니다!");
+    } catch (err: any) {
+      console.error("[HookGenerator] Firestore 저장 실패:", err);
+      // Firestore 권한 에러 안내
+      if (err?.code === "permission-denied") {
+        alert("저장 권한이 없습니다. 로그인 상태를 확인해 주세요.");
+      } else {
+        alert("저장에 실패했습니다. 다시 시도해 주세요.");
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // ─── 대본 생성 ─────────────────────────────────────────────────────────────────
   const handleGenerate = async (targetTopic?: string) => {
     const activeTopic = (targetTopic ?? topic).trim();
     if (!activeTopic) {
@@ -52,6 +112,8 @@ export default function HookGenerator({ lang = "ko" }: HookGeneratorProps) {
     setIsLoading(true);
     setError("");
     setResult(null);
+    setIsFallback(false);
+    sendGAEvent({ event: 'generate_click', value: 'hook_generator' });
 
     try {
       const response = await fetch("/api/generate-hook", {
@@ -62,11 +124,18 @@ export default function HookGenerator({ lang = "ko" }: HookGeneratorProps) {
 
       const data = await response.json();
 
+      // 429 상태코드를 프론트에서 정확히 인지하여 에러 문구 표시
       if (!response.ok) {
-        throw new Error(data.error?.message || "AI 생성 중 오류가 발생했습니다.");
+        const errMsg = data.error?.message || "AI 생성 중 오류가 발생했습니다.";
+        throw new Error(errMsg);
       }
 
       setResult(data.data);
+      // Fallback 모드 여부 감지 (배너 표시용)
+      if (data.fallback === true) {
+        setIsFallback(true);
+      }
+
       if (targetTopic) {
         setTopic(targetTopic);
       }
@@ -80,6 +149,7 @@ export default function HookGenerator({ lang = "ko" }: HookGeneratorProps) {
   const handleCopy = async (key: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      sendGAEvent({ event: 'copy_click', value: 'hook_generator' });
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1500);
     } catch (e) {
@@ -183,6 +253,21 @@ export default function HookGenerator({ lang = "ko" }: HookGeneratorProps) {
         </div>
       </div>
 
+      {/* Fallback 모드 안내 배너 */}
+      <AnimatePresence>
+        {isFallback && result && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="p-4 rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-400 text-xs font-bold flex items-center gap-2 mb-4"
+          >
+            <Info className="w-4 h-4 text-amber-500 shrink-0" />
+            <span>⚠️ 현재 AI 서버 요청이 집중되어 샘플 대본을 표시하고 있습니다. 잠시 후 다시 생성해 보세요!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* 에러 상태 안내 배너 */}
       <AnimatePresence>
         {error && (
@@ -217,83 +302,107 @@ export default function HookGenerator({ lang = "ko" }: HookGeneratorProps) {
 
         {/* 결과 카드 렌더링 */}
         {!isLoading && result && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-4">
+            {/* 도구상자 저장 버튼 */}
+            <div className="flex justify-end">
+              <button
+                onClick={handleSaveToToolbox}
+                disabled={isSaving}
+                className={`py-2 px-3.5 rounded-xl border text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm ${
+                  saveSuccess
+                    ? "bg-teal-50 border-teal-200 text-teal-800 dark:bg-teal-500/20 dark:border-teal-500/40 dark:text-teal-300"
+                    : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:text-white"
+                }`}
+              >
+                {isSaving ? (
+                  <RefreshCcw className="w-4 h-4 animate-spin" />
+                ) : saveSuccess ? (
+                  <Check className="w-4 h-4 text-emerald-500" />
+                ) : (
+                  <FolderHeart className="w-4 h-4 text-rose-500" />
+                )}
+                <span>{isSaving ? "저장 중..." : saveSuccess ? "도구상자 저장됨" : "도구상자에 전체 결과 저장"}</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* 1. 팩트 폭행 카드 */}
-            <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[190px] relative overflow-hidden group">
-              <div className="space-y-3 relative z-10">
-                <span className="text-[10px] font-extrabold text-indigo-600 bg-indigo-50 border border-indigo-200/50 dark:bg-indigo-950/20 dark:border-indigo-900/60 dark:text-indigo-400 px-2 py-0.5 rounded">
-                  도발적인 팩트 폭행 💥
-                </span>
-                <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-bold">
-                  "{result.fact}"
-                </p>
+              {/* 1. 팩트 폭행 카드 */}
+              <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[190px] relative overflow-hidden group">
+                <div className="space-y-3 relative z-10">
+                  <span className="text-[10px] font-extrabold text-indigo-600 bg-indigo-50 border border-indigo-200/50 dark:bg-indigo-950/20 dark:border-indigo-900/60 dark:text-indigo-400 px-2 py-0.5 rounded">
+                    도발적인 팩트 폭행 💥
+                  </span>
+                  <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-bold">
+                    "{result.fact}"
+                  </p>
+                </div>
+                <div className="mt-4 flex justify-end relative z-10">
+                  <button
+                    onClick={() => handleCopy("fact", result.fact)}
+                    className={`py-1.5 px-3 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      copiedKey === "fact"
+                        ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
+                        : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-900 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    }`}
+                  >
+                    {copiedKey === "fact" ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedKey === "fact" ? "복사 완료" : "복사하기"}</span>
+                  </button>
+                </div>
               </div>
-              <div className="mt-4 flex justify-end relative z-10">
-                <button
-                  onClick={() => handleCopy("fact", result.fact)}
-                  className={`py-1.5 px-3 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    copiedKey === "fact"
-                      ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
-                      : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-900 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                  }`}
-                >
-                  {copiedKey === "fact" ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedKey === "fact" ? "복사 완료" : "복사하기"}</span>
-                </button>
-              </div>
-            </div>
 
-            {/* 2. 감성적인 공감 카드 */}
-            <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[190px] relative overflow-hidden group">
-              <div className="space-y-3 relative z-10">
-                <span className="text-[10px] font-extrabold text-rose-600 bg-rose-50 border border-rose-200/50 dark:bg-rose-950/20 dark:border-rose-900/60 dark:text-rose-400 px-2 py-0.5 rounded">
-                  감성적인 공감 유도 💌
-                </span>
-                <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-bold">
-                  "{result.empathy}"
-                </p>
+              {/* 2. 감성적인 공감 카드 */}
+              <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[190px] relative overflow-hidden group">
+                <div className="space-y-3 relative z-10">
+                  <span className="text-[10px] font-extrabold text-rose-600 bg-rose-50 border border-rose-200/50 dark:bg-rose-950/20 dark:border-rose-900/60 dark:text-rose-400 px-2 py-0.5 rounded">
+                    감성적인 공감 유도 💌
+                  </span>
+                  <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-bold">
+                    "{result.empathy}"
+                  </p>
+                </div>
+                <div className="mt-4 flex justify-end relative z-10">
+                  <button
+                    onClick={() => handleCopy("empathy", result.empathy)}
+                    className={`py-1.5 px-3 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      copiedKey === "empathy"
+                        ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
+                        : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-900 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    }`}
+                  >
+                    {copiedKey === "empathy" ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedKey === "empathy" ? "복사 완료" : "복사하기"}</span>
+                  </button>
+                </div>
               </div>
-              <div className="mt-4 flex justify-end relative z-10">
-                <button
-                  onClick={() => handleCopy("empathy", result.empathy)}
-                  className={`py-1.5 px-3 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    copiedKey === "empathy"
-                      ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
-                      : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-900 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                  }`}
-                >
-                  {copiedKey === "empathy" ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedKey === "empathy" ? "복사 완료" : "복사하기"}</span>
-                </button>
-              </div>
-            </div>
 
-            {/* 3. 호기심 질문 카드 */}
-            <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[190px] relative overflow-hidden group">
-              <div className="space-y-3 relative z-10">
-                <span className="text-[10px] font-extrabold text-amber-600 bg-amber-50 border border-amber-200/50 dark:bg-amber-950/20 dark:border-amber-900/60 dark:text-amber-400 px-2 py-0.5 rounded">
-                  호기심 극대화 질문 ❓
-                </span>
-                <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-bold">
-                  "{result.question}"
-                </p>
+              {/* 3. 호기심 질문 카드 */}
+              <div className="bg-white border border-zinc-200 dark:bg-zinc-950/60 dark:border-zinc-850 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between min-h-[190px] relative overflow-hidden group">
+                <div className="space-y-3 relative z-10">
+                  <span className="text-[10px] font-extrabold text-amber-600 bg-amber-50 border border-amber-200/50 dark:bg-amber-950/20 dark:border-amber-900/60 dark:text-amber-400 px-2 py-0.5 rounded">
+                    호기심 극대화 질문 ❓
+                  </span>
+                  <p className="text-xs sm:text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-bold">
+                    "{result.question}"
+                  </p>
+                </div>
+                <div className="mt-4 flex justify-end relative z-10">
+                  <button
+                    onClick={() => handleCopy("question", result.question)}
+                    className={`py-1.5 px-3 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      copiedKey === "question"
+                        ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
+                        : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-900 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    }`}
+                  >
+                    {copiedKey === "question" ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedKey === "question" ? "복사 완료" : "복사하기"}</span>
+                  </button>
+                </div>
               </div>
-              <div className="mt-4 flex justify-end relative z-10">
-                <button
-                  onClick={() => handleCopy("question", result.question)}
-                  className={`py-1.5 px-3 rounded-lg border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    copiedKey === "question"
-                      ? "bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-500/20 dark:border-emerald-500/40 dark:text-emerald-300"
-                      : "bg-white border-zinc-200 text-zinc-600 hover:text-zinc-900 dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-                  }`}
-                >
-                  {copiedKey === "question" ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedKey === "question" ? "복사 완료" : "복사하기"}</span>
-                </button>
-              </div>
-            </div>
 
+            </div>
           </div>
         )}
 
