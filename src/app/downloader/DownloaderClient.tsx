@@ -31,11 +31,22 @@ import UploadTimeCalculator from "@/components/home/UploadTimeCalculator";
 import SponsorPitchGenerator from "@/components/home/SponsorPitchGenerator";
 import ReverseEngineerGenerator from "@/components/home/ReverseEngineerGenerator";
 import RetentionDoctorGenerator from "@/components/home/RetentionDoctorGenerator";
+import TrendPlannerGenerator from "@/components/home/TrendPlannerGenerator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
 
 const TOOLS = [
+  {
+    id: "trend-planner",
+    title: "실시간 트렌드 탑승 기획기 (Trend-to-Shorts Planner)",
+    titleEn: "Trend-to-Shorts Planner",
+    desc: "현재 뜨고 있는 트렌드 키워드나 뉴스를 바탕으로 AI가 구글 검색을 수행해 맥락을 파악하고, 조회수를 터뜨릴 3종 컨셉(정보, 스킷, 논쟁) 기획서를 작성합니다.",
+    descEn: "Input a hot trend or news keyword to fetch Google Search results, generating 3 tailored viral content concepts.",
+    icon: "📊",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
   {
     id: "retention-doctor",
     title: "3초 후킹 & 이탈 방지 대본 닥터 (Retention Doctor)",
@@ -179,7 +190,7 @@ const TOOLS = [
 ];
 
 export default function DownloaderClient() {
-  const [activeTool, setActiveTool] = useState<"retention-doctor" | "reverse-engineer" | "sponsor-pitch-generator" | "viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
+  const [activeTool, setActiveTool] = useState<"trend-planner" | "retention-doctor" | "reverse-engineer" | "sponsor-pitch-generator" | "viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -298,7 +309,7 @@ export default function DownloaderClient() {
       const toolParam = params.get("tool");
       const scrollParam = params.get("scroll");
 
-      if (toolParam && ["retention-doctor", "reverse-engineer", "sponsor-pitch-generator", "viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "upload-time-calculator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
+      if (toolParam && ["trend-planner", "retention-doctor", "reverse-engineer", "sponsor-pitch-generator", "viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "upload-time-calculator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
         setActiveTool(toolParam as any);
         setTimeout(() => {
           const el = document.getElementById("available-tools");
@@ -651,7 +662,9 @@ export default function DownloaderClient() {
           isOpen={activeTool !== null}
           onClose={() => setActiveTool(null)}
           title={
-            activeTool === "retention-doctor"
+            activeTool === "trend-planner"
+              ? (lang === "ko" ? "📊 실시간 트렌드 탑승 기획기 (Trend-to-Shorts Planner)" : "📊 Trend-to-Shorts Planner")
+              : activeTool === "retention-doctor"
               ? (lang === "ko" ? "🩺 3초 후킹 & 이탈 방지 대본 닥터 (Retention Doctor)" : "🩺 Shorts Script Retention Doctor")
               : activeTool === "reverse-engineer"
               ? (lang === "ko" ? "🔬 경쟁자 대본 역설계기 (Shorts Script Reverse Engineer)" : "🔬 Shorts Script Reverse Engineer")
@@ -682,6 +695,7 @@ export default function DownloaderClient() {
               : ""
           }
         >
+          {activeTool === "trend-planner" && <TrendPlannerGenerator lang={lang} />}
           {activeTool === "retention-doctor" && <RetentionDoctorGenerator lang={lang} />}
           {activeTool === "reverse-engineer" && <ReverseEngineerGenerator lang={lang} />}
           {activeTool === "sponsor-pitch-generator" && <SponsorPitchGenerator lang={lang} />}
