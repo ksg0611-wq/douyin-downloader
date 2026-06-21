@@ -29,11 +29,22 @@ import ThumbnailTextGenerator from "@/components/home/ThumbnailTextGenerator";
 import AlgoHookGenerator from "@/components/home/AlgoHookGenerator";
 import UploadTimeCalculator from "@/components/home/UploadTimeCalculator";
 import SponsorPitchGenerator from "@/components/home/SponsorPitchGenerator";
+import ReverseEngineerGenerator from "@/components/home/ReverseEngineerGenerator";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
 
 const TOOLS = [
+  {
+    id: "reverse-engineer",
+    title: "경쟁자 대본 역설계기 (Shorts Script Reverse Engineer)",
+    titleEn: "Shorts Script Reverse Engineer",
+    desc: "잘 터진 숏폼 영상의 대본을 해체 분석하여 시청자의 심리를 파악하고, 내 채널에 맞는 떡상 대본으로 재조립하는 강력한 기획 도구입니다.",
+    descEn: "Dismantle and analyze viral shorts scripts to reverse engineer viewer psychology, rewriting them to fit your channel.",
+    icon: "🔬",
+    badge: "NEW",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+  },
   {
     id: "sponsor-pitch-generator",
     title: "브랜드 협찬(광고) 제안서 자동 생성기",
@@ -157,7 +168,7 @@ const TOOLS = [
 ];
 
 export default function DownloaderClient() {
-  const [activeTool, setActiveTool] = useState<"sponsor-pitch-generator" | "viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
+  const [activeTool, setActiveTool] = useState<"reverse-engineer" | "sponsor-pitch-generator" | "viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
   const [url, setUrl] = useState("");
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
@@ -276,7 +287,7 @@ export default function DownloaderClient() {
       const toolParam = params.get("tool");
       const scrollParam = params.get("scroll");
 
-      if (toolParam && ["sponsor-pitch-generator", "viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "upload-time-calculator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
+      if (toolParam && ["reverse-engineer", "sponsor-pitch-generator", "viral-analyzer", "thumbnail-text-generator", "algo-hook-generator", "upload-time-calculator", "hashtag", "translator", "revenue", "safe-zone", "bpm-calculator", "shadowban-scanner", "hook-generator"].includes(toolParam)) {
         setActiveTool(toolParam as any);
         setTimeout(() => {
           const el = document.getElementById("available-tools");
@@ -629,7 +640,9 @@ export default function DownloaderClient() {
           isOpen={activeTool !== null}
           onClose={() => setActiveTool(null)}
           title={
-            activeTool === "sponsor-pitch-generator"
+            activeTool === "reverse-engineer"
+              ? (lang === "ko" ? "🔬 경쟁자 대본 역설계기 (Shorts Script Reverse Engineer)" : "🔬 Shorts Script Reverse Engineer")
+              : activeTool === "sponsor-pitch-generator"
               ? (lang === "ko" ? "💰 브랜드 협찬(광고) 제안서 자동 생성기" : "💰 AI Sponsor Pitch Generator")
               : activeTool === "viral-analyzer"
               ? (lang === "ko" ? "AI 바이럴 영상 역설계 분석기" : "AI Viral Video Analyzer")
@@ -656,6 +669,7 @@ export default function DownloaderClient() {
               : ""
           }
         >
+          {activeTool === "reverse-engineer" && <ReverseEngineerGenerator lang={lang} />}
           {activeTool === "sponsor-pitch-generator" && <SponsorPitchGenerator lang={lang} />}
           {activeTool === "viral-analyzer" && <ViralAnalyzer lang={lang} />}
           {activeTool === "thumbnail-text-generator" && <ThumbnailTextGenerator lang={lang} />}
