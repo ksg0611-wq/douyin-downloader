@@ -68,7 +68,7 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
         </div>
 
         {/* Navigation Section */}
-        <nav className="flex items-center gap-2 sm:gap-4">
+        <nav className="flex items-center gap-1 sm:gap-3 flex-wrap">
           <Link 
             href="/"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -90,6 +90,17 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
           >
             <DownloadCloud className="w-4 h-4" />
             <span className="hidden sm:inline">{lang === "ko" ? "다운로더" : "Downloader"}</span>
+          </Link>
+          <Link 
+            href="/support"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              isDark 
+                ? "text-zinc-400 hover:text-white hover:bg-zinc-900" 
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            <span className="text-base leading-none">🙋‍♀️</span>
+            <span className="hidden sm:inline">{lang === "ko" ? "고객지원" : "Support"}</span>
           </Link>
 
           {user && (

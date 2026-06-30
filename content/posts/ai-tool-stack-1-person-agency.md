@@ -1,7 +1,7 @@
 ---
 title: "월 10만 원으로 개발팀과 마케팅팀 세팅하기: 1인 에이전시의 완벽한 AI 툴 스택"
 date: "2026-06-02"
-category: "Marketing"
+category: "MARKETING"
 tags: ["AI툴스택", "ChatGPT", "Claude", "Gemini", "Genspark", "생산성"]
 readTime: "6 min read"
 draft: true

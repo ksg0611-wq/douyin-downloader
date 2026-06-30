@@ -2,7 +2,7 @@
 title: "고단가 CPA 마케팅 실전 가이드"
 summary: "실제 트래픽을 유발하는 숏폼 콘텐츠 기획부터, 고단가 CPA 캠페인 세팅 및 트래킹 솔루션 연동까지의 전 과정을 상세히 해부합니다."
 date: "2024. 05. 25"
-category: "Affiliate"
+category: "AFFILIATE"
 readTime: "8 min read"
 tags: ["CPA마케팅", "트래픽", "랜딩페이지", "트래킹", "수익자동화"]
 draft: true

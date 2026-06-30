@@ -1,7 +1,7 @@
 ---
 title: "터지는 배너의 비밀: 고단가 CPA 전환율을 지배하는 카피라이팅 A/B 테스트"
 date: "2026-05-29"
-category: "Marketing"
+category: "MARKETING"
 tags: ["AB테스트", "카피라이팅", "CPA", "퍼포먼스마케팅", "전환율"]
 readTime: "6 min read"
 draft: true

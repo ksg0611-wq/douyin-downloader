@@ -1,7 +1,7 @@
 ---
 title: "1인 마케터를 위한 완벽한 생산성 시스템: 노션(Notion)과 구글 워크스페이스 연동법"
 date: "2026-05-29"
-category: "Productivity"
+category: "PRODUCTIVITY"
 tags: ["노션", "구글워크스페이스", "업무자동화", "생산성도구", "1인기업"]
 readTime: "6 min read"
 draft: true

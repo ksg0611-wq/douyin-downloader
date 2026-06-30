@@ -1,7 +1,7 @@
 ---
 title: "도우인(Douyin) 영상 로고 없이 다운로드하는 방법"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 readTime: "6 min read"
 tags: ["도우인", "로고 및 오버레이제거", "숏폼마케팅", "구매대행", "CVR최적화"]
 summary: "중국 인기 숏폼 플랫폼 도우인의 고화질 영상을 로고나 크리에이터 ID 로고 없이 원본 화질 그대로 추출하고 마케팅 벤치마킹 및 학습용으로 활용하는 완벽 가이드를 제시합니다."

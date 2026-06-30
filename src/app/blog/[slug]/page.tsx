@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BlogCTA from "@/components/home/BlogCTA";
+import AdBanner from "@/components/layout/AdBanner";
 import { getPostData, getSortedPostsData } from "@/lib/posts";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
@@ -66,9 +67,55 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  // Convert post date to ISO date format for JSON-LD schema compliance
+  let publishedDate = new Date();
+  if (postData.date) {
+    try {
+      const formattedDate = postData.date.replace(/\./g, "-").replace(/\s/g, "");
+      publishedDate = new Date(formattedDate);
+      if (isNaN(publishedDate.getTime())) {
+        publishedDate = new Date();
+      }
+    } catch (e) {
+      publishedDate = new Date();
+    }
+  }
+  const datePublishedIso = publishedDate.toISOString();
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": postData.title,
+    "description": postData.summary || postData.description,
+    "datePublished": datePublishedIso,
+    "dateModified": datePublishedIso,
+    "author": {
+      "@type": "Person",
+      "name": "Kim Sung-geun",
+      "url": "https://shortspack.com/about"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ShortsPack Pro",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://shortspack.com/favicon.ico"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://shortspack.com/blog/${slug}`
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-[#060609] dark:text-zinc-100 font-sans flex flex-col transition-colors duration-300">
-      <Header />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-[#060609] dark:text-zinc-100 font-sans flex flex-col transition-colors duration-300">
+        <Header />
 
       <main className="flex-grow max-w-3xl w-full mx-auto px-4 py-12 md:py-20 z-10">
         
@@ -100,10 +147,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </p>
         </header>
 
+        <AdBanner position="top" />
+
         {/* Markdown Content rendered via prose */}
         <article className="prose prose-zinc prose-rose dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-a:text-rose-600 hover:prose-a:text-rose-500 prose-img:rounded-xl">
           <ReactMarkdown>{postData.content}</ReactMarkdown>
         </article>
+
+        <AdBanner position="bottom" />
 
         <BlogCTA category={postData.category} />
 
@@ -113,5 +164,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <Footer />
       </div>
     </div>
+  </>
   );
 }

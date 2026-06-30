@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useRouter, usePathname } from "next/navigation";
 import { MOCK_VIDEOS } from "@/data";
 import { VideoMock, DownloadHistory as DownloadHistoryType } from "@/types";
 
@@ -16,22 +17,22 @@ import DownloadResult from "@/components/home/DownloadResult";
 import FeaturesGuide from "@/components/home/FeaturesGuide";
 import DownloadHistory from "@/components/home/DownloadHistory";
 import FAQSection from "@/components/home/FAQSection";
-import HashtagTrendAnalyzer from "@/components/home/HashtagTrendAnalyzer";
-import GlobalTranslator from "@/components/home/GlobalTranslator";
-import RevenueSimulator from "@/components/home/RevenueSimulator";
+import HashtagTrendAnalyzer from "@/components/tools/HashtagTrendAnalyzer";
+import GlobalTranslator from "@/components/tools/GlobalTranslator";
+import RevenueSimulator from "@/components/tools/RevenueSimulator";
 import ToolModal from "@/components/home/ToolModal";
-import SafeZonePreviewer from "@/components/home/SafeZonePreviewer";
-import BPMCalculator from "@/components/home/BPMCalculator";
-import ShadowbanScanner from "@/components/home/ShadowbanScanner";
-import HookGenerator from "@/components/home/HookGenerator";
-import ViralAnalyzer from "@/components/home/ViralAnalyzer";
-import ThumbnailTextGenerator from "@/components/home/ThumbnailTextGenerator";
-import AlgoHookGenerator from "@/components/home/AlgoHookGenerator";
-import UploadTimeCalculator from "@/components/home/UploadTimeCalculator";
-import SponsorPitchGenerator from "@/components/home/SponsorPitchGenerator";
-import ReverseEngineerGenerator from "@/components/home/ReverseEngineerGenerator";
-import RetentionDoctorGenerator from "@/components/home/RetentionDoctorGenerator";
-import TrendPlannerGenerator from "@/components/home/TrendPlannerGenerator";
+import SafeZonePreviewer from "@/components/tools/SafeZonePreviewer";
+import BPMCalculator from "@/components/tools/BPMCalculator";
+import ShadowbanScanner from "@/components/tools/ShadowbanScanner";
+import HookGenerator from "@/components/tools/HookGenerator";
+import ThumbnailTextGenerator from "@/components/tools/ThumbnailTextGenerator";
+import AlgoHookGenerator from "@/components/tools/AlgoHookGenerator";
+import UploadTimeCalculator from "@/components/tools/UploadTimeCalculator";
+import SponsorPitchGenerator from "@/components/tools/SponsorPitchGenerator";
+import RetentionDoctorGenerator from "@/components/tools/RetentionDoctorGenerator";
+import TrendPlannerGenerator from "@/components/tools/TrendPlannerGenerator";
+import ViralScriptReverseEngineer from "@/components/tools/ViralScriptReverseEngineer";
+import ScriptExtractor from "@/components/tools/ScriptExtractor";
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, query, where, orderBy, limit, deleteDoc, doc } from "firebase/firestore";
@@ -46,6 +47,7 @@ const TOOLS = [
     icon: "📊",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "idea",
   },
   {
     id: "retention-doctor",
@@ -56,16 +58,18 @@ const TOOLS = [
     icon: "🩺",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "script",
   },
   {
-    id: "reverse-engineer",
-    title: "경쟁자 대본 역설계기 (Shorts Script Reverse Engineer)",
-    titleEn: "Shorts Script Reverse Engineer",
+    id: "viral-reverse-engineer",
+    title: "🧠 바이럴 영상·대본 역설계기 (Viral Script Reverse Engineer)",
+    titleEn: "Viral Script Reverse Engineer",
     desc: "잘 터진 숏폼 영상의 대본을 해체 분석하여 시청자의 심리를 파악하고, 내 채널에 맞는 떡상 대본으로 재조립하는 강력한 기획 도구입니다.",
     descEn: "Dismantle and analyze viral shorts scripts to reverse engineer viewer psychology, rewriting them to fit your channel.",
-    icon: "🔬",
+    icon: "🧠",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "idea",
   },
   {
     id: "sponsor-pitch-generator",
@@ -76,16 +80,18 @@ const TOOLS = [
     icon: "💌",
     badge: "PRO",
     badgeColor: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30",
+    category: "business",
   },
   {
-    id: "viral-analyzer",
-    title: "AI 바이럴 영상 역설계 분석기",
-    titleEn: "AI Viral Video Analyzer",
-    desc: "인기 숏폼 비디오의 대본을 입력하면, 100만 조회수의 후킹 기법, 이탈 방지 전개 방식, CTA 전략 및 채널 맞춤형 변형 아이디어를 AI가 즉시 역설계합니다.",
-    descEn: "Analyze scripts of popular shorts to reverse engineer hooking points, retention tactics, and custom channel ideas.",
-    icon: "🧠",
-    badge: "🔥 HOT",
+    id: "extract-script",
+    title: "📝 AI 대본 추출 및 요약",
+    titleEn: "AI Script Extractor",
+    desc: "숏폼 비디오에서 음성을 고정밀 텍스트로 자동 추출하고, 핵심 내용을 요약하며 분석 리포트를 제공합니다.",
+    descEn: "Extract high-precision scripts from short-form videos automatically, summarizing and generating analysis reports.",
+    icon: "📝",
+    badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "script",
   },
   {
     id: "thumbnail-text-generator",
@@ -96,6 +102,7 @@ const TOOLS = [
     icon: "🧲",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "upload",
   },
   {
     id: "algo-hook-generator",
@@ -106,6 +113,7 @@ const TOOLS = [
     icon: "📢",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "upload",
   },
   {
     id: "upload-time-calculator",
@@ -116,6 +124,7 @@ const TOOLS = [
     icon: "🌍",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "upload",
   },
   {
     id: "hashtag",
@@ -126,6 +135,7 @@ const TOOLS = [
     icon: "📊",
     badge: "AI",
     badgeColor: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/30",
+    category: "idea",
   },
   {
     id: "translator",
@@ -136,6 +146,7 @@ const TOOLS = [
     icon: "🌐",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "script",
   },
   {
     id: "revenue",
@@ -146,6 +157,7 @@ const TOOLS = [
     icon: "💰",
     badge: "POPULAR",
     badgeColor: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400 border border-amber-200 dark:border-amber-500/30",
+    category: "business",
   },
   {
     id: "safe-zone",
@@ -156,6 +168,7 @@ const TOOLS = [
     icon: "📱",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "upload",
   },
   {
     id: "bpm-calculator",
@@ -166,6 +179,7 @@ const TOOLS = [
     icon: "🎵",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "video",
   },
   {
     id: "shadowban-scanner",
@@ -176,6 +190,7 @@ const TOOLS = [
     icon: "🛡️",
     badge: "NEW",
     badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
+    category: "script",
   },
   {
     id: "hook-generator",
@@ -186,12 +201,41 @@ const TOOLS = [
     icon: "🪄",
     badge: "AI",
     badgeColor: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/30",
+    category: "script",
+  },
+  {
+    id: "video-downloader",
+    title: "클린 버전 숏폼 비디오 다운로더",
+    titleEn: "Clean-Version Short-Form Downloader",
+    desc: "틱톡 및 도우인 동영상 주소를 입력해 로고 없이 깨끗한 원본 고화질 MP4 파일로 다운로드합니다.",
+    descEn: "Download clean-version high-definition MP4 videos from TikTok and Douyin.",
+    icon: "⚡",
+    badge: "FREE",
+    badgeColor: "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700",
+    category: "video",
   }
 ];
 
-export default function DownloaderClient() {
-  const [activeTool, setActiveTool] = useState<"trend-planner" | "retention-doctor" | "reverse-engineer" | "sponsor-pitch-generator" | "viral-analyzer" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | null>(null);
+interface DownloaderClientProps {
+  initialCategory: string;
+}
+
+export default function DownloaderClient({ initialCategory }: DownloaderClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [activeTool, setActiveTool] = useState<"trend-planner" | "retention-doctor" | "viral-reverse-engineer" | "sponsor-pitch-generator" | "thumbnail-text-generator" | "algo-hook-generator" | "upload-time-calculator" | "hashtag" | "translator" | "revenue" | "safe-zone" | "bpm-calculator" | "shadowban-scanner" | "hook-generator" | "extract-script" | "video-downloader" | null>(null);
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    setActiveCategory(initialCategory);
+  }, [initialCategory]);
+
+  const handleTabChange = (category: string) => {
+    setActiveCategory(category);
+    router.push(`${pathname}?category=${category}`, { scroll: false });
+  };
   const [platform, setPlatform] = useState<"douyin" | "xiaohongshu">("douyin");
   const [lang, setLang] = useState<"ko" | "en">("ko");
   const [errorMessage, setErrorMessage] = useState("");
@@ -617,12 +661,47 @@ export default function DownloaderClient() {
               {lang === "ko" ? "Available Tools (크리에이터 필수 도구)" : "Available Tools (Creator Toolbox)"}
             </h2>
           </div>
+
+          {/* 5대 카테고리 탭 바 */}
+          <div className="flex border-b border-zinc-200 dark:border-zinc-800/80 mb-8 overflow-x-auto scrollbar-none gap-1 sm:gap-2 pb-px">
+            {[
+              { key: "idea", label: lang === "ko" ? "💡 아이디어 · 기획" : "💡 Ideas & Planning" },
+              { key: "script", label: lang === "ko" ? "📝 대본 · 텍스트" : "📝 Scripts & Text" },
+              { key: "video", label: lang === "ko" ? "🎬 비디오 · 편집" : "🎬 Video & Edit" },
+              { key: "upload", label: lang === "ko" ? "🔥 업로드 · 패키징" : "🔥 Uploads & Packaging" },
+              { key: "business", label: lang === "ko" ? "💼 수익화 · 비즈니스" : "💼 Business & Revenue" },
+            ].map((tab) => {
+              const isActive = activeCategory === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => handleTabChange(tab.key)}
+                  className={`px-4 py-3 text-xs sm:text-sm font-extrabold whitespace-nowrap border-b-2 transition-all cursor-pointer ${
+                    isActive
+                      ? "border-rose-500 text-rose-600 dark:text-rose-455 scale-[1.02]"
+                      : "border-transparent text-zinc-500 hover:text-zinc-850 dark:hover:text-zinc-300"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TOOLS.map((tool) => (
+            {TOOLS.filter(t => t.category === activeCategory).map((tool) => (
               <div
                 key={tool.id}
-                onClick={() => setActiveTool(tool.id as any)}
+                onClick={() => {
+                  if (tool.id === "video-downloader") {
+                    window.scrollTo({ top: 180, behavior: "smooth" });
+                    const inputEl = document.getElementById("downloader-url-input");
+                    if (inputEl) inputEl.focus();
+                    showToast(lang === "ko" ? "상단 입력창에 동영상 링크를 입력해 주세요! ⚡" : "Please paste the link in the input box at the top!");
+                  } else {
+                    setActiveTool(tool.id as any);
+                  }
+                }}
                 className="group relative bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer"
               >
                 <div className="space-y-4">
@@ -647,8 +726,10 @@ export default function DownloaderClient() {
                 
                 {/* Card Bottom: Button */}
                 <div className="mt-6 flex justify-end">
-                  <button className="flex items-center gap-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-rose-500 dark:group-hover:text-rose-450 transition-colors cursor-pointer">
-                    {lang === "ko" ? "도구 실행하기" : "Launch Tool"}
+                  <button className="flex items-center gap-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-rose-500 dark:group-hover:text-rose-455 transition-colors cursor-pointer">
+                    {tool.id === "video-downloader" 
+                      ? (lang === "ko" ? "메인 화면으로 이동" : "Go to Main") 
+                      : (lang === "ko" ? "도구 실행하기" : "Launch Tool")}
                     <span className="text-base group-hover:translate-x-1 transition-transform">➔</span>
                   </button>
                 </div>
@@ -663,43 +744,42 @@ export default function DownloaderClient() {
           onClose={() => setActiveTool(null)}
           title={
             activeTool === "trend-planner"
-              ? (lang === "ko" ? "📊 실시간 트렌드 탑승 기획기 (Trend-to-Shorts Planner)" : "📊 Trend-to-Shorts Planner")
+              ? (lang === "ko" ? "📊 트렌드 기획기 (Trend-to-Shorts Planner)" : "📊 Trend-to-Shorts Planner")
               : activeTool === "retention-doctor"
               ? (lang === "ko" ? "🩺 3초 후킹 & 이탈 방지 대본 닥터 (Retention Doctor)" : "🩺 Shorts Script Retention Doctor")
-              : activeTool === "reverse-engineer"
-              ? (lang === "ko" ? "🔬 경쟁자 대본 역설계기 (Shorts Script Reverse Engineer)" : "🔬 Shorts Script Reverse Engineer")
+              : activeTool === "viral-reverse-engineer"
+              ? (lang === "ko" ? "🧠 바이럴 영상·대본 역설계기 (Viral Script Reverse Engineer)" : "🧠 Shorts Script Reverse Engineer")
               : activeTool === "sponsor-pitch-generator"
               ? (lang === "ko" ? "💰 브랜드 협찬(광고) 제안서 자동 생성기" : "💰 AI Sponsor Pitch Generator")
-              : activeTool === "viral-analyzer"
-              ? (lang === "ko" ? "AI 바이럴 영상 역설계 분석기" : "AI Viral Video Analyzer")
               : activeTool === "thumbnail-text-generator"
-              ? (lang === "ko" ? "0.1초 시선 강탈 썸네일 텍스트 생성기" : "Thumbnail Copy Generator")
+              ? (lang === "ko" ? "🧲 0.1초 시선 강탈 썸네일 텍스트 생성기" : "Thumbnail Copy Generator")
               : activeTool === "algo-hook-generator"
-              ? (lang === "ko" ? "알고리즘 폭발 CTA & 댓글 유도 멘트 생성기" : "Algo CTA & Comment Generator")
+              ? (lang === "ko" ? "📢 CTA & 댓글 유도 멘트 생성기" : "Algo CTA & Comment Generator")
               : activeTool === "upload-time-calculator"
-              ? (lang === "ko" ? "글로벌 최적 업로드 타임 계산기" : "Global Upload Time Calculator")
+              ? (lang === "ko" ? "🌍 숏폼 업로드 타임 계산기" : "Global Upload Time Calculator")
               : activeTool === "hashtag"
-              ? (lang === "ko" ? "실시간 해시태그 트렌드 분석기" : "Real-time Hashtag Trend Analyzer")
+              ? (lang === "ko" ? "📊 해시태그 트렌드 분석" : "Real-time Hashtag Trend Analyzer")
               : activeTool === "translator"
-              ? (lang === "ko" ? "다국어 숏폼 제목 번역" : "Global Title Translator")
+              ? (lang === "ko" ? "🌐 다국어 제목/자막 번역" : "Global Title Translator")
               : activeTool === "revenue"
-              ? (lang === "ko" ? "숏폼 예상 수익 시뮬레이터" : "Revenue Simulator")
+              ? (lang === "ko" ? "🧮 크리에이터 예상 수익 계산기" : "Revenue Simulator")
               : activeTool === "safe-zone"
-              ? (lang === "ko" ? "숏폼 안전 영역(Safe Zone) 프리뷰어" : "Short-form Safe Zone Previewer")
+              ? (lang === "ko" ? "📱 숏폼 안전 영역 프리뷰어" : "Short-form Safe Zone Previewer")
               : activeTool === "bpm-calculator"
-              ? (lang === "ko" ? "숏폼 BGM 컷편집 계산기 (BPM Tapper)" : "BGM Beat-Sync Editor (BPM Tapper)")
+              ? (lang === "ko" ? "🧮 BGM 컷편집 계산기" : "BGM Beat-Sync Editor")
               : activeTool === "shadowban-scanner"
-              ? (lang === "ko" ? "틱톡/도우인 섀도우밴 위험 단어 스캐너" : "TikTok/Douyin Shadowban Word Scanner")
+              ? (lang === "ko" ? "🛡️ 섀도우밴 스캐너" : "TikTok/Douyin Shadowban Word Scanner")
               : activeTool === "hook-generator"
-              ? (lang === "ko" ? "AI 3초 후킹 대본 생성기" : "AI 3-Second Hook Generator")
+              ? (lang === "ko" ? "🪄 3초 후킹 대본 생성기" : "AI 3-Second Hook Generator")
+              : activeTool === "extract-script"
+              ? (lang === "ko" ? "📝 AI 대본 추출 및 요약" : "AI Script Extractor")
               : ""
           }
         >
           {activeTool === "trend-planner" && <TrendPlannerGenerator lang={lang} />}
           {activeTool === "retention-doctor" && <RetentionDoctorGenerator lang={lang} />}
-          {activeTool === "reverse-engineer" && <ReverseEngineerGenerator lang={lang} />}
+          {activeTool === "viral-reverse-engineer" && <ViralScriptReverseEngineer lang={lang} />}
           {activeTool === "sponsor-pitch-generator" && <SponsorPitchGenerator lang={lang} />}
-          {activeTool === "viral-analyzer" && <ViralAnalyzer lang={lang} />}
           {activeTool === "thumbnail-text-generator" && <ThumbnailTextGenerator lang={lang} />}
           {activeTool === "algo-hook-generator" && <AlgoHookGenerator lang={lang} />}
           {activeTool === "upload-time-calculator" && <UploadTimeCalculator lang={lang} />}
@@ -710,6 +790,7 @@ export default function DownloaderClient() {
           {activeTool === "bpm-calculator" && <BPMCalculator lang={lang} />}
           {activeTool === "shadowban-scanner" && <ShadowbanScanner lang={lang} />}
           {activeTool === "hook-generator" && <HookGenerator lang={lang} />}
+          {activeTool === "extract-script" && <ScriptExtractor lang={lang} />}
         </ToolModal>
 
         <FAQSection 

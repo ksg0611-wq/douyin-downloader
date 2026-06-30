@@ -3,7 +3,7 @@ title: "한국 시장은 좁다? 언어 장벽 없이 글로벌 숏폼으로 달
 summary: "애드센스 및 크리에이터 펀드 수익을 극대화하기 위해 언어 장벽이 없는 넌버벌(Non-verbal) 콘텐츠 기획과 글로벌 타겟 숏폼 채널 운영 전략을 공개합니다."
 description: "애드센스 및 크리에이터 펀드 수익을 극대화하기 위해 언어 장벽이 없는 넌버벌(Non-verbal) 콘텐츠 기획과 글로벌 타겟 숏폼 채널 운영 전략을 공개합니다."
 date: "2026. 06. 18"
-category: "수익화"
+category: "MONETIZATION"
 readTime: "5 min read"
 draft: false
 ---

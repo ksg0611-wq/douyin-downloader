@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import ShadowbanScanner from "@/components/home/ShadowbanScanner";
+import ShadowbanScanner from "@/components/tools/ShadowbanScanner";
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - 틱톡/도우인 섀도우밴(Shadowban) 단어 스캐너",

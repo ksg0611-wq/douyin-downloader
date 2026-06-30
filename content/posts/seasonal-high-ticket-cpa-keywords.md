@@ -1,7 +1,7 @@
 ---
 title: "시즌 트래픽을 현금으로: 쇼핑몰 키워드 광고를 넘어선 고단가 CPA 키워드 발굴법"
 date: "2026-05-29"
-category: "Marketing"
+category: "MARKETING"
 tags: ["키워드발굴", "CPA", "시즌이슈", "퍼포먼스마케팅", "트래픽선점"]
 readTime: "6 min read"
 draft: true

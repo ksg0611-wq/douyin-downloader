@@ -1,7 +1,7 @@
 ---
 title: "고단가 마케팅의 보이지 않는 벽: 기술적 SEO와 정보처리 역량의 중요성"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 readTime: "6 min read"
 tags: ["기술적SEO", "정보처리역량", "CPA마케팅", "데이터베이스", "검색엔진최적화"]
 draft: true

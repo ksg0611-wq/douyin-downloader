@@ -1,7 +1,7 @@
 ---
 title: "블루오션 개척: 하이퍼 로컬 B2B 마케팅과 SW 교육의 강력한 시너지"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 readTime: "6 min read"
 tags: ["하이퍼로컬", "B2B마케팅", "SW교육", "CPA", "디지털전환"]
 draft: true

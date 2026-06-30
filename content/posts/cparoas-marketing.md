@@ -5,7 +5,7 @@ summary: "내 광고 계정에서 새고 있는 돈을 막고, 알짜배기 수�
 
 date: "2026. 05. 25"
 
-category: "Affiliate"
+category: "AFFILIATE"
 
 readTime: "8 min read"
 

@@ -1,7 +1,7 @@
 ---
 title: "1인 온라인 광고 대행사 창업: AI와 숏폼으로 고마진 CPA 시장 장악하기"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 tags: ["광고대행사", "CPA", "AI자동화", "퍼포먼스마케팅", "수익자동화"]
 readTime: "6 min read"
 draft: true

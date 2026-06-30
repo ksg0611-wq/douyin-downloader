@@ -2,7 +2,7 @@
 title: "틱톡·더우인 숏폼으로 자사몰 매출 올리는 상세페이지 기획 테크닉"
 summary: "숏폼 리뷰 영상이 구매 전환에 미치는 영향과 이를 자사몰 상세페이지에 최적화하여 삽입하는 실전 테크닉에 대해 깊이 있게 다루어 보겠습니다."
 date: "2026. 05. 25"
-category: "Affiliate"
+category: "AFFILIATE"
 readTime: "8 min read"
 draft: true
 ---

@@ -1,7 +1,7 @@
 ---
 title: "고단가 CPA 마케팅의 비밀: 숏폼 트래픽을 활용한 DB 수집과 수익 극대화"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 tags: ["CPA", "제휴마케팅", "퍼포먼스마케팅", "DB수집", "자동차금융"]
 readTime: "6 min read"
 draft: true

@@ -1,7 +1,7 @@
 ---
 title: "애드센스 승인 공식: 구글 봇과 방문자를 모두 만족시키는 SEO 텍스트 구조 설계법"
 date: "2026-05-29"
-category: "Marketing"
+category: "MARKETING"
 tags: ["애드센스승인", "SEO", "검색엔진최적화", "블로그수익화", "콘텐츠마케팅"]
 readTime: "6 min read"
 draft: true

@@ -2,7 +2,7 @@
 title: "2026 도우인(Douyin) 알고리즘 완벽 분석: 조회수 폭발시키는 3가지 치트키"
 summary: "글로벌 숏폼 트렌드를 이끄는 도우인 알고리즘의 최신 변화를 분석하고, 한국 크리에이터가 조회수를 폭발시킬 수 있는 구체적인 3가지 바이럴 전략을 공개합니다."
 date: "2026. 06. 13"
-category: "Algorithm"
+category: "ALGORITHM"
 readTime: "7 min read"
 tags: ["도우인알고리즘", "Douyin", "숏폼마케팅", "바이럴전략", "조회수치트키"]
 draft: false

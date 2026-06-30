@@ -1,7 +1,7 @@
 ---
 title: "데이터는 답을 알고 있다: GA4(구글 애널리틱스)를 활용한 마케팅 퍼널 분석과 CPA 성과 측정"
 date: "2026-05-29"
-category: "Marketing"
+category: "MARKETING"
 tags: ["GA4", "구글애널리틱스", "퍼널분석", "데이터마케팅", "성과측정"]
 readTime: "6 min read"
 draft: true

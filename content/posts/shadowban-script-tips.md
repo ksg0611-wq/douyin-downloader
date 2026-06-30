@@ -1,7 +1,7 @@
 ---
 title: "틱톡/도우인 알고리즘 노출 제한(섀도우밴) 피하는 대본 작성 팁"
 date: "2026-05-28"
-category: "Marketing"
+category: "MARKETING"
 readTime: "6 min read"
 tags: ["섀도우밴", "Shadowban", "대본작성", "알고리즘노출", "숏폼마케팅"]
 summary: "틱톡, 도우인 등 숏폼 추천 알고리즘의 노출 제한(섀도우밴)을 예방하고 안전하게 트래픽을 얻을 수 있는 금지어 필터링 우회 대본 작성법과 팁을 공유합니다."

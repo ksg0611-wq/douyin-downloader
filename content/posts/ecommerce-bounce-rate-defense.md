@@ -1,7 +1,7 @@
 ---
 title: "이커머스 생존 공방전: 상세페이지 이탈률(Bounce Rate) 방어와 숏폼의 역할"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 readTime: "6 min read"
 tags: ["이탈률", "상세페이지", "이커머스", "숏폼마케팅", "체류시간"]
 draft: true

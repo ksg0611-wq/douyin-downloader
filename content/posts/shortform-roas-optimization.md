@@ -1,7 +1,7 @@
 ---
 title: "쇼핑몰 키워드 광고 한계 돌파: 숏폼 영상을 활용한 ROAS 극대화 공식"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 tags: ["ROAS", "키워드광고", "숏폼마케팅", "퍼포먼스마케팅", "CPC단가"]
 readTime: "6 min read"
 draft: true

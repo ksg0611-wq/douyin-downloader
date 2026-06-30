@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import UploadTimeCalculator from "@/components/home/UploadTimeCalculator";
+import UploadTimeCalculator from "@/components/tools/UploadTimeCalculator";
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - 글로벌 크로스보더 최적 업로드 타임 계산기",

@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import ThumbnailTextGenerator from "@/components/home/ThumbnailTextGenerator";
+import ThumbnailTextGenerator from "@/components/tools/ThumbnailTextGenerator";
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - 0.1초 시선 강탈 썸네일 텍스트 생성기",

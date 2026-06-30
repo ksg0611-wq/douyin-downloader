@@ -1,7 +1,7 @@
 ---
 title: "애드센스 수익 극대화의 비밀: 마이크로 웹앱 실전 광고 배치 최적화 가이드"
 date: "2026-06-02"
-category: "Monetization"
+category: "MONETIZATION"
 tags: ["애드센스", "수익최적화", "CTR", "광고배치", "웹앱수익화"]
 readTime: "6 min read"
 draft: true

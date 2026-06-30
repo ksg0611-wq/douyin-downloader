@@ -1,7 +1,7 @@
 ---
 title: "샤오홍슈(Xiaohongshu) 동영상 및 이미지 고화질 저장 가이드"
 date: "2026-05-27"
-category: "Marketing"
+category: "MARKETING"
 readTime: "6 min read"
 tags: ["샤오홍슈", "Xiaohongshu", "이미지저장", "동영상저장", "중국마케팅"]
 summary: "중국 최대의 트렌드 지식 공유 플랫폼 샤오홍슈의 초고화질 사진과 동영상을 로고 로고 없이 원본 무손실 파일로 저장하는 상세 가이드와 저작권 유의점을 소개합니다."

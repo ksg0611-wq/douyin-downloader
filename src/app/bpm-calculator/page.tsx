@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import BPMCalculator from "@/components/home/BPMCalculator";
+import BPMCalculator from "@/components/tools/BPMCalculator";
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - 숏폼 BGM 컷편집 계산기 (BPM Tapper)",

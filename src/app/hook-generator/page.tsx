@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import HookGenerator from "@/components/home/HookGenerator";
+import HookGenerator from "@/components/tools/HookGenerator";
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - AI 기반 3초 후킹(Hook) 대본 생성기",

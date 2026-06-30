@@ -1,7 +1,7 @@
 ---
 title: "1인 마케터의 한계 돌파: Gemini API와 AI 스튜디오를 활용한 콘텐츠 자동화 시스템"
 date: "2026-06-02"
-category: "Marketing"
+category: "MARKETING"
 tags: ["GeminiAPI", "구글AI스튜디오", "마케팅자동화", "퍼포먼스마케팅", "AI활용"]
 readTime: "6 min read"
 draft: true

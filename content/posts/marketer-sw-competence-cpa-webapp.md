@@ -1,7 +1,7 @@
 ---
 title: "마케터의 SW 역량이 수익을 바꾼다: 마이크로 웹앱으로 고단가 DB 싹쓸이하기"
 date: "2026-05-26"
-category: "Marketing"
+category: "MARKETING"
 readTime: "6 min read"
 tags: ["마이크로웹앱", "CPA", "퍼포먼스마케팅", "SW교육", "DB수집"]
 draft: true

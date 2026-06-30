@@ -1,7 +1,7 @@
 ---
 title: "1인 에이전시의 무기: 파이어베이스(Firebase)를 활용한 서버리스 마케팅 웹앱과 DB 자동화"
 date: "2026-06-01"
-category: "Marketing"
+category: "MARKETING"
 tags: ["파이어베이스", "서버리스", "웹앱", "DB자동화", "퍼포먼스마케팅"]
 readTime: "6 min read"
 draft: true

@@ -4,7 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
+      allow: ["/", "/blog/"],
       disallow: ["/api/", "/my-toolbox"],
     },
     sitemap: "https://shortspack.com/sitemap.xml",

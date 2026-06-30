@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import SafeZonePreviewer from "@/components/home/SafeZonePreviewer";
+import SafeZonePreviewer from "@/components/tools/SafeZonePreviewer";
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - 숏폼 안전 영역(Safe Zone) 프리뷰어",
