@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
@@ -36,9 +36,11 @@ export default async function BlogHome() {
           </p>
         </div>
 
-        {/* Client-side filter bar (self-contained Suspense inside) */}
+        {/* Client-side filter bar */}
         <div className="w-full flex justify-center mb-10 overflow-x-auto scrollbar-none pb-2">
-          <BlogFilterClient availableTags={availableTags} />
+          <Suspense fallback={<div className="text-zinc-400 text-xs font-bold py-2">Loading filters...</div>}>
+            <BlogFilterClient availableTags={availableTags} />
+          </Suspense>
         </div>
 
         {/*
