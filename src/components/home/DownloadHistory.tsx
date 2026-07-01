@@ -28,7 +28,7 @@ export default function DownloadHistory({
         <div className="flex items-center justify-between mb-2.5 border-b border-zinc-200 dark:border-zinc-900 pb-2 relative z-10">
           <h3 className="text-[10px] sm:text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-widest flex items-center gap-2">
             <History className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-            🕒 최근 다운로드 기록
+            🕒 최근 백업 내역
           </h3>
           {historyList.length > 0 && (
             <button
@@ -43,7 +43,7 @@ export default function DownloadHistory({
 
         {displayList.length === 0 ? (
           <div className="text-center py-4 text-[10px] sm:text-xs text-zinc-500 dark:text-zinc-600 font-medium">
-            아직 분석한 비디오 기록이 없습니다. 상단에서 비디오 주소를 입력하고 간편하게 다운로드해보세요.
+            아직 분석한 비디오 기록이 없습니다. 상단에서 비디오 주소를 입력하고 간편하게 백업해보세요.
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 relative z-10">

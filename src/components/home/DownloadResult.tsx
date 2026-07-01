@@ -323,7 +323,7 @@ export default function DownloadResult({
                   />
                 </div>
                 <p className="text-[10px] text-zinc-550 dark:text-zinc-500 mt-1.5 text-right">
-                  자동 다운로드 트리거 패킷이 완료되면 파일 저정 다이얼로그가 자동 실행됩니다.
+                  자동 백업 트리거 패킷이 완료되면 파일 저정 다이얼로그가 자동 실행됩니다.
                 </p>
               </div>
             )}
@@ -336,7 +336,7 @@ export default function DownloadResult({
               >
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <strong>다운로드 시뮬레이션 성공!</strong> 파일이 로컬 기기로 정상 이송되었습니다. 불필요한 레이블 요소가 소거된 무손실 최고해상도 원본 파일 형태입니다.
+                  <strong>백업 시뮬레이션 성공!</strong> 파일이 로컬 기기로 정상 이송되었습니다. 불필요한 레이블 요소가 소거된 무손실 최고해상도 원본 파일 형태입니다.
                 </div>
               </motion.div>
             )}
@@ -354,7 +354,7 @@ export default function DownloadResult({
                 >
                   <div className="absolute inset-0 bg-white/10 hover:bg-transparent pointer-events-none" />
                   <Video className="w-5 h-5 text-zinc-950" />
-                  <span>MP4 비디오 다운로드 (클린 버전)</span>
+                  <span>MP4 비디오 백업 (클린 버전)</span>
                   <span className="bg-zinc-950 text-cyan-300 text-[10px] font-black px-1.5 py-0.5 rounded tracking-wide uppercase">
                     {analysisResult.fileSize}
                   </span>
@@ -381,12 +381,12 @@ export default function DownloadResult({
                       {thumbnailProgress ? (
                         <>
                           <RefreshCcw className="w-4 h-4 text-purple-500 dark:text-purple-400 animate-spin" />
-                          <span>다운로드 중...</span>
+                          <span>백업 중...</span>
                         </>
                       ) : (
                         <>
                           <span className="text-sm leading-none">🖼️</span>
-                          <span>썸네일 다운로드</span>
+                          <span>썸네일 백업</span>
                         </>
                       )}
                     </button>
@@ -702,7 +702,7 @@ export default function DownloadResult({
             </div>
 
             <div className="bg-zinc-100/50 border border-zinc-200 dark:bg-zinc-950 dark:border-zinc-900 rounded-lg p-3 text-[11px] text-zinc-500 dark:text-zinc-500 leading-relaxed">
-              💡 <strong>알림:</strong> Douyin(抖音)의 고화질 원본 비디오 파일은 해외 CDN 가속 망에 직접 업 링크되어 다운로드 속도가 대폭 향상되었습니다. 오프라인 상태에서도 언제든지 비디오 미리보기 재생이 가능합니다.
+              💡 <strong>알림:</strong> Douyin(抖音)의 고화질 원본 비디오 파일은 해외 CDN 가속 망에 직접 업 링크되어 백업 속도가 대폭 향상되었습니다. 오프라인 상태에서도 언제든지 비디오 미리보기 재생이 가능합니다.
             </div>
 
           </div>

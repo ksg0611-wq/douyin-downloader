@@ -237,7 +237,7 @@ export default function ScriptExtractor({ lang = "ko" }: ScriptExtractorProps) {
                   type="text"
                   className="w-full bg-white dark:bg-zinc-900 border border-zinc-250 dark:border-zinc-800 rounded-xl pl-11 pr-4 py-3.5 text-sm text-zinc-850 dark:text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-teal-500 transition-colors font-sans"
                   placeholder={lang === "ko" 
-                    ? "도우인, 샤오홍슈 영상 링크 또는 직접 다운로드 가능한 mp3 오디오 주소를 입력하세요."
+                    ? "도우인, 샤오홍슈 영상 링크 또는 직접 백업 가능한 mp3 오디오 주소를 입력하세요."
                     : "Enter Douyin, Xiaohongshu url, or raw mp3 audio link."}
                   value={url}
                   onChange={(e) => {

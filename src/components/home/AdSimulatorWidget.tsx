@@ -60,7 +60,7 @@ export default function AdSimulatorWidget({
 
             <div className="grid grid-cols-2 gap-2 bg-zinc-900 rounded-lg p-2 font-mono text-center">
               <div className="border-r border-zinc-800">
-                <span className="text-[9px] text-zinc-500 block">오늘 다운로드 수</span>
+                <span className="text-[9px] text-zinc-500 block">오늘 백업 수</span>
                 <span className="text-white font-bold text-xs">{downloadSessionCount} 회</span>
               </div>
               <div>

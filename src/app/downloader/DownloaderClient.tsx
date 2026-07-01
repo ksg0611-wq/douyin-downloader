@@ -205,10 +205,10 @@ const TOOLS = [
   },
   {
     id: "video-downloader",
-    title: "클린 버전 숏폼 비디오 다운로더",
-    titleEn: "Clean-Version Short-Form Downloader",
-    desc: "틱톡 및 도우인 동영상 주소를 입력해 로고 없이 깨끗한 원본 고화질 MP4 파일로 다운로드합니다.",
-    descEn: "Download clean-version high-definition MP4 videos from TikTok and Douyin.",
+    title: "클린 버전 숏폼 레퍼런스 분석기",
+    titleEn: "Clean-Version Short-Form Ref-Backup Tool",
+    desc: "틱톡 및 도우인 동영상 주소를 입력해 레퍼런스 분석용 초고화질 MP4 파일로 백업합니다.",
+    descEn: "Backup clean-version high-definition MP4 videos from TikTok and Douyin.",
     icon: "⚡",
     badge: "FREE",
     badgeColor: "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700",
@@ -445,7 +445,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
   const clearAllHistory = async () => {
     setHistoryList([]);
     localStorage.removeItem("douyin_download_history");
-    showToast("모든 다운로드 기록이 삭제되었습니다.");
+    showToast("모든 백업 내역이 삭제되었습니다.");
 
     const userId = localStorage.getItem("douyin_guest_user_id") || guestUserId;
     if (db && userId) {
@@ -536,7 +536,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
     const targetUrl = type === "video" ? analysisResult.realVideoUrl : analysisResult.realAudioUrl;
     
     if (!targetUrl) {
-       showToast(lang === "ko" ? "다운로드할 수 있는 원본 미디어 링크가 없습니다." : "No original media link available for download.");
+       showToast(lang === "ko" ? "백업할 수 있는 원본 미디어 링크가 없습니다." : "No original media link available for download.");
        return;
     }
 
@@ -557,7 +557,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
       });
     }, 250);
 
-    // 트리거 Native 브라우저 다운로드
+    // 트리거 Native 브라우저 백업
     const link = document.createElement("a");
     link.href = proxyUrl;
     link.download = filename;
@@ -648,7 +648,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
             } else {
               setUrl(item.url);
               window.scrollTo({ top: 120, behavior: "smooth" });
-              showToast("주소가 붙여 넣어졌습니다. 다운로드 버튼을 클릭하세요!");
+              showToast("주소가 붙여 넣어졌습니다. 백업 버튼을 클릭하세요!");
             }
           }} 
         />

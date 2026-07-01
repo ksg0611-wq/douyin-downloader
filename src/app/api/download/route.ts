@@ -23,12 +23,12 @@ export async function GET(req: NextRequest) {
       throw new Error(`미디어 스트림 호출 실패: ${response.status}`);
     }
 
-    // 스트림 파이핑 및 헤더 변조 (다운로드 강제)
+    // 스트림 파이핑 및 헤더 변조 (백업 강제)
     const headers = new Headers();
     headers.set("Content-Disposition", `attachment; filename="${encodeURIComponent(filename)}"`);
     headers.set("Content-Type", response.headers.get("Content-Type") || "application/octet-stream");
     
-    // 원본 응답의 Content-Length가 있다면 보존하여 다운로드 진행률이 브라우저에 표시되게 함
+    // 원본 응답의 Content-Length가 있다면 보존하여 백업 진행률이 브라우저에 표시되게 함
     const contentLength = response.headers.get("Content-Length");
     if (contentLength) {
       headers.set("Content-Length", contentLength);
@@ -41,6 +41,6 @@ export async function GET(req: NextRequest) {
     
   } catch (error: any) {
     console.error("Proxy Download Error:", error);
-    return new NextResponse("파일을 다운로드할 수 없습니다: " + error.message, { status: 500 });
+    return new NextResponse("파일을 백업할 수 없습니다: " + error.message, { status: 500 });
   }
 }

@@ -36,7 +36,7 @@ export default function FeaturesGuide() {
             주소 입력 및 분석 시작
           </h4>
           <p className="text-[11px] text-zinc-650 dark:text-zinc-400 leading-normal">
-            복사한 주소를 본 사이트 주소창에 넣은 다음, <strong>[다운로드]</strong> 파란 버튼을 클릭하십시오. 인공지능이 약 2초간 보안 분석을 수행합니다.
+            복사한 주소를 본 사이트 주소창에 넣은 다음, <strong>[백업]</strong> 파란 버튼을 클릭하십시오. 인공지능이 약 2초간 보안 분석을 수행합니다.
           </p>
         </div>
 
@@ -46,10 +46,10 @@ export default function FeaturesGuide() {
           </div>
           <h4 className="font-bold text-zinc-800 dark:text-zinc-200 text-xs mb-1 flex items-center gap-1">
             <Download className="w-3.5 h-3.5 text-emerald-400" />
-            클린 버전 MP4 다운로드
+            클린 버전 MP4 백업
           </h4>
           <p className="text-[11px] text-zinc-650 dark:text-zinc-400 leading-normal">
-            우회 분석이 종료되면 비디오 정보 카드와 함께 파일 사이즈가 표시됩니다. <strong>[MP4 다운로드]</strong>를 클릭해 최고화질(HD) 파일로 저장하십시오.
+            우회 분석이 종료되면 비디오 정보 카드와 함께 파일 사이즈가 표시됩니다. <strong>[MP4 백업]</strong>를 클릭해 최고화질(HD) 파일로 저장하십시오.
           </p>
         </div>
       </div>

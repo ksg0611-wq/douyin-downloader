@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import DownloaderClient from "./DownloaderClient";
 
 export const metadata: Metadata = {
-  title: "틱톡/도우인 클린 비디오 다운로더 - ShortsPack Pro",
-  description: "원본 화질 그대로 틱톡, 도우인, 릴스 영상을 고화질로 다운로드하세요. 개인 학습 및 벤치마킹을 위한 필수 도구입니다.",
+  title: "틱톡/도우인 클린 숏폼 레퍼런스 분석기 - ShortsPack Pro",
+  description: "원본 화질 그대로 틱톡, 도우인, 릴스 영상을 고화질로 백업하여 분석하세요. 개인 학습 및 벤치마킹을 위한 필수 도구입니다.",
 };
 
 interface PageProps {

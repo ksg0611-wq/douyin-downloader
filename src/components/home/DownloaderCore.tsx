@@ -151,7 +151,7 @@ export default function DownloaderCore({
               ) : (
                 <>
                   <Download className="w-5 h-5" />
-                  <span>{lang === "ko" ? "다운로드" : "Download"}</span>
+                  <span>{lang === "ko" ? "백업" : "Download"}</span>
                 </>
               )}
             </button>
@@ -174,7 +174,7 @@ export default function DownloaderCore({
           {/* 법적 면책 문구 (Disclaimer) */}
           <p className="text-xs text-gray-500 text-center mt-2 leading-relaxed">
             {lang === "ko" ? (
-              "⚠️ 본 서비스는 개인의 학습, 벤치마킹 및 포트폴리오 분석 목적으로만 제공됩니다. 다운로드한 영상의 저작권 침해 및 무단 재업로드로 인해 발생하는 모든 법적 책임은 사용자 본인에게 있습니다."
+              "⚠️ 본 서비스는 개인의 학습, 벤치마킹 및 포트폴리오 분석 목적으로만 제공됩니다. 백업한 영상의 저작권 침해 및 무단 재업로드로 인해 발생하는 모든 법적 책임은 사용자 본인에게 있습니다."
             ) : (
               "⚠️ This service is provided only for personal learning, benchmarking, and portfolio analysis purposes. All legal responsibilities arising from copyright infringement and unauthorized re-uploading of downloaded videos lie with the user."
             )}

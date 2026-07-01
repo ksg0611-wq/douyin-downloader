@@ -19,11 +19,11 @@ export default function SupportPage() {
 
   const faqs: FAQItem[] = [
     {
-      question: "다운로드한 벤치마킹용 영상은 어떻게 활용해야 하나요?",
-      answer: "본 서비스는 크리에이터의 순수 개인 학습 및 콘텐츠 벤치마킹 분석 목적에 한하여 무료로 제공되는 클린 비디오 다운로드 툴입니다. 다운로드한 영상을 타 플랫폼에 무단으로 재업로드하는 것은 권장하지 않습니다."
+      question: "백업한 벤치마킹용 영상은 어떻게 활용해야 하나요?",
+      answer: "본 서비스는 크리에이터의 순수 개인 학습 및 콘텐츠 벤치마킹 분석 목적에 한하여 무료로 제공되는 클린 비디오 백업 툴입니다. 백업한 영상을 타 플랫폼에 무단으로 재업로드하는 것은 권장하지 않습니다."
     },
     {
-      question: "다운로드 가능한 동영상 플랫폼은 무엇인가요?",
+      question: "백업 가능한 동영상 플랫폼은 무엇인가요?",
       answer: "현재 중국의 도우인(Douyin) 및 샤오홍슈(Xiaohongshu) 플랫폼의 고화질 비디오 및 오리지널 이미지 저장을 공식 지원하고 있습니다. 타 숏폼 플랫폼의 지원 범위도 점차 확장 예정입니다."
     },
     {
@@ -31,7 +31,7 @@ export default function SupportPage() {
       answer: "기본적으로 비회원 상태에서도 일일 제한 크레딧 내에서 사용 가능하며, 구글 로그인을 하시면 1인 미디어 창작에 필요한 넉넉한 분량의 추가 무료 일일 크레딧을 즉시 충전받아 사용하실 수 있습니다."
     },
     {
-      question: "다운로드한 비디오를 다른 플랫폼에 재업로드해도 되나요?",
+      question: "백업한 비디오를 다른 플랫폼에 재업로드해도 되나요?",
       answer: "불가합니다. ShortsPack Pro를 통해 내려받은 모든 원본 미디어는 오직 컷편집 템포 분석, 연출 기법 벤치마킹 등 개인의 학술 연구 목적에 한해서만 사용해야 합니다. 타인의 저작권을 침해하는 상업적 재배포는 원작자와 플랫폼 가이드라인에 위배될 수 있으므로 각별한 주의가 필요합니다."
     },
     {
@@ -39,7 +39,7 @@ export default function SupportPage() {
       answer: "구글 파이어베이스(Firebase) 보안 인프라를 거쳐 업계 표준의 암호화 시스템으로 철저히 격리 관리됩니다. 귀하의 구글 계정 비밀번호 등은 당사 시스템에 절대 수집·저장되지 않으며, 개인정보처리방침을 엄격히 준수합니다."
     },
     {
-      question: "동영상 다운로드 및 분석 에러가 날 때는 어떻게 해야 하나요?",
+      question: "동영상 백업 및 분석 에러가 날 때는 어떻게 해야 하나요?",
       answer: "동영상 링크가 올바른지, 혹은 원본 게시물이 삭제되었거나 비공개 상태인지 확인해 보세요. 또한 일시적인 플랫폼 서버 지연일 수 있으므로 브라우저 캐시를 완전히 비운 뒤 Chrome(크롬) 웹 브라우저에서 재시도해 보시기 바랍니다. 에러가 지속된다면 해당 URL 주소를 문의 이메일로 접수해 주시면 즉시 점검하겠습니다."
     }
   ];
@@ -140,10 +140,10 @@ export default function SupportPage() {
 
           <div className="inline-block bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-6 py-3 rounded-2xl shadow-sm">
             <a 
-              href="mailto:ksg0611@gmail.com" 
+              href="mailto:contact@shortspack.com" 
               className="text-lg md:text-xl font-extrabold text-rose-600 dark:text-rose-455 hover:underline flex items-center justify-center gap-2 cursor-pointer"
             >
-              ksg0611@gmail.com
+              contact@shortspack.com
             </a>
           </div>
         </section>

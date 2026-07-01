@@ -245,7 +245,7 @@ export default function ThumbnailEditor({
     drawCanvas();
   }, [drawCanvas]);
 
-  // ── 다운로드 ──
+  // ── 백업 ──
   const handleDownload = async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -267,7 +267,7 @@ export default function ThumbnailEditor({
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch {
-      alert("다운로드에 실패했습니다. 다시 시도해 주세요.");
+      alert("백업에 실패했습니다. 다시 시도해 주세요.");
     } finally {
       setIsDownloading(false);
     }
@@ -497,7 +497,7 @@ export default function ThumbnailEditor({
                   ) : (
                     <>
                       <Download className="w-4 h-4" />
-                      <span>📥 완성된 커버 다운로드 (PNG)</span>
+                      <span>📥 완성된 커버 백업 (PNG)</span>
                     </>
                   )}
                 </button>

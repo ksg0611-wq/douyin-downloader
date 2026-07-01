@@ -7,7 +7,7 @@ import { Mail, Copy, Check, ExternalLink, Compass } from "lucide-react";
 
 export default function AboutClient() {
   const [copied, setCopied] = useState(false);
-  const email = "ksg0611@gmail.com";
+  const email = "contact@shortspack.com";
 
   const handleCopyEmail = async () => {
     try {
@@ -131,6 +131,14 @@ export default function AboutClient() {
               </a>
             </div>
           </div>
+        </section>
+
+        {/* Contact Us Section for EEAT */}
+        <section className="w-full max-w-xl border-t border-zinc-200 dark:border-zinc-800 pt-8 text-center space-y-2">
+          <h3 className="text-lg font-bold text-zinc-900 dark:text-white">[Contact Us]</h3>
+          <p className="text-zinc-650 dark:text-zinc-400 text-sm font-semibold">
+            비즈니스 및 제휴 문의: <a href="mailto:contact@shortspack.com" className="text-violet-600 dark:text-violet-400 hover:underline">contact@shortspack.com</a>
+          </p>
         </section>
       </main>
 
