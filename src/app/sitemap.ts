@@ -20,6 +20,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/algo-hook-generator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/upload-time-calculator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/sponsor-pitch-generator", changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: "/tools", changeFrequency: "weekly" as const, priority: 0.9 },
+    { url: "/tools/hook-generator", changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: "/tools/hashtag-scanner", changeFrequency: "monthly" as const, priority: 0.8 },
+    { url: "/tools/tempo-calculator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/tools/sponsor-pitch-generator", changeFrequency: "monthly" as const, priority: 0.8 },
   ];
 

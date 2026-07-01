@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { BookOpen, DownloadCloud, FolderHeart, LogIn, LogOut } from "lucide-react";
+import { BookOpen, Search, FolderHeart, LogIn, LogOut, ChevronDown, Wrench } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 interface HeaderProps {
@@ -13,6 +13,7 @@ interface HeaderProps {
 
 export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
   const [activeTheme, setActiveTheme] = React.useState<"light" | "dark">("light");
+  const [isToolsOpen, setIsToolsOpen] = React.useState(false);
   const { user, loading, signInWithGoogle, logout } = useAuth();
 
   React.useEffect(() => {
@@ -80,6 +81,18 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
             <BookOpen className="w-4 h-4" />
             <span className="hidden sm:inline">{lang === "ko" ? "블로그" : "Blog"}</span>
           </Link>
+
+          <Link 
+            href="/tools"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              isDark 
+                ? "text-zinc-400 hover:text-white hover:bg-zinc-900" 
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            <Wrench className="w-4 h-4" />
+            <span className="hidden sm:inline">{lang === "ko" ? "도구" : "Tools"}</span>
+          </Link>
           <Link 
             href="/downloader"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
@@ -88,8 +101,8 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
                 : "bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100/80"
             }`}
           >
-            <DownloadCloud className="w-4 h-4" />
-            <span className="hidden sm:inline">{lang === "ko" ? "다운로더" : "Downloader"}</span>
+            <Search className="w-4 h-4" />
+            <span className="hidden sm:inline">{lang === "ko" ? "레퍼런스 백업" : "Reference Backup"}</span>
           </Link>
           <Link 
             href="/support"
