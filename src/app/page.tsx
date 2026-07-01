@@ -8,8 +8,7 @@ import AdBanner from "@/components/layout/AdBanner";
 import BlogFilterClient from "./BlogFilterClient";
 import { getSortedPostsDataAsync } from "@/lib/posts";
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - 100만 뷰를 부르는 크리에이터 종합 AI 툴박스",
