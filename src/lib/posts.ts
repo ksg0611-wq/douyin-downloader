@@ -94,6 +94,10 @@ export function getSortedPostsData(): BlogPostMeta[] {
     });
 }
 
+export async function getSortedPostsDataAsync(): Promise<BlogPostMeta[]> {
+  return Promise.resolve(getSortedPostsData());
+}
+
 // 특정 id(slug)를 가진 글의 상세 내용(본문 포함)을 가져오는 함수
 export function getPostData(id: string): BlogPostDetail | null {
   const fullPath = path.join(postsDirectory, `${id}.md`);
