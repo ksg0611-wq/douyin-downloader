@@ -4,7 +4,7 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolSubNav from "@/components/tools/ToolSubNav";
-import { Zap, Hash, Clock, Mail, ArrowRight, LayoutGrid, Puzzle, MousePointerClick } from "lucide-react";
+import { Zap, Hash, Clock, Mail, ArrowRight, LayoutGrid, Puzzle, MousePointerClick, Clapperboard, MessageSquare } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "비즈니스 & 마케팅 스마트 도구 모음 - ShortsPack Pro",
@@ -78,6 +78,24 @@ const TOOL_CARDS: ToolCard[] = [
     icon: <MousePointerClick className="w-6 h-6 text-orange-500" />,
     badge: "CONVERSION",
     badgeColor: "bg-orange-50 border-orange-200 text-orange-650 dark:bg-orange-500/15 dark:border-orange-500/30 dark:text-orange-400"
+  },
+  {
+    id: "ctr-title",
+    title: "🎬 숏폼 타이틀 & 피드 자막 치트키",
+    desc: "평범한 제목을 호기심 유발형, 반전/폭로형, 손실 회피형 등 숏폼 피드에서 무조건 스톱하게 만드는 조회수 폭발형 타이틀과 상단 고정 자막으로 변환합니다.",
+    href: "/tools/ctr-title",
+    icon: <Clapperboard className="w-6 h-6 text-rose-500" />,
+    badge: "CTR",
+    badgeColor: "bg-rose-50 border-rose-200 text-rose-650 dark:bg-rose-500/15 dark:border-rose-500/30 dark:text-rose-400"
+  },
+  {
+    id: "comment-engagement",
+    title: "💬 댓글 떡상용 소재 발전기",
+    desc: "평범한 일상/지식 주제를 시청자들이 댓글 창에서 치열하게 토론하거나 격하게 공감할 수밖에 없는 바이럴 소재로 비틀어주고, 고정 댓글용 질문까지 세트로 추천합니다.",
+    href: "/tools/comment-engagement",
+    icon: <MessageSquare className="w-6 h-6 text-indigo-500" />,
+    badge: "ENGAGEMENT",
+    badgeColor: "bg-indigo-50 border-indigo-200 text-indigo-650 dark:bg-indigo-500/15 dark:border-indigo-500/30 dark:text-indigo-400"
   }
 ];
 
