@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Zap, Hash, Clock, Mail, LayoutGrid, Puzzle, MousePointerClick, Clapperboard, MessageSquare } from "lucide-react";
@@ -71,17 +71,62 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function ToolSubNav() {
   const pathname = usePathname();
+  const scrollRef = useRef<HTMLElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!scrollRef.current) return;
+    // 수직 스크롤(deltaY)을 가로 스크롤로 변환
+    if (e.deltaY !== 0) {
+      scrollRef.current.scrollLeft += e.deltaY;
+    }
+  };
 
   return (
-    <div className="w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm sticky top-[69px] z-30 -mt-8 mb-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <nav className="flex items-center gap-1 sm:gap-2 overflow-x-auto py-3 scrollbar-none -mb-px">
+    <div className="w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-[69px] z-30 -mt-8 mb-8">
+      <div className="max-w-6xl mx-auto px-4 relative overflow-hidden">
+        <nav 
+          ref={scrollRef}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onWheel={handleWheel}
+          className="flex items-center gap-1 sm:gap-2 overflow-x-auto py-3 -mb-px whitespace-nowrap cursor-grab active:cursor-grabbing select-none scrollbar-hide [&::-webkit-scrollbar]:hidden"
+          style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+        >
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                draggable={false}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 border cursor-pointer ${
                   isActive
                     ? "bg-rose-500/10 border-rose-500/30 text-rose-500 font-extrabold dark:bg-rose-500/20"
@@ -94,6 +139,8 @@ export default function ToolSubNav() {
             );
           })}
         </nav>
+        {/* Right Fading Gradient */}
+        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white via-white/80 dark:from-zinc-950 dark:via-zinc-950/80 to-transparent pointer-events-none" />
       </div>
     </div>
   );
