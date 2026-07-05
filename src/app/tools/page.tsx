@@ -4,7 +4,7 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolSubNav from "@/components/tools/ToolSubNav";
-import { Zap, Hash, Clock, Mail, ArrowRight, LayoutGrid } from "lucide-react";
+import { Zap, Hash, Clock, Mail, ArrowRight, LayoutGrid, Puzzle, MousePointerClick } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "비즈니스 & 마케팅 스마트 도구 모음 - ShortsPack Pro",
@@ -60,6 +60,24 @@ const TOOL_CARDS: ToolCard[] = [
     icon: <Mail className="w-6 h-6 text-indigo-500" />,
     badge: "AI",
     badgeColor: "bg-indigo-50 border-indigo-200 text-indigo-650 dark:bg-indigo-500/15 dark:border-indigo-500/30 dark:text-indigo-400"
+  },
+  {
+    id: "script-framework",
+    title: "🧩 바이럴 대본 프레임워크 조립기",
+    desc: "PAS, AIDA 등 검증된 마케팅 공식을 숏폼 길이에 맞게 압축하여, 빈칸만 채우면 기승전결이 완벽한 대본 초안을 자동 완성해 줍니다.",
+    href: "/tools/script-framework",
+    icon: <Puzzle className="w-6 h-6 text-cyan-500" />,
+    badge: "SCRIPT",
+    badgeColor: "bg-cyan-50 border-cyan-200 text-cyan-650 dark:bg-cyan-500/15 dark:border-cyan-500/30 dark:text-cyan-400"
+  },
+  {
+    id: "cta-wizard",
+    title: "🎯 행동 유도(CTA) 멘트 마법사",
+    desc: "단순 시청을 넘어 팔로우, 댓글 참여, 프로필 링크 클릭 등 시청자의 확실한 행동과 전환을 이끌어내는 목적별 맞춤형 엔딩 멘트를 추천합니다.",
+    href: "/tools/cta-wizard",
+    icon: <MousePointerClick className="w-6 h-6 text-orange-500" />,
+    badge: "CONVERSION",
+    badgeColor: "bg-orange-50 border-orange-200 text-orange-650 dark:bg-orange-500/15 dark:border-orange-500/30 dark:text-orange-400"
   }
 ];
 

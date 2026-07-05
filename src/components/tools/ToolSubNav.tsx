@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Zap, Hash, Clock, Mail, LayoutGrid } from "lucide-react";
+import { Zap, Hash, Clock, Mail, LayoutGrid, Puzzle, MousePointerClick } from "lucide-react";
 
 interface NavItem {
   name: string;
@@ -42,6 +42,18 @@ const NAV_ITEMS: NavItem[] = [
     nameEn: "Sponsor Pitch",
     href: "/tools/sponsor-pitch-generator",
     icon: <Mail className="w-4 h-4" />
+  },
+  {
+    name: "대본 프레임워크",
+    nameEn: "Script Framework",
+    href: "/tools/script-framework",
+    icon: <Puzzle className="w-4 h-4" />
+  },
+  {
+    name: "CTA 멘트 마법사",
+    nameEn: "CTA Wizard",
+    href: "/tools/cta-wizard",
+    icon: <MousePointerClick className="w-4 h-4" />
   }
 ];
 
