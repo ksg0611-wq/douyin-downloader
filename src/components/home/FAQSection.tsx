@@ -39,20 +39,16 @@ export default function FAQSection({ expandedFaqId, setExpandedFaqId }: FAQSecti
                 </span>
               </button>
 
-              <AnimatePresence>
-                {isOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden border-t border-zinc-200 dark:border-zinc-900"
-                  >
-                    <p className="p-4.5 text-xs sm:text-sm text-zinc-650 leading-relaxed whitespace-pre-line bg-zinc-50/50 dark:text-zinc-400 dark:bg-zinc-950/80">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <motion.div
+                initial={false}
+                animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden border-t border-zinc-200 dark:border-zinc-900"
+              >
+                <div className={`p-4.5 text-xs sm:text-sm text-zinc-650 leading-relaxed whitespace-pre-line bg-zinc-50/50 dark:text-zinc-400 dark:bg-zinc-950/80 ${isOpen ? 'block' : 'hidden'}`}>
+                  {faq.answer}
+                </div>
+              </motion.div>
             </div>
           );
         })}
