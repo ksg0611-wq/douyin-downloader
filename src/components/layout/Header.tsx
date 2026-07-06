@@ -69,7 +69,7 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
         </div>
 
         {/* Navigation Section */}
-        <nav className="flex items-center gap-1 sm:gap-3 flex-wrap">
+        <nav className="flex items-center gap-1 sm:gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide [&::-webkit-scrollbar]:hidden py-1">
           <Link 
             href="/"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${

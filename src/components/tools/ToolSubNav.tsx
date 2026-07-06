@@ -108,7 +108,7 @@ export default function ToolSubNav() {
   };
 
   return (
-    <div className="w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-[69px] z-30 -mt-8 mb-8">
+    <div className="w-full border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-[64px] sm:top-[69px] z-30 mb-8">
       <div className="max-w-6xl mx-auto px-4 relative overflow-hidden">
         <nav 
           ref={scrollRef}
