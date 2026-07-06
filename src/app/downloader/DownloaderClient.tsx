@@ -689,7 +689,9 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {TOOLS.filter(t => t.category === activeCategory).map((tool) => (
+            {TOOLS.map((tool) => {
+              const isActiveCategory = tool.category === activeCategory;
+              return (
               <div
                 key={tool.id}
                 onClick={() => {
@@ -702,7 +704,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
                     setActiveTool(tool.id as any);
                   }
                 }}
-                className="group relative bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer"
+                className={`group relative bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex-col justify-between cursor-pointer ${isActiveCategory ? 'flex' : 'hidden'}`}
               >
                 <div className="space-y-4">
                   {/* Card Top: Icon & Badge */}
@@ -734,7 +736,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
                   </button>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </section>
 
