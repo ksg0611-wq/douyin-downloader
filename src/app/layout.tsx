@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 import { AuthContextProvider } from "@/context/AuthContext";
 import "./globals.css";
 
@@ -51,11 +52,11 @@ export default function RootLayout({
             `
           }}
         />
-        <script
+        <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959341960002320"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8195982419600082"
           crossOrigin="anonymous"
-          dangerouslySetInnerHTML={{ __html: "" }}
+          strategy="afterInteractive"
         />
       </head>
       <body className="min-h-full flex flex-col">
