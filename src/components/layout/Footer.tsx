@@ -10,6 +10,9 @@ export default function Footer() {
           <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">Contact: contact@shortspack.com</p>
         </div>
         <div className="flex items-center gap-4 flex-wrap justify-center">
+          <Link href="/blog/shorts-monetization" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">쇼츠 수익화 팁</Link>
+          <Link href="/blog/reels-algorithm-hook" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">릴스 알고리즘</Link>
+          <Link href="/blog/viral-video-reverse-engineering" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">바이럴 역설계</Link>
           <Link href="/about" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">소개 (About)</Link>
           <Link href="/terms" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">이용약관</Link>
           <Link href="/privacy" className="transition-colors hover:text-zinc-800 dark:hover:text-zinc-200">개인정보처리방침</Link>
