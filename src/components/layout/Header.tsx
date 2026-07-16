@@ -71,7 +71,7 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
         {/* Navigation Section */}
         <nav className="flex items-center gap-1 sm:gap-3 overflow-x-auto whitespace-nowrap scrollbar-hide [&::-webkit-scrollbar]:hidden py-1">
           <Link 
-            href="/blog/shorts-monetization"
+            href="/blog"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               isDark 
                 ? "text-zinc-400 hover:text-white hover:bg-zinc-900" 
