@@ -704,11 +704,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
                     setActiveTool(tool.id as any);
                   }
                 }}
-                className={`group relative bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-2xl transition-all duration-300 cursor-pointer ${
-                  isActiveCategory 
-                    ? 'p-6 flex flex-col justify-between shadow-sm hover:shadow-md hover:-translate-y-1' 
-                    : 'absolute opacity-0 h-0 w-0 overflow-hidden pointer-events-none m-0 p-0 border-0'
-                }`}
+                className={`group relative bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex-col justify-between cursor-pointer ${isActiveCategory ? 'flex' : 'hidden'}`}
               >
                 <div className="space-y-4">
                   {/* Card Top: Icon & Badge */}
