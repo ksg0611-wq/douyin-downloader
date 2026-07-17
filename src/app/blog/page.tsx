@@ -17,6 +17,14 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "유튜브 쇼츠 저작권 침해 피하는 3가지 필수 체크리스트 (5초 법칙의 진실)",
+    desc: "타인의 영상이나 음악을 짧게 쓰면 안전할까요? 잘못된 2차 창작으로 인한 채널 삭제를 막기 위해 공정 이용(Fair Use) 가이드라인을 상세히 분석합니다.",
+    href: "/blog/shorts-copyright-guide",
+    date: "2026년 7월 17일",
+    category: "Copyright & Legal",
+    color: "text-red-500 bg-red-50 dark:bg-red-500/10",
+  },
+  {
     title: "글로벌 타겟 숏폼 알고리즘 기반 최적 업로드 시간",
     desc: "언제 올려야 가장 많은 시청자가 볼까요? 국가별, 플랫폼별, 요일별 데이터에 기반한 2026년 최신 숏폼 업로드 골든타임을 심층 분석합니다.",
     href: "/blog/global-best-upload-time",
