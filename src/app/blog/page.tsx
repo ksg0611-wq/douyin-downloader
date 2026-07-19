@@ -17,6 +17,14 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "숏폼 시청 지속시간(Retention) 향상법: 초반 3초와 이탈 방어 전략",
+    desc: "알고리즘의 유일한 신(God) '시청 지속시간'. 초반 3초 후킹부터 마의 15초 이탈 구간을 완벽하게 방어하는 심리적 편집 전략을 파헤칩니다.",
+    href: "/blog/shorts-retention-strategy",
+    date: "2026년 7월 20일",
+    category: "Algorithm & Analytics",
+    color: "text-blue-500 bg-blue-50 dark:bg-blue-500/10",
+  },
+  {
     title: "인공지능(AI)으로 떡상하는 쇼츠 대본 10배 빠르게 양산하는 프롬프트 가이드",
     desc: "더 이상 대본 작성에 밤새지 마세요. 챗GPT와 제미나이를 마법처럼 부리는 3초 후킹 프롬프트 엔지니어링 공식을 낱낱이 파헤칩니다.",
     href: "/blog/ai-shorts-script-guide",
