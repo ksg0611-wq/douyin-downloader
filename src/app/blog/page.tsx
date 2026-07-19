@@ -17,6 +17,14 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "인공지능(AI)으로 떡상하는 쇼츠 대본 10배 빠르게 양산하는 프롬프트 가이드",
+    desc: "더 이상 대본 작성에 밤새지 마세요. 챗GPT와 제미나이를 마법처럼 부리는 3초 후킹 프롬프트 엔지니어링 공식을 낱낱이 파헤칩니다.",
+    href: "/blog/ai-shorts-script-guide",
+    date: "2026년 7월 19일",
+    category: "AI & Prompt Engineering",
+    color: "text-purple-500 bg-purple-50 dark:bg-purple-500/10",
+  },
+  {
     title: "유튜브 쇼츠 저작권 침해 피하는 3가지 필수 체크리스트 (5초 법칙의 진실)",
     desc: "타인의 영상이나 음악을 짧게 쓰면 안전할까요? 잘못된 2차 창작으로 인한 채널 삭제를 막기 위해 공정 이용(Fair Use) 가이드라인을 상세히 분석합니다.",
     href: "/blog/shorts-copyright-guide",
