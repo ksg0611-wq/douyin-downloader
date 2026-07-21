@@ -17,6 +17,14 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "숏폼 크리에이터 브랜드 협찬 단가 산정법과 성공적인 제안서 작성법",
+    desc: "내 채널의 진짜 몸값은 얼마일까? 마케터들이 실제로 사용하는 조회수 기반 CPV 협찬 단가 공식과 마음을 훔치는 콜드메일 제안서 템플릿을 대공개합니다.",
+    href: "/blog/shorts-brand-sponsorship-guide",
+    date: "2026년 7월 21일",
+    category: "Business & Sponsorship",
+    color: "text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10",
+  },
+  {
     title: "숏폼 시청 지속시간(Retention) 향상법: 초반 3초와 이탈 방어 전략",
     desc: "알고리즘의 유일한 신(God) '시청 지속시간'. 초반 3초 후킹부터 마의 15초 이탈 구간을 완벽하게 방어하는 심리적 편집 전략을 파헤칩니다.",
     href: "/blog/shorts-retention-strategy",
