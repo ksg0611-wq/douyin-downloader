@@ -17,6 +17,22 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "2026 유튜브 쇼츠 테크니컬 SEO 완벽 가이드",
+    desc: "알고리즘 추천이 끝난 후에도 마르지 않는 검색 트래픽(Evergreen)을 확보하기 위한 유튜브 쇼츠 메타데이터 최적화 전략.",
+    href: "/blog/shorts-technical-seo-guide",
+    date: "2026년 7월 23일",
+    category: "SEO & Traffic",
+    color: "text-orange-500 bg-orange-50 dark:bg-orange-500/10",
+  },
+  {
+    title: "2026 틱톡 vs 더우인(Douyin) 알고리즘 차이와 글로벌 진출 전략",
+    desc: "글로벌 숏폼 시장의 양대 산맥, 틱톡과 더우인의 추천 로직 차이점과 한국 크리에이터의 맞춤형 떡상 기획법을 완벽 분석합니다.",
+    href: "/blog/tiktok-douyin-global-algorithm",
+    date: "2026년 7월 23일",
+    category: "Global Trend & Algorithm",
+    color: "text-pink-500 bg-pink-50 dark:bg-pink-500/10",
+  },
+  {
     title: "숏폼 크리에이터 브랜드 협찬 단가 산정법과 성공적인 제안서 작성법",
     desc: "내 채널의 진짜 몸값은 얼마일까? 마케터들이 실제로 사용하는 조회수 기반 CPV 협찬 단가 공식과 마음을 훔치는 콜드메일 제안서 템플릿을 대공개합니다.",
     href: "/blog/shorts-brand-sponsorship-guide",
