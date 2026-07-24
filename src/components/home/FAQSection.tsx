@@ -53,7 +53,6 @@ export default function FAQSection({ expandedFaqId, setExpandedFaqId }: FAQSecti
           );
         })}
       </div>
-      </div>
     </section>
   );
 }
