@@ -738,20 +738,6 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
               </div>
             )})}
           </div>
-
-          {/* 구글 크롤러 및 SSR SEO용 16개 전체 도구 텍스트 노출 블록 (Accessible SSR HTML Indexing) */}
-          <div className="sr-only">
-            <h2>{lang === "ko" ? "ShortsPack Pro 전체 16개 크리에이터 툴박스 목록" : "ShortsPack Pro All 16 Creator Toolbox Tools"}</h2>
-            {TOOLS.map((tool) => (
-              <article key={`ssr-tool-${tool.id}`}>
-                <h3>{tool.title} ({tool.titleEn})</h3>
-                <p>{tool.desc}</p>
-                <p>{tool.descEn}</p>
-                <span>Category: {tool.category}</span>
-                <span>Badge: {tool.badge}</span>
-              </article>
-            ))}
-          </div>
         </section>
 
         {/* Tool Modals */}

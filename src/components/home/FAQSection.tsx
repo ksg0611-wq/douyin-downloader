@@ -53,16 +53,6 @@ export default function FAQSection({ expandedFaqId, setExpandedFaqId }: FAQSecti
           );
         })}
       </div>
-
-      {/* 구글 크롤러 및 SSR HTML 노출 보장용 4개 FAQ 질문/답변 전체 인덱싱 영역 */}
-      <div className="sr-only">
-        <h2>ShortsPack Pro 자주 묻는 질문 (FAQ) 전체 목록</h2>
-        {FAQS.map((faq) => (
-          <article key={`ssr-faq-${faq.id}`}>
-            <h3>{faq.question}</h3>
-            <p>{faq.answer}</p>
-          </article>
-        ))}
       </div>
     </section>
   );
