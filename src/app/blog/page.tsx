@@ -17,6 +17,14 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "2026 숏폼 원소스 멀티유즈(OSMU) 파이프라인 구축 가이드",
+    desc: "1개의 원본 영상으로 유튜브 쇼츠, 인스타그램 릴스, 틱톡 3대 플랫폼을 동시 폭발시키는 최적화 가공 및 워터마크 없는 배포 실무 프로세스.",
+    href: "/blog/shortform-osmu-multiplatform-strategy",
+    date: "2026년 7월 25일",
+    category: "Strategy & Workflow",
+    color: "text-blue-500 bg-blue-50 dark:bg-blue-500/10",
+  },
+  {
     title: "2026 유튜브 쇼츠 테크니컬 SEO 완벽 가이드",
     desc: "알고리즘 추천이 끝난 후에도 마르지 않는 검색 트래픽(Evergreen)을 확보하기 위한 유튜브 쇼츠 메타데이터 최적화 전략.",
     href: "/blog/shorts-technical-seo-guide",
