@@ -17,6 +17,22 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "시청 지속시간(Retention)을 200% 끌어올리는 AI 숏폼 자막·캡션 타이포그래피 공식",
+    desc: "3초 후킹을 완성하는 자막 위치, 폰트 가독성, 색상 대비, AI 자동 자막 편집 노하우 및 시청자 이탈을 막는 텍스트 애니메이션 배치법.",
+    href: "/blog/shortform-ai-captions-typography-retention",
+    date: "2026년 7월 29일",
+    category: "Editing & Retention",
+    color: "text-purple-500 bg-purple-50 dark:bg-purple-500/10",
+  },
+  {
+    title: "2026 숏폼 상업용 음원 저작권 & 라이선스 완전 가이드 (수익 창출 제한 차단법)",
+    desc: "유튜브 쇼츠·인스타그램 릴스·틱톡의 음원 정책 차이점, 기업/개인 채널별 사용 기준, Content ID 클레임 완전 차단 체크리스트.",
+    href: "/blog/shortform-music-copyright-license-guide",
+    date: "2026년 7월 29일",
+    category: "Copyright & Licensing",
+    color: "text-green-500 bg-green-50 dark:bg-green-500/10",
+  },
+  {
     title: "2026 숏폼 원소스 멀티유즈(OSMU) 파이프라인 구축 가이드",
     desc: "1개의 원본 영상으로 유튜브 쇼츠, 인스타그램 릴스, 틱톡 3대 플랫폼을 동시 폭발시키는 최적화 가공 및 워터마크 없는 배포 실무 프로세스.",
     href: "/blog/shortform-osmu-multiplatform-strategy",
