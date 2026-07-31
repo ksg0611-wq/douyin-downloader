@@ -17,6 +17,22 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "2026 AI 숏폼 크리에이터 필수 스택 TOP 5 & 자동화 워크플로우",
+    desc: "대본, 영상, 음성(TTS), 자막 편집을 한 번에 연결하는 2026 최신 AI 크리에이터 테크 스택 조합과 제작 시간 80% 단축 자동화 파이프라인.",
+    href: "/blog/ai-shortform-creator-toolstack-2026",
+    date: "2026년 7월 31일",
+    category: "AI Tools & Automation",
+    color: "text-indigo-500 bg-indigo-50 dark:bg-indigo-500/10",
+  },
+  {
+    title: "2026 숏폼 조회수 침체기(플래토) 극복과 알고리즘 리셋 전략 (1,000회 벽 깨기)",
+    desc: "조회수 1,000회 구간에서 성장이 정체되는 원인 분석과 계정 지수 회복을 위한 시청 완료율 개선법 및 알고리즘 재진입 3단계 루틴.",
+    href: "/blog/shortform-algorithm-plateau-breakthrough",
+    date: "2026년 7월 31일",
+    category: "Algorithm & Growth",
+    color: "text-rose-500 bg-rose-50 dark:bg-rose-500/10",
+  },
+  {
     title: "시청 지속시간(Retention)을 200% 끌어올리는 AI 숏폼 자막·캡션 타이포그래피 공식",
     desc: "3초 후킹을 완성하는 자막 위치, 폰트 가독성, 색상 대비, AI 자동 자막 편집 노하우 및 시청자 이탈을 막는 텍스트 애니메이션 배치법.",
     href: "/blog/shortform-ai-captions-typography-retention",
