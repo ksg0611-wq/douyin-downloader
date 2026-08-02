@@ -17,6 +17,22 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "2026 숏폼 썸네일 & 초반 1프레임 커버 최적화 공식 (CTR 상위 1%)",
+    desc: "유튜브 쇼츠 피드 및 인스타/틱톡 프로필 그리드에서 클릭을 부르는 첫 프레임 커버 디자인, 텍스트 대비 및 구도 최적화를 통한 CTR 극대화 기법.",
+    href: "/blog/shortform-thumbnail-first-frame-ctr-guide",
+    date: "2026년 8월 3일",
+    category: "Thumbnail & Branding",
+    color: "text-blue-500 bg-blue-50 dark:bg-blue-500/10",
+  },
+  {
+    title: "2026 숏폼 댓글창 참여 폭발 기획법: 의도적 티징 포인트(Bait) 설계",
+    desc: "숏폼 알고리즘 핵심 시그널인 댓글 작성률 유도법, 영상 내 의도적 논쟁 요소(Bait) 및 오탈자 배치 전략, 시청자 댓글 체류 시간을 늘리는 편집 루틴.",
+    href: "/blog/shortform-comment-engagement-bait-strategy",
+    date: "2026년 8월 3일",
+    category: "Engagement & Algorithm",
+    color: "text-orange-500 bg-orange-50 dark:bg-orange-500/10",
+  },
+  {
     title: "2026 AI 숏폼 크리에이터 필수 스택 TOP 5 & 자동화 워크플로우",
     desc: "대본, 영상, 음성(TTS), 자막 편집을 한 번에 연결하는 2026 최신 AI 크리에이터 테크 스택 조합과 제작 시간 80% 단축 자동화 파이프라인.",
     href: "/blog/ai-shortform-creator-toolstack-2026",
