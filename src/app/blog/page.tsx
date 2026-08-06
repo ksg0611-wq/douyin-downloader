@@ -17,6 +17,22 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "2026 숏폼 떡상 대본 스크립트 프레임워크 5선 (3초 후킹→몰입→댓글 유도)",
+    desc: "시청 지속시간(Retention)을 보장하는 5가지 대본 구조 공식, 3초 후킹 텍스트 배치법, 몰입 구조 및 영상 끝 CTA 댓글 유도 대본 작성법 완전 정리.",
+    href: "/blog/shortform-script-frameworks-viral-structure",
+    date: "2026년 8월 6일",
+    category: "Scripting & Strategy",
+    color: "text-teal-500 bg-teal-50 dark:bg-teal-500/10",
+  },
+  {
+    title: "2026 숏폼 플랫폼별 수익 창출 조건 및 CPM·RPM 정산 구조 완벽 비교",
+    desc: "유튜브 쇼츠, 인스타그램 릴스, 틱톡 크리에이터 리워드의 2026년 수익 자격요건, CPM·RPM 차이점 및 광고 수익 다각화 전략 완벽 분석.",
+    href: "/blog/shortform-monetization-cpm-rpm-comparison-2026",
+    date: "2026년 8월 6일",
+    category: "Monetization & Revenue",
+    color: "text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10",
+  },
+  {
     title: "2026 숏폼 썸네일 & 초반 1프레임 커버 최적화 공식 (CTR 상위 1%)",
     desc: "유튜브 쇼츠 피드 및 인스타/틱톡 프로필 그리드에서 클릭을 부르는 첫 프레임 커버 디자인, 텍스트 대비 및 구도 최적화를 통한 CTR 극대화 기법.",
     href: "/blog/shortform-thumbnail-first-frame-ctr-guide",
