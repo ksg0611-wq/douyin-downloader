@@ -17,6 +17,14 @@ export const metadata: Metadata = {
 
 const BLOG_POSTS = [
   {
+    title: "2026 숏폼 크리에이터 종합소득세·외화 정산 실무 가이드 (세금 폭탄 피하는 절세 공식)",
+    desc: "유튜브, 틱톡, 인스타 수익 창출 이후 필수적으로 알아야 할 외화 통장 정산 실무, 사업자 등록 타이밍, 크리에이터 영세율 적용 및 종합소득세 절세 노하우.",
+    href: "/blog/shortform-creator-tax-settlement-guide",
+    date: "2026년 8월 9일",
+    category: "Tax & Business",
+    color: "text-green-500 bg-green-50 dark:bg-green-500/10",
+  },
+  {
     title: "2026 숏폼 떡상 대본 스크립트 프레임워크 5선 (3초 후킹→몰입→댓글 유도)",
     desc: "시청 지속시간(Retention)을 보장하는 5가지 대본 구조 공식, 3초 후킹 텍스트 배치법, 몰입 구조 및 영상 끝 CTA 댓글 유도 대본 작성법 완전 정리.",
     href: "/blog/shortform-script-frameworks-viral-structure",
