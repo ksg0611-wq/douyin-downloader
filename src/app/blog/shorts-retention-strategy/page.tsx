@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import React from "react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "https://shortspack.com/blog/shorts-retention-strategy" },
   title: "숏폼 시청 지속시간(Retention) 향상법: 3초 후킹과 이탈 방어 전략 | ShortsPack Pro",
   description: "유튜브 쇼츠와 릴스 알고리즘을 지배하는 단 하나의 핵심 지표, '시청 지속시간(Retention)'. 초반 3초 후킹부터 중간 이탈 구간을 완벽하게 방어하는 심리적 편집 전략을 파헤칩니다.",
   openGraph: {

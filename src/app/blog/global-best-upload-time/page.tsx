@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import React from "react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "https://shortspack.com/blog/global-best-upload-time" },
   title: "글로벌 타겟 숏폼 알고리즘 기반 플랫폼별 최적 업로드 시간 | ShortsPack Pro",
   description: "언제 올려야 가장 많은 시청자가 내 영상을 볼까요? 국가별, 플랫폼별, 요일별 데이터에 기반한 2026년 숏폼 동영상 최적의 업로드 타임(Golden Time)을 심층 분석합니다.",
   openGraph: {

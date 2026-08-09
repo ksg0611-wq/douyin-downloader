@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import React from "react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "https://shortspack.com/blog/shadowban-recovery-guide" },
   title: "틱톡/쇼츠 쉐도우밴(Shadowban) 원인 및 계정 복구 가이드 | ShortsPack Pro",
   description: "갑자기 0뷰에 갇히셨나요? 2026년 최신 알고리즘 기준 틱톡, 도우인, 유튜브 쇼츠의 쉐도우밴(Shadowban) 유발 민감어 및 행동 패턴, 그리고 확실한 계정 복구 가이드를 제공합니다.",
   openGraph: {

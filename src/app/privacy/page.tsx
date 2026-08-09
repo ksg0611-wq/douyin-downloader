@@ -1,6 +1,11 @@
 import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://shortspack.com/privacy" },
+};
 
 export default function PrivacyPolicy() {
   return (

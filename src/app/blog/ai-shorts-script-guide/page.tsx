@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import React from "react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "https://shortspack.com/blog/ai-shorts-script-guide" },
   title: "인공지능(AI)으로 떡상하는 쇼츠 대본 10배 빠르게 양산하는 프롬프트 가이드 | ShortsPack Pro",
   description: "챗GPT와 제미나이를 활용해 떡상하는 숏폼 대본을 10배 빠르게 양산하는 완벽 프롬프트 엔지니어링 가이드. 3초 후킹부터 알고리즘 맞춤형 포맷까지 전부 공개합니다.",
   openGraph: {

@@ -28,6 +28,41 @@ const nextConfig: NextConfig = {
         destination: '/tools/thumbnail-text-generator',
         permanent: true,
       },
+      {
+        source: '/script-framework',
+        destination: '/tools/script-framework',
+        permanent: true,
+      },
+      {
+        source: '/blog/ga4-marketing-data-analysis',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/firebase-serverless-marketing-webapp',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/seasonal-high-ticket-cpa-keywords',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/adsense-approval-seo-structure',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/adsense-placement-optimization-webapp',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/technical-seo-information-processing',
+        destination: '/blog',
+        permanent: true,
+      }
     ];
   },
 };

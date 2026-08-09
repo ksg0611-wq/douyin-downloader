@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import React from "react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "https://shortspack.com/blog/shorts-reels-safe-zone" },
   title: "2026 최신 유튜브 쇼츠 & 릴스 안전영역(Safe Zone) 템플릿 가이드 | ShortsPack Pro",
   description: "기껏 만든 자막과 중요 이미지가 플랫폼 UI(좋아요 버튼, 설명란)에 가려지나요? 2026년 기준 틱톡, 릴스, 쇼츠의 픽셀 단위 안전영역(Safe Zone) 완벽 가이드 및 실시간 테스트 방법을 알려드립니다.",
   openGraph: {

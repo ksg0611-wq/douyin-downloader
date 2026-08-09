@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import React from "react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "https://shortspack.com/blog/shorts-copyright-guide" },
   title: "유튜브 쇼츠 저작권 침해 피하는 3가지 필수 체크리스트 (5초 법칙의 진실) | ShortsPack Pro",
   description: "유튜브 쇼츠, 인스타그램 릴스, 틱톡에서 타인의 영상을 사용할 때 저작권 폭탄을 피하는 확실한 가이드라인. 이른바 '5초 법칙'의 진실과 공정 이용(Fair Use) 가이드라인을 상세히 분석합니다.",
   openGraph: {
