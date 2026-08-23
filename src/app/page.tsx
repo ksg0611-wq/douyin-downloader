@@ -6,17 +6,18 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AdBanner from "@/components/layout/AdBanner";
 import BlogFilterClient from "./BlogFilterClient";
-import { getSortedPostsDataAsync } from "@/lib/posts";
-
-
+import { BLOG_POSTS } from "@/data/blogPosts";
 
 export const metadata: Metadata = {
   title: "ShortsPack Pro - 100만 뷰를 부르는 크리에이터 종합 AI 툴박스",
   description: "숏폼 크리에이터를 위한 AI 대본 생성, 알고리즘 분석, 클린 숏폼 레퍼런스 분석기까지. 떡상을 위한 모든 도구를 무료로 만나보세요.",
+  alternates: {
+    canonical: "https://shortspack.com",
+  },
 };
 
-export default async function BlogHome() {
-  const posts = await getSortedPostsDataAsync();
+export default function BlogHome() {
+  const posts = BLOG_POSTS;
 
   const availableTags = [
     "ALL",
@@ -47,13 +48,13 @@ export default async function BlogHome() {
 
         {/*
           STATIC SERVER-RENDERED HTML GRID
-          All 17 posts are ALWAYS baked into the HTML source code at build time.
+          All 22 posts are ALWAYS baked into the HTML source code at build time.
           Client-side filtering toggles visibility via data-category DOM attributes.
         */}
         <div id="blog-grid" className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <Link
-              href={`/blog/${post.id}`}
+              href={post.href}
               key={post.id}
               data-category={post.category.toUpperCase()}
               className="blog-card group bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
