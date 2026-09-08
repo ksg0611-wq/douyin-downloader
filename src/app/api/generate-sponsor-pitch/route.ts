@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     if (isRateLimited(ip)) {
       console.warn(`[generate-sponsor-pitch] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter)`);
       return NextResponse.json(
-        { error: "현재 AI 서버 사용량이 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요." },
+        { error: "요청이 너무 잦습니다. 잠시 후 다시 시도해 주세요." },
         { status: 429 }
       );
     }
