@@ -106,7 +106,7 @@ export default function AIToolstackGuide() {
 
             <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-10">5. 요약</h2>
             <p>
-              2026년 AI 크리에이터 스택의 핵심은 도구의 종류가 아니라 <strong>도구들을 매끄럽게 연결하는 파이프라인 설계 능력</strong>입니다. ChatGPT(대본) → AI 영상(Sora/Runway) → ElevenLabs(TTS) → Descript/CapCut(편집) → VidIQ(SEO)라는 5단계 자동화 파이프라인을 한 번 구축해 두면, 기존 대비 80% 이상 빠른 속도로 고품질 숏폼 영상을 대량 생산할 수 있습니다. ShortsPack Pro의 다양한 <a href="/downloader" className="text-indigo-500 hover:underline">크리에이터 툴박스</a>와 이 AI 파이프라인을 조합하여 여러분만의 최적화된 콘텐츠 제작 시스템을 완성하세요.
+              2026년 AI 크리에이터 스택의 핵심은 도구의 종류가 아니라 <strong>도구들을 매끄럽게 연결하는 파이프라인 설계 능력</strong>입니다. ChatGPT(대본) → AI 영상(Sora/Runway) → ElevenLabs(TTS) → Descript/CapCut(편집) → VidIQ(SEO)라는 5단계 자동화 파이프라인을 한 번 구축해 두면, 기존 대비 80% 이상 빠른 속도로 고품질 숏폼 영상을 대량 생산할 수 있습니다. ShortsPack Pro의 다양한 <a href="/" className="text-indigo-500 hover:underline">크리에이터 툴박스</a>와 이 AI 파이프라인을 조합하여 여러분만의 최적화된 콘텐츠 제작 시스템을 완성하세요.
             </p>
 
           </section>

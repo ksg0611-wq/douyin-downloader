@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     { url: "", changeFrequency: "weekly" as const, priority: 1.0 },
     { url: "/blog", changeFrequency: "daily" as const, priority: 0.9 },
-    { url: "/downloader", changeFrequency: "weekly" as const, priority: 0.9 },
     { url: "/tools", changeFrequency: "weekly" as const, priority: 0.9 },
     { url: "/tools/hook-generator", changeFrequency: "monthly" as const, priority: 0.8 },
     { url: "/tools/hashtag-scanner", changeFrequency: "monthly" as const, priority: 0.8 },

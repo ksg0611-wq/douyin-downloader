@@ -110,7 +110,7 @@ export default function CaptionsTypographyGuide() {
 
             <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mt-10">7. 요약: 자막은 비용이 아닌 투자입니다</h2>
             <p>
-              숏폼 자막 설계에 투자한 시간 1시간은, 알고리즘이 당신의 영상을 더 많은 사람에게 밀어주는 수십 시간의 유기적 트래픽으로 돌아옵니다. 플랫폼 안전 영역 준수, 굵은 고딕 폰트, 외곽선 처리, AI 자막 수동 교정, 단어 단위 팝업 애니메이션이라는 5가지 원칙을 하나의 영상에 모두 적용했을 때, 당신의 Retention 그래프가 어떻게 달라지는지 직접 확인해 보십시오. ShortsPack Pro의 <a href="/safe-zone" className="text-purple-500 hover:underline">세이프존 가이드</a>와 <a href="/downloader" className="text-purple-500 hover:underline">각종 크리에이터 툴박스</a>를 함께 활용하면 더욱 효율적인 제작 환경을 구축할 수 있습니다.
+              숏폼 자막 설계에 투자한 시간 1시간은, 알고리즘이 당신의 영상을 더 많은 사람에게 밀어주는 수십 시간의 유기적 트래픽으로 돌아옵니다. 플랫폼 안전 영역 준수, 굵은 고딕 폰트, 외곽선 처리, AI 자막 수동 교정, 단어 단위 팝업 애니메이션이라는 5가지 원칙을 하나의 영상에 모두 적용했을 때, 당신의 Retention 그래프가 어떻게 달라지는지 직접 확인해 보십시오. ShortsPack Pro의 <a href="/safe-zone" className="text-purple-500 hover:underline">세이프존 가이드</a>와 <a href="/" className="text-purple-500 hover:underline">각종 크리에이터 툴박스</a>를 함께 활용하면 더욱 효율적인 제작 환경을 구축할 수 있습니다.
             </p>
 
           </section>

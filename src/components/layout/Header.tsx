@@ -94,7 +94,7 @@ export default function Header({ theme, lang = "ko", setLang }: HeaderProps) {
             <span className="hidden sm:inline">{lang === "ko" ? "도구" : "Tools"}</span>
           </Link>
           <Link 
-            href="/downloader"
+            href="/"
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors border ${
               isDark 
                 ? "bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20" 

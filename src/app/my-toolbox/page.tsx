@@ -190,11 +190,11 @@ export default function MyToolbox() {
         {/* Back Link */}
         <div className="mb-6">
           <Link 
-            href="/downloader" 
+            href="/" 
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-zinc-650 hover:text-zinc-900 dark:text-zinc-450 dark:hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>다운로더 메인으로 돌아가기</span>
+            <span>메인으로 돌아가기</span>
           </Link>
         </div>
 
@@ -247,7 +247,7 @@ export default function MyToolbox() {
             </div>
             <div className="pt-2">
               <Link 
-                href="/downloader" 
+                href="/" 
                 className="inline-flex items-center justify-center py-2.5 px-6 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 hover:brightness-105 active:scale-95 text-white font-bold text-xs shadow-md transition-all"
               >
                 도구 사용해보기 ➔

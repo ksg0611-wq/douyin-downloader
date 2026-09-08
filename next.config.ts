@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/downloader',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/sponsor-pitch-generator',
         destination: '/tools/sponsor-pitch-generator',
         permanent: true,
