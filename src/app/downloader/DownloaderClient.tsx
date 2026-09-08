@@ -503,6 +503,15 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
       setAnalysisStep((prev) => (prev < 3 ? prev + 1 : prev));
     }, 650);
 
+    let resultTracked = false;
+    const trackResult = (status: "success" | "error") => {
+      if (resultTracked) return;
+      resultTracked = true;
+      try {
+        trackEvent("download_result", { platform, status });
+      } catch (_) {}
+    };
+
     try {
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -515,15 +524,10 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
       setAnalysisStep(4);
 
       if (!response.ok || !data.success) {
-        try {
-          trackEvent("download_result", { platform, status: "error" });
-        } catch (_) {}
         throw new Error(data.error || "분석 중 서버 에러가 발생했습니다.");
       }
 
-      try {
-        trackEvent("download_result", { platform, status: "success" });
-      } catch (_) {}
+      trackResult("success");
 
       setAnalysisResult(data.data);
       saveToHistory(data.data);
@@ -532,9 +536,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
       
     } catch (err: any) {
       clearInterval(interval);
-      try {
-        trackEvent("download_result", { platform, status: "error" });
-      } catch (_) {}
+      trackResult("error");
       setErrorMessage(err.message);
       showToast(lang === "ko" ? "분석에 실패했습니다." : "Analysis failed.");
     } finally {
@@ -546,9 +548,6 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
 
   const triggerDownloadAction = (type: "video" | "audio") => {
     if (!analysisResult) return;
-    try {
-      trackEvent("download_result", { platform, status: "success" });
-    } catch (_) {}
     
     const targetUrl = type === "video" ? analysisResult.realVideoUrl : analysisResult.realAudioUrl;
     
