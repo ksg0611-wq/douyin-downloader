@@ -57,11 +57,18 @@ function getRelatedHashtags(keyword: string, rand: () => number): string[] {
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { keyword } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
+  }
+
+  try {
+    const { keyword } = bodyData || {};
 
     if (!keyword || typeof keyword !== 'string' || keyword.trim().length === 0) {
-      return NextResponse.json({ error: '키워드를 입력해 주세요.' }, { status: 400 });
+      return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
     }
 
     const cleanKeyword = keyword.trim().slice(0, 50);

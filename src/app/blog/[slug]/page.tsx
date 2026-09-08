@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import BlogCTA from "@/components/home/BlogCTA";
-import AdBanner from "@/components/layout/AdBanner";
 import { getPostData, getSortedPostsData } from "@/lib/posts";
 import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
@@ -147,14 +146,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </p>
         </header>
 
-        <AdBanner position="top" />
-
         {/* Markdown Content rendered via prose */}
         <article className="prose prose-zinc prose-rose dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-a:text-rose-600 hover:prose-a:text-rose-500 prose-img:rounded-xl">
           <ReactMarkdown>{postData.content}</ReactMarkdown>
         </article>
-
-        <AdBanner position="bottom" />
 
         <BlogCTA category={postData.category} />
 

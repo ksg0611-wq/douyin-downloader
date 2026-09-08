@@ -56,18 +56,22 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
-  let content = '';
+  let bodyObj: any;
   try {
-    const bodyObj = await request.json();
-    content = bodyObj.content || '';
+    bodyObj = await request.json();
+  } catch {
+    return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
+  }
 
+  let content = bodyObj?.content || '';
+  try {
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 200 OK 반환하되 Fallback 연동)
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
       console.warn(`[analyze-viral] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
       return NextResponse.json({
         success: true,
-        data: getFallbackData(content.trim()),
+        data: getFallbackData(typeof content === 'string' ? content.trim() : ''),
         fallback: true,
         fallbackReason: 'LOCAL_RATE_LIMIT',
       }, { status: 200 }); 
@@ -75,9 +79,9 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!content || !content.trim()) {
+    if (!content || typeof content !== 'string' || !content.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 분석할 영상 대본이나 내용을 입력해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }

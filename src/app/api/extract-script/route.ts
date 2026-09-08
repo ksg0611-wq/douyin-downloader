@@ -40,25 +40,35 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { audioUrl, videoTitle } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "유효한 요청 파라미터가 아닙니다." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { audioUrl, videoTitle } = bodyData || {};
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return NextResponse.json(
-        { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.' } },
+        { error: "서버 설정 오류입니다. 관리자에게 문의해 주세요." },
         { status: 500 }
       );
     }
 
-    if (!audioUrl) {
+    if (!audioUrl || typeof audioUrl !== "string" || !audioUrl.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 오디오 주소가 전달되지 않았습니다.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     // ── 1단계: 오디오 파일 fetch (실패 시 텍스트 폴백) ──
     let audioBase64: string | null = null;

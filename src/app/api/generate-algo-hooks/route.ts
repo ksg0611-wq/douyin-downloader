@@ -65,8 +65,18 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { topic } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "유효한 요청 파라미터가 아닙니다." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { topic } = bodyData || {};
 
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환 및 Fallback 연동)
     const ip = getClientIp(request);
@@ -82,9 +92,9 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!topic || !topic.trim()) {
+    if (!topic || typeof topic !== 'string' || !topic.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 영상의 주제나 내용을 입력해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }
@@ -92,12 +102,12 @@ export async function POST(request: Request) {
     if (!apiKey) {
       console.error('[generate-algo-hooks] GEMINI_API_KEY 환경변수가 설정되지 않았습니다.');
       return NextResponse.json(
-        { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' } },
+        { error: '서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' },
         { status: 500 }
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 숏폼 알고리즘을 지배하는 그로스 해커(Growth Hacker)이자 카피라이터야. 사용자가 영상의 주제나 핵심 내용을 입력하면, 시청자의 행동(저장, 공유, 좋아요, 댓글)을 폭발적으로 유도하는 '마지막 멘트(CTA)'와 '고정 댓글용 질문' 10개를 생성해 줘.
 요청 조건:

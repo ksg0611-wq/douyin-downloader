@@ -47,19 +47,36 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { title } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "유효한 요청 파라미터가 아닙니다." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { title } = bodyData || {};
     const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!title || typeof title !== 'string' || !title.trim()) {
+      return NextResponse.json(
+        { error: "유효한 요청 파라미터가 아닙니다." },
+        { status: 400 }
+      );
+    }
 
     if (!apiKey) {
       console.error('[generate-caption] GEMINI_API_KEY 환경변수가 설정되지 않았습니다.');
       return NextResponse.json(
-        { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' } },
+        { error: '서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' },
         { status: 500 }
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const body = JSON.stringify({
       contents: [{

@@ -61,19 +61,23 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
-  let scriptDraft = '';
+  let bodyObj: any;
+  try {
+    bodyObj = await request.json();
+  } catch {
+    return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
+  }
+
+  let scriptDraft = bodyObj?.scriptDraft || '';
 
   try {
-    const bodyObj = await request.json();
-    scriptDraft = bodyObj.scriptDraft || '';
-
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 200 OK 반환하되 Fallback 연동)
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
       console.warn(`[retention-doctor] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
       return NextResponse.json({
         success: true,
-        data: getFallbackData(scriptDraft),
+        data: getFallbackData(typeof scriptDraft === 'string' ? scriptDraft : ''),
         fallback: true,
         fallbackReason: 'LOCAL_RATE_LIMIT',
       }, { status: 200 });
@@ -81,9 +85,9 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!scriptDraft || !scriptDraft.trim()) {
+    if (!scriptDraft || typeof scriptDraft !== 'string' || !scriptDraft.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 대본 초안(scriptDraft)을 입력해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }

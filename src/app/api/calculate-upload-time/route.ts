@@ -54,8 +54,18 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { country, platform } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "유효한 요청 파라미터가 아닙니다." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { country, platform } = bodyData || {};
 
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환 및 Fallback 연동)
     const ip = getClientIp(request);
@@ -71,9 +81,10 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!country || !platform) {
+    if (!country || typeof country !== 'string' || !country.trim() ||
+        !platform || typeof platform !== 'string' || !platform.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 국가와 플랫폼을 정확히 선택해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }
@@ -81,12 +92,12 @@ export async function POST(request: Request) {
     if (!apiKey) {
       console.error('[calculate-upload-time] GEMINI_API_KEY 환경변수가 설정되지 않았습니다.');
       return NextResponse.json(
-        { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' } },
+        { error: '서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' },
         { status: 500 }
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 글로벌 숏폼 알고리즘 전문가야. 사용자가 타겟 국가와 타겟 플랫폼을 입력하면, 해당 국가의 플랫폼 유저들이 가장 활발히 반응하는 피크 요일과 시간대를 분석해 줘. 
 그리고 이를 대한민국 서울 표준시(KST)로 정확하게 환산한 시간대를 계산해 줘.

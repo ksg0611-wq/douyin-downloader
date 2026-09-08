@@ -7,7 +7,6 @@ import { MOCK_VIDEOS } from "@/data";
 import { VideoMock, DownloadHistory as DownloadHistoryType } from "@/types";
 
 import Header from "@/components/layout/Header";
-import AdBanner from "@/components/layout/AdBanner";
 import Footer from "@/components/layout/Footer";
 
 
@@ -596,8 +595,6 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
       <Header lang={lang} setLang={setLang} />
 
       <main id="app-main" className="flex-grow max-w-6xl w-full mx-auto px-4 py-6 md:py-10 z-10">
-        {/* <AdBanner position="top" /> */} {/* 구글 애드센스 승인 완료 시 주석 해제하여 활성화 */}
-
         <HeroSection lang={lang} />
 
 
@@ -615,8 +612,6 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
           setPlatform={setPlatform}
           lang={lang}
         />
-
-        {/* <AdBanner position="bottom" /> */} {/* 구글 애드센스 승인 완료 시 주석 해제하여 활성화 (하단 Mock Slot) */}
 
         <AnimatePresence>
           {analysisResult && (

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import AdBanner from "@/components/layout/AdBanner";
 import { BlogPostMeta } from "@/lib/posts";
 
 interface BlogClientProps {
@@ -140,8 +139,6 @@ export default function BlogClient({ posts }: BlogClientProps) {
             </div>
           )}
         </div>
-
-        <AdBanner position="bottom" />
       </main>
 
       {/* Light Footer Wrapper */}

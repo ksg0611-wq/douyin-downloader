@@ -68,19 +68,23 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
-  let trendKeyword = '';
+  let bodyObj: any;
+  try {
+    bodyObj = await request.json();
+  } catch {
+    return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
+  }
+
+  let trendKeyword = bodyObj?.trendKeyword || '';
 
   try {
-    const bodyObj = await request.json();
-    trendKeyword = bodyObj.trendKeyword || '';
-
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 200 OK 반환하되 Fallback 연동)
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
       console.warn(`[trend-planner] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
       return NextResponse.json({
         success: true,
-        data: getFallbackData(trendKeyword),
+        data: getFallbackData(typeof trendKeyword === 'string' ? trendKeyword.trim() : ''),
         fallback: true,
         fallbackReason: 'LOCAL_RATE_LIMIT',
       }, { status: 200 });
@@ -88,9 +92,9 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!trendKeyword || !trendKeyword.trim()) {
+    if (!trendKeyword || typeof trendKeyword !== 'string' || !trendKeyword.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 트렌드 키워드/사건(trendKeyword)을 입력해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }

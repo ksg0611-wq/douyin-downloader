@@ -63,21 +63,24 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
-  let competitorScript = '';
-  let myTopic = '';
+  let bodyObj: any;
+  try {
+    bodyObj = await request.json();
+  } catch {
+    return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
+  }
+
+  let competitorScript = bodyObj?.competitorScript || '';
+  let myTopic = bodyObj?.myTopic || '';
 
   try {
-    const bodyObj = await request.json();
-    competitorScript = bodyObj.competitorScript || '';
-    myTopic = bodyObj.myTopic || '';
-
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 200 OK 반환하되 Fallback 연동)
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
       console.warn(`[reverse-engineer] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
       return NextResponse.json({
         success: true,
-        data: getFallbackData(myTopic),
+        data: getFallbackData(typeof myTopic === 'string' ? myTopic : ''),
         fallback: true,
         fallbackReason: 'LOCAL_RATE_LIMIT',
       }, { status: 200 });
@@ -85,9 +88,10 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!competitorScript || !competitorScript.trim() || !myTopic || !myTopic.trim()) {
+    if (!competitorScript || typeof competitorScript !== 'string' || !competitorScript.trim() ||
+        !myTopic || typeof myTopic !== 'string' || !myTopic.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 경쟁사 대본과 내 채널 주제를 모두 입력해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }

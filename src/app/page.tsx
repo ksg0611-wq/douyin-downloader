@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import AdBanner from "@/components/layout/AdBanner";
 import BlogFilterClient from "./BlogFilterClient";
 import { BLOG_POSTS } from "@/data/blogPosts";
 
@@ -96,8 +95,6 @@ export default function BlogHome() {
             </Link>
           ))}
         </div>
-
-        <AdBanner position="bottom" />
       </main>
 
       {/* Light Footer Wrapper */}

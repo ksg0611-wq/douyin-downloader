@@ -57,8 +57,18 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { channelTopic, targetAudience, targetBrand } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "유효한 요청 파라미터가 아닙니다." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { channelTopic, targetAudience, targetBrand } = bodyData || {};
 
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환 및 Fallback 연동)
     const ip = getClientIp(request);
@@ -67,45 +77,36 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         data: getFallbackData(
-          channelTopic ? channelTopic.trim() : '',
-          targetAudience ? targetAudience.trim() : '',
-          targetBrand ? targetBrand.trim() : ''
+          typeof channelTopic === 'string' ? channelTopic.trim() : '',
+          typeof targetAudience === 'string' ? targetAudience.trim() : '',
+          typeof targetBrand === 'string' ? targetBrand.trim() : ''
         ),
         fallback: true,
         fallbackReason: 'LOCAL_RATE_LIMIT',
       }, { status: 429 });
     }
 
+    // WO-03: 파라미터 유효성 검사 강화 (500 서버 크래시 방지 및 400 규격화)
+    if (!channelTopic || typeof channelTopic !== 'string' || !channelTopic.trim() ||
+        !targetAudience || typeof targetAudience !== 'string' || !targetAudience.trim() ||
+        !targetBrand || typeof targetBrand !== 'string' || !targetBrand.trim()) {
+      return NextResponse.json(
+        { error: "유효한 요청 파라미터가 아닙니다." },
+        { status: 400 }
+      );
+    }
+
     const apiKey = process.env.GEMINI_API_KEY;
-
-    if (!channelTopic || !channelTopic.trim()) {
-      return NextResponse.json(
-        { error: { message: '⚠️ 채널 주제를 입력해 주세요.' } },
-        { status: 400 }
-      );
-    }
-    if (!targetAudience || !targetAudience.trim()) {
-      return NextResponse.json(
-        { error: { message: '⚠️ 주요 시청자층을 입력해 주세요.' } },
-        { status: 400 }
-      );
-    }
-    if (!targetBrand || !targetBrand.trim()) {
-      return NextResponse.json(
-        { error: { message: '⚠️ 타겟 브랜드를 입력해 주세요.' } },
-        { status: 400 }
-      );
-    }
-
     if (!apiKey) {
       console.error('[generate-sponsor-pitch] GEMINI_API_KEY 환경변수가 설정되지 않았습니다.');
       return NextResponse.json(
-        { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' } },
+        { error: "서버 설정 오류입니다. 관리자에게 문의해 주세요.", code: 'API_KEY_MISSING' },
         { status: 500 }
       );
     }
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    // 2026 최신 Gemini 모델 gemini-2.5-flash-lite 적용
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 탑티어 MCN 소속의 전문 비즈니스 매니저야. 사용자가 제공하는 채널 정보와 타겟 브랜드를 바탕으로, 해당 브랜드의 담당 마케터가 첫눈에 관심을 갖고 긍정적인 답변을 보낼 수 있는 수준 높은 [협찬 제안 콜드 메일(또는 DM)] 초안을 작성해 줘.
 결과는 반드시 아래의 지정된 JSON 키 형식으로만 구성해서 반환해 줘. 마크다운 기호(예: \`\`\`json)나 다른 설명 텍스트는 절대로 앞뒤로 붙이지 말고, 중괄호로 시작해서 중괄호로 끝나는 순수 JSON 텍스트로만 대답해 줘.
@@ -121,9 +122,9 @@ export async function POST(request: Request) {
 }
 
 입력 정보:
-- 채널 주제: ${channelTopic}
-- 주요 시청자층: ${targetAudience}
-- 협찬받고 싶은 타겟 브랜드: ${targetBrand}`;
+- 채널 주제: ${channelTopic.trim()}
+- 주요 시청자층: ${targetAudience.trim()}
+- 협찬받고 싶은 타겟 브랜드: ${targetBrand.trim()}`;
 
     const body = JSON.stringify({
       contents: [{
@@ -153,8 +154,11 @@ export async function POST(request: Request) {
 
     const data = await response.json();
 
+    // WO-02: 상위 AI API 호출 실패 시 명확한 상세 로깅 추가
     if (!response.ok) {
       const status = response.status;
+      const errorDetails = JSON.stringify(data);
+      console.error(`[generate-sponsor-pitch] ❌ 상위 AI API(Gemini) 호출 실패! Status: ${status} (${response.statusText}), Error Response: ${errorDetails}`);
 
       // 429/503 → Fallback 모드
       if (status === 429 || status === 503) {
@@ -168,8 +172,7 @@ export async function POST(request: Request) {
       }
 
       const koreanMsg = toKoreanError(status, data.error?.message);
-      console.error(`[generate-sponsor-pitch] Gemini API 오류 (${status}):`, data.error?.message);
-      return NextResponse.json({ error: { message: koreanMsg } }, { status });
+      return NextResponse.json({ error: koreanMsg, details: data.error?.message }, { status });
     }
 
     const outputText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -213,7 +216,12 @@ export async function POST(request: Request) {
     const message = status === 429
       ? '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!'
       : '⚠️ AI 서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.';
-    console.error('[generate-sponsor-pitch] 예상치 못한 에러:', error);
-    return NextResponse.json({ error: { message } }, { status });
+    // WO-02: 상위 AI API 예외 발생 시 상세 로깅 추가
+    console.error('[generate-sponsor-pitch] ❌ 상위 AI API 호출 또는 처리 중 예외 발생:', {
+      message: error?.message,
+      stack: error?.stack,
+      status: error?.status,
+    });
+    return NextResponse.json({ error: message, details: error?.message }, { status });
   }
 }

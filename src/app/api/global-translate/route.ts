@@ -28,15 +28,25 @@ async function callGeminiWithRetry(url: string, body: string): Promise<Response>
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { text } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "유효한 요청 파라미터가 아닙니다." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { text } = bodyData || {};
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return NextResponse.json({ error: { message: '⚠️ 서버 설정 오류입니다.' } }, { status: 500 });
+      return NextResponse.json({ error: '⚠️ 서버 설정 오류입니다.' }, { status: 500 });
     }
     if (!text || typeof text !== 'string' || text.trim().length === 0) {
-      return NextResponse.json({ error: { message: '번역할 텍스트를 입력해 주세요.' } }, { status: 400 });
+      return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
     }
 
     const cleanText = text.trim().slice(0, 300);
@@ -84,7 +94,7 @@ export async function POST(request: Request) {
 
 [이 콘텐츠를 글로벌 피드에서 바이럴시키기 위한 핵심 전략을 2~3문장으로 한글로 정리]`;
 
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
     const body = JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
     });

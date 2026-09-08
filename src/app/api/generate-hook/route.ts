@@ -54,8 +54,18 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { topic } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "유효한 요청 파라미터가 아닙니다." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { topic } = bodyData || {};
     
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환 및 Fallback 연동)
     const ip = getClientIp(request);
@@ -71,9 +81,9 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!topic || !topic.trim()) {
+    if (!topic || typeof topic !== 'string' || !topic.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 주제를 입력해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }
@@ -81,13 +91,13 @@ export async function POST(request: Request) {
     if (!apiKey) {
       console.error('[generate-hook] GEMINI_API_KEY 환경변수가 설정되지 않았습니다.');
       return NextResponse.json(
-        { error: { message: '⚠️ 서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' } },
+        { error: '서버 설정 오류입니다. 관리자에게 문의해 주세요.', code: 'API_KEY_MISSING' },
         { status: 500 }
       );
     }
 
-    // gemini-2.0-flash-lite 모델 사용
-    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`;
+    // gemini-2.5-flash-lite 모델 사용
+    const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
 
     const prompt = `너는 글로벌 최고 수준의 숏폼 마케터야. 유저가 입력한 주제에 대해 시청자의 시선을 3초 안에 사로잡을 수 있는 숏폼 대본의 '첫 문장(Hook)'을 3가지 스타일(1. 도발적인 팩트 폭행, 2. 감성적인 공감 유도, 3. 호기심을 극대화하는 질문)로 작성해 줘. 
 결과는 반드시 각 스타일을 키(key)로 갖는 다음과 같은 JSON 형식으로만 반환해 줘. 마크다운 기호(예: \`\`\`json)나 다른 설명 텍스트는 절대로 앞뒤로 붙이지 말고, 중괄호로 시작해서 중괄호로 끝나는 순수 JSON 텍스트로만 대답해 줘.

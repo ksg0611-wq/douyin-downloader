@@ -152,7 +152,8 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error?.message || "AI 제안서 생성 중 오류가 발생했습니다.");
+        const errMsg = typeof data.error === 'string' ? data.error : (data.error?.message || data.message || "AI 제안서 생성 중 오류가 발생했습니다.");
+        throw new Error(errMsg);
       }
 
       setResult(data.data);

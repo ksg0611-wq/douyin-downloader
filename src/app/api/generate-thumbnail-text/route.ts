@@ -65,18 +65,24 @@ async function callGeminiWithRetry(targetUrl: string, body: string): Promise<Res
 }
 
 export async function POST(request: Request) {
+  let bodyData: any;
   try {
-    const { topic } = await request.json();
+    bodyData = await request.json();
+  } catch {
+    return NextResponse.json({ error: "유효한 요청 파라미터가 아닙니다." }, { status: 400 });
+  }
+
+  try {
+    const { topic } = bodyData || {};
 
     // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 200 OK 반환하되 Fallback 연동)
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
       console.warn(`[generate-thumbnail-text] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
       
-      // 🟢 [교정 완료] 브라우저 콘솔 에러(붉은 줄)를 방지하기 위해 status를 429에서 200으로 변경합니다.
       return NextResponse.json({
         success: true,
-        data: getFallbackData(topic ? topic.trim() : ''),
+        data: getFallbackData(topic ? String(topic).trim() : ''),
         fallback: true,
         fallbackReason: 'LOCAL_RATE_LIMIT',
       }, { status: 200 }); 
@@ -84,9 +90,9 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!topic || !topic.trim()) {
+    if (!topic || typeof topic !== 'string' || !topic.trim()) {
       return NextResponse.json(
-        { error: { message: '⚠️ 영상의 주제나 내용을 입력해 주세요.' } },
+        { error: "유효한 요청 파라미터가 아닙니다." },
         { status: 400 }
       );
     }
