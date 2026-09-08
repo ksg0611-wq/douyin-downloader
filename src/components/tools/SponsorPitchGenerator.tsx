@@ -197,12 +197,13 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
 
   const handleCopyText = async (key: string, text: string) => {
     try {
+      const target = key === 'subject' ? 'subject' : key === 'concept' ? 'concept' : key;
+      trackEvent('pitch_copy', { target });
+      sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
+    } catch (_) {}
+
+    try {
       await navigator.clipboard.writeText(text);
-      try {
-        const target = key === 'subject' ? 'subject' : key === 'concept' ? 'concept' : key;
-        trackEvent('pitch_copy', { target });
-        sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
-      } catch (_) {}
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1500);
     } catch (e) {
@@ -212,13 +213,14 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
 
   const handleCopyAll = async () => {
     if (!result) return;
+    try {
+      trackEvent('pitch_copy', { target: 'full' });
+      sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
+    } catch (_) {}
+
     const fullText = `[이메일 제목]\n${result.subject}\n\n[인사말]\n${result.greeting}\n\n[채널 어필 포인트]\n${result.channelAppeal}\n\n[브랜드 시너지]\n${result.synergy}\n\n[숏폼 기획안]\n${result.concept}\n\n[마무리]\n${result.closing}`;
     try {
       await navigator.clipboard.writeText(fullText);
-      try {
-        trackEvent('pitch_copy', { target: 'full' });
-        sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
-      } catch (_) {}
       setCopiedAll(true);
       setTimeout(() => setCopiedAll(false), 2000);
     } catch (err) {
