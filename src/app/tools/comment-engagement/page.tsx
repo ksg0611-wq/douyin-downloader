@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolSubNav from "@/components/tools/ToolSubNav";
 import { MessageSquare, Copy, CheckCircle2, Wand2 } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 type EngagementStyle = "balance" | "empathy";
 
@@ -38,6 +39,9 @@ export default function CommentEngagementPage() {
     
     setResult(generatedResult);
     setCopied(false);
+    try {
+      trackEvent('tool_run', { tool_name: 'comment_engagement' });
+    } catch (_) {}
   };
 
   const handleCopy = () => {

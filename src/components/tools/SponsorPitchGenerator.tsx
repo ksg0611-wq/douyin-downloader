@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { trackEvent } from "@/lib/analytics";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -130,11 +131,15 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
     }
 
     setIsLoading(true);
-    sendGAEvent({ event: 'generate_click', value: 'sponsor_pitch_generator' });
+    try {
+      trackEvent('pitch_generate_attempt', { topic: topicVal, brand: brandVal });
+      sendGAEvent({ event: 'generate_click', value: 'sponsor_pitch_generator' });
+    } catch (_) {}
     setError("");
     setResult(null);
     setCopiedAll(false);
 
+    let responseStatus = 500;
     try {
       const response = await fetch("/api/generate-sponsor-pitch", {
         method: "POST",
@@ -145,6 +150,7 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
           targetBrand: brandVal
         })
       });
+      responseStatus = response.status;
 
       let data: any;
       try {
@@ -154,6 +160,9 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
       }
 
       if (!response.ok) {
+        try {
+          trackEvent('pitch_generate_result', { status: 'error', http_status: response.status });
+        } catch (_) {}
         const errMsg = (data && typeof data.error === 'string')
           ? data.error
           : (data?.error?.message || data?.message || (response.status === 429 || response.status === 503
@@ -163,8 +172,15 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
       }
 
       if (!data?.data) {
+        try {
+          trackEvent('pitch_generate_result', { status: 'error', http_status: response.status });
+        } catch (_) {}
         throw new Error("유효한 제안서 데이터를 받지 못했습니다. 다시 시도해 주세요.");
       }
+
+      try {
+        trackEvent('pitch_generate_result', { status: 'success', http_status: response.status });
+      } catch (_) {}
 
       setResult(data.data);
       if (presetData) {
@@ -182,7 +198,11 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
   const handleCopyText = async (key: string, text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
+      try {
+        const target = key === 'subject' ? 'subject' : key === 'concept' ? 'concept' : key;
+        trackEvent('pitch_copy', { target });
+        sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
+      } catch (_) {}
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1500);
     } catch (e) {
@@ -195,7 +215,10 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
     const fullText = `[이메일 제목]\n${result.subject}\n\n[인사말]\n${result.greeting}\n\n[채널 어필 포인트]\n${result.channelAppeal}\n\n[브랜드 시너지]\n${result.synergy}\n\n[숏폼 기획안]\n${result.concept}\n\n[마무리]\n${result.closing}`;
     try {
       await navigator.clipboard.writeText(fullText);
-      sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
+      try {
+        trackEvent('pitch_copy', { target: 'full' });
+        sendGAEvent({ event: 'copy_click', value: 'sponsor_pitch_generator' });
+      } catch (_) {}
       setCopiedAll(true);
       setTimeout(() => setCopiedAll(false), 2000);
     } catch (err) {
@@ -386,6 +409,13 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] font-black uppercase text-zinc-550 dark:text-zinc-500 tracking-wider">Subject.</span>
                   <span className="text-xs sm:text-sm font-black text-zinc-900 dark:text-white">{result.subject}</span>
+                  <button
+                    onClick={() => handleCopyText("subject", result.subject)}
+                    className="p-1 rounded text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
+                    title="제목 복사"
+                  >
+                    {copiedKey === "subject" ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
                 </div>
               </div>
 
@@ -452,10 +482,29 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
 
               {/* 숏폼 기획안 */}
               <div className="bg-teal-50/40 dark:bg-teal-950/10 border border-teal-100 dark:border-teal-950/60 rounded-xl p-4 space-y-2">
-                <span className="text-[10px] font-black text-teal-700 dark:text-teal-300 uppercase tracking-widest block flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-yellow-500" />
-                  제안하는 숏폼 영상 제작 기획안
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black text-teal-700 dark:text-teal-300 uppercase tracking-widest flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-yellow-500" />
+                    제안하는 숏폼 영상 제작 기획안
+                  </span>
+                  <button
+                    onClick={() => handleCopyText("concept", result.concept)}
+                    className="p-1 rounded text-zinc-400 hover:text-teal-600 dark:hover:text-teal-300 transition-colors cursor-pointer flex items-center gap-1 text-[11px] font-bold"
+                    title="기획안 복사"
+                  >
+                    {copiedKey === "concept" ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-500" />
+                        <span className="text-emerald-600 dark:text-emerald-400">복사됨</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>기획안 복사</span>
+                      </>
+                    )}
+                  </button>
+                </div>
                 <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 font-bold leading-relaxed">
                   {result.concept}
                 </p>

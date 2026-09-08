@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://shortspack.com"),
   title: "ShortsPack Pro - 글로벌 크리에이터 종합 툴박스",
-  description: "도우인·샤오홍슈·틱톡·릴스 등 글로벌 숏폼 다운로더부터 AI 대본 추출, 트렌드 분석, 다국어 번역, 수익 시뮬레이터까지 아우르는 크리에이터 필수 도구 모음집",
+  description: "중국 숏폼(더우인·샤오홍슈) 워터마크 없는 고화질 레퍼런스 백업부터 AI 협찬 제안서, 대본 프레임워크, 트렌드 분석까지 아우르는 크리에이터 필수 도구 모음집",
   verification: {
     google: "a97GsPCt8lP3zBSrkbPU7uBfDBzPSmLfZV5NuCPB6j4",
     other: {

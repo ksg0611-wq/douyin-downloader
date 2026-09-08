@@ -31,7 +31,7 @@ const TOOL_CARDS: ToolCard[] = [
     desc: "시청자의 초반 1초 이탈을 방지하고 알고리즘 도달률을 높여줄 5가지 바이럴 오프닝 멘트 템플릿을 즉시 생성합니다.",
     href: "/tools/hook-generator",
     icon: <Zap className="w-6 h-6 text-rose-500" />,
-    badge: "FAST",
+    badge: "템플릿",
     badgeColor: "bg-rose-50 border-rose-200 text-rose-600 dark:bg-rose-500/15 dark:border-rose-500/30 dark:text-rose-400"
   },
   {
@@ -40,7 +40,7 @@ const TOOL_CARDS: ToolCard[] = [
     desc: "영상의 카테고리와 주제에 어울리는 최적의 인기 해시태그 조합을 스캔하고, 바구니 기능을 통해 한 번에 묶음 복사합니다.",
     href: "/tools/hashtag-scanner",
     icon: <Hash className="w-6 h-6 text-purple-500" />,
-    badge: "SEO",
+    badge: "스캐너",
     badgeColor: "bg-purple-50 border-purple-200 text-purple-650 dark:bg-purple-500/15 dark:border-purple-500/30 dark:text-purple-400"
   },
   {
@@ -49,7 +49,7 @@ const TOOL_CARDS: ToolCard[] = [
     desc: "대본의 글자 수 대비 예상 소요 시간을 측정하고, 50자 이상의 긴 문장(위험 구간)을 분석하여 이탈률 방어 처방을 내립니다.",
     href: "/tools/tempo-calculator",
     icon: <Clock className="w-6 h-6 text-amber-500" />,
-    badge: "TEMPO",
+    badge: "계산기",
     badgeColor: "bg-amber-50 border-amber-200 text-amber-600 dark:bg-amber-500/15 dark:border-amber-500/30 dark:text-amber-400"
   },
   {
@@ -67,7 +67,7 @@ const TOOL_CARDS: ToolCard[] = [
     desc: "PAS, AIDA 등 검증된 마케팅 공식을 숏폼 길이에 맞게 압축하여, 빈칸만 채우면 기승전결이 완벽한 대본 초안을 자동 완성해 줍니다.",
     href: "/tools/script-framework",
     icon: <Puzzle className="w-6 h-6 text-cyan-500" />,
-    badge: "SCRIPT",
+    badge: "프레임워크",
     badgeColor: "bg-cyan-50 border-cyan-200 text-cyan-650 dark:bg-cyan-500/15 dark:border-cyan-500/30 dark:text-cyan-400"
   },
   {
@@ -76,7 +76,7 @@ const TOOL_CARDS: ToolCard[] = [
     desc: "단순 시청을 넘어 팔로우, 댓글 참여, 프로필 링크 클릭 등 시청자의 확실한 행동과 전환을 이끌어내는 목적별 맞춤형 엔딩 멘트를 추천합니다.",
     href: "/tools/cta-wizard",
     icon: <MousePointerClick className="w-6 h-6 text-orange-500" />,
-    badge: "CONVERSION",
+    badge: "공식",
     badgeColor: "bg-orange-50 border-orange-200 text-orange-650 dark:bg-orange-500/15 dark:border-orange-500/30 dark:text-orange-400"
   },
   {
@@ -85,7 +85,7 @@ const TOOL_CARDS: ToolCard[] = [
     desc: "평범한 제목을 호기심 유발형, 반전/폭로형, 손실 회피형 등 숏폼 피드에서 무조건 스톱하게 만드는 조회수 폭발형 타이틀과 상단 고정 자막으로 변환합니다.",
     href: "/tools/ctr-title",
     icon: <Clapperboard className="w-6 h-6 text-rose-500" />,
-    badge: "CTR",
+    badge: "치트키",
     badgeColor: "bg-rose-50 border-rose-200 text-rose-650 dark:bg-rose-500/15 dark:border-rose-500/30 dark:text-rose-400"
   },
   {
@@ -94,7 +94,7 @@ const TOOL_CARDS: ToolCard[] = [
     desc: "평범한 일상/지식 주제를 시청자들이 댓글 창에서 치열하게 토론하거나 격하게 공감할 수밖에 없는 바이럴 소재로 비틀어주고, 고정 댓글용 질문까지 세트로 추천합니다.",
     href: "/tools/comment-engagement",
     icon: <MessageSquare className="w-6 h-6 text-indigo-500" />,
-    badge: "ENGAGEMENT",
+    badge: "소재 공식",
     badgeColor: "bg-indigo-50 border-indigo-200 text-indigo-650 dark:bg-indigo-500/15 dark:border-indigo-500/30 dark:text-indigo-400"
   }
 ];

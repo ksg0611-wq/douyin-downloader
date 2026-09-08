@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolSubNav from "@/components/tools/ToolSubNav";
 import { MousePointerClick, Copy, CheckCircle2 } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 type Purpose = "follow" | "comment" | "link" | "share";
 type Flavor = "mild" | "spicy";
@@ -68,6 +69,9 @@ export default function CtaWizardPage() {
   const handleCopy = (text: string, index: number) => {
     navigator.clipboard.writeText(text);
     setCopiedIndex(index);
+    try {
+      trackEvent('tool_run', { tool_name: 'cta_wizard' });
+    } catch (_) {}
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
@@ -109,7 +113,10 @@ export default function CtaWizardPage() {
               ].map((p) => (
                 <button
                   key={p.id}
-                  onClick={() => setPurpose(p.id as Purpose)}
+                  onClick={() => {
+                    setPurpose(p.id as Purpose);
+                    try { trackEvent('tool_run', { tool_name: 'cta_wizard' }); } catch (_) {}
+                  }}
                   className={`py-3 px-4 rounded-xl text-sm font-bold transition-all border ${
                     purpose === p.id
                       ? "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
@@ -127,7 +134,10 @@ export default function CtaWizardPage() {
             <h3 className="text-sm font-extrabold text-zinc-800 dark:text-zinc-200 mb-3">2. 멘트 톤앤매너 (맛 선택)</h3>
             <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => setFlavor("mild")}
+                onClick={() => {
+                  setFlavor("mild");
+                  try { trackEvent('tool_run', { tool_name: 'cta_wizard' }); } catch (_) {}
+                }}
                 className={`py-2 px-5 rounded-xl text-sm font-bold transition-all border ${
                   flavor === "mild"
                     ? "bg-zinc-900 border-zinc-900 text-white dark:bg-zinc-100 dark:border-zinc-100 dark:text-zinc-900 shadow-md"
@@ -137,7 +147,10 @@ export default function CtaWizardPage() {
                 🌿 순한맛 (신뢰/이성형)
               </button>
               <button
-                onClick={() => setFlavor("spicy")}
+                onClick={() => {
+                  setFlavor("spicy");
+                  try { trackEvent('tool_run', { tool_name: 'cta_wizard' }); } catch (_) {}
+                }}
                 className={`py-2 px-5 rounded-xl text-sm font-bold transition-all border ${
                   flavor === "spicy"
                     ? "bg-rose-500 border-rose-500 text-white shadow-md shadow-rose-500/20"

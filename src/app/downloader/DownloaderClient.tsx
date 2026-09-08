@@ -8,6 +8,7 @@ import { VideoMock, DownloadHistory as DownloadHistoryType } from "@/types";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { trackEvent } from "@/lib/analytics";
 
 
 import HeroSection from "@/components/home/HeroSection";
@@ -132,8 +133,8 @@ const TOOLS = [
     desc: "중국/글로벌 해시태그 유입량, 경쟁도, 연관 태그를 정밀 분석하여 영상 노출 확률을 극대화합니다.",
     descEn: "Analyze hashtag search volumes, competition levels, and related keywords to maximize video reach.",
     icon: "📊",
-    badge: "AI",
-    badgeColor: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/30",
+    badge: "스캐너",
+    badgeColor: "bg-purple-50 text-purple-600 dark:bg-purple-500/15 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30",
     category: "idea",
   },
   {
@@ -195,19 +196,19 @@ const TOOLS = [
     id: "hook-generator",
     title: "3초 후킹 대본 생성기",
     titleEn: "3-Second Hook Generator",
-    desc: "영상 주제만 입력하면, 시청자의 시선을 3초 안에 사로잡을 3대 스타일의 도입부 대본을 AI가 즉시 자동 생성합니다.",
-    descEn: "Enter a topic to generate 3-second viral script hooks (facts, empathy, questions) using Gemini AI.",
+    desc: "영상 주제만 입력하면, 시청자의 시선을 3초 안에 사로잡을 3대 스타일의 도입부 대본을 자동 생성합니다.",
+    descEn: "Enter a topic to generate 3-second viral script hooks (facts, empathy, questions).",
     icon: "🪄",
-    badge: "AI",
-    badgeColor: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-400 border border-cyan-200 dark:border-cyan-500/30",
+    badge: "템플릿",
+    badgeColor: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-400 border border-rose-200 dark:border-rose-500/30",
     category: "script",
   },
   {
     id: "video-downloader",
-    title: "클린 버전 숏폼 레퍼런스 분석기",
-    titleEn: "Clean-Version Short-Form Ref-Backup Tool",
-    desc: "틱톡 및 도우인 동영상 주소를 입력해 레퍼런스 분석용 초고화질 MP4 파일로 백업합니다.",
-    descEn: "Backup clean-version high-definition MP4 videos from TikTok and Douyin.",
+    title: "중국 숏폼(더우인·샤오홍슈) 워터마크 없는 고화질 레퍼런스 백업",
+    titleEn: "Douyin & Xiaohongshu Watermark-Free HD Reference Backup",
+    desc: "더우인 및 샤오홍슈 동영상 주소를 입력해 레퍼런스 분석용 초고화질 MP4 파일로 백업합니다.",
+    descEn: "Backup watermark-free high-definition MP4 videos from Douyin and Xiaohongshu.",
     icon: "⚡",
     badge: "FREE",
     badgeColor: "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700",
@@ -493,6 +494,10 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
     setDownloadProgress(null);
     setDownloadCompleted(false);
 
+    try {
+      trackEvent("download_attempt", { platform });
+    } catch (_) {}
+
     // 가짜 진행 단계 시뮬레이션
     const interval = setInterval(() => {
       setAnalysisStep((prev) => (prev < 3 ? prev + 1 : prev));
@@ -510,8 +515,15 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
       setAnalysisStep(4);
 
       if (!response.ok || !data.success) {
+        try {
+          trackEvent("download_result", { platform, status: "error" });
+        } catch (_) {}
         throw new Error(data.error || "분석 중 서버 에러가 발생했습니다.");
       }
+
+      try {
+        trackEvent("download_result", { platform, status: "success" });
+      } catch (_) {}
 
       setAnalysisResult(data.data);
       saveToHistory(data.data);
@@ -520,6 +532,9 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
       
     } catch (err: any) {
       clearInterval(interval);
+      try {
+        trackEvent("download_result", { platform, status: "error" });
+      } catch (_) {}
       setErrorMessage(err.message);
       showToast(lang === "ko" ? "분석에 실패했습니다." : "Analysis failed.");
     } finally {
@@ -531,6 +546,9 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
 
   const triggerDownloadAction = (type: "video" | "audio") => {
     if (!analysisResult) return;
+    try {
+      trackEvent("download_result", { platform, status: "success" });
+    } catch (_) {}
     
     const targetUrl = type === "video" ? analysisResult.realVideoUrl : analysisResult.realAudioUrl;
     
@@ -798,13 +816,13 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
         {/* 애드센스 승인용 SEO 텍스트 블록 */}
         <section id="seo-guide-block" className="max-w-4xl mx-auto mt-16 pb-8 border-t border-zinc-900 pt-10 text-zinc-500">
           <h3 className="text-sm font-bold text-zinc-400 mb-4 tracking-wider uppercase">
-            {lang === "ko" ? "💡 글로벌 크리에이터를 위한 숏폼 트렌드 분석 및 클린 버전 저장 가이드" : "💡 Short-Form Trend Analysis & Clean Video Saving Guide for Global Creators"}
+            {lang === "ko" ? "💡 중국 숏폼(더우인·샤오홍슈) 워터마크 없는 고화질 레퍼런스 백업 가이드" : "💡 Chinese Short-Form (Douyin & Xiaohongshu) Watermark-Free HD Reference Backup Guide"}
           </h3>
           <div className="space-y-4 text-xs sm:text-sm leading-relaxed">
             {lang === "ko" ? (
               <>
                 <p>
-                  오늘날 디지털 마케팅 환경에서 숏폼(Short-form) 콘텐츠는 단순한 엔터테인먼트를 넘어 브랜드 인지도와 전환율을 결정짓는 핵심 수단으로 자리 잡았습니다. 틱톡(TikTok)을 필두로 인스타그램 릴스(Instagram Reels), 유튜브 쇼츠(YouTube Shorts)는 글로벌 플랫폼 시장을 지배하고 있으며, 중국의 도우인(Douyin)과 샤오홍슈(Xiaohongshu)는 최첨단 트렌드와 이커머스 비즈니스 모델이 탄생하는 산실 역할을 하고 있습니다. 국내외 크리에이터와 마케터들이 글로벌 시장에서 선도적인 위치를 확보하기 위해서는 이러한 글로벌 플랫폼들의 콘텐츠 구성 방식, 시각적 연출, 그리고 유저 반응 요소를 철저하게 벤치마킹하는 것이 필수적입니다. 글로벌 트렌드를 면밀히 모니터링하고 가치를 추출해 내는 역량이 크리에이터 성장의 핵심 척도가 됩니다.
+                  오늘날 디지털 마케팅 환경에서 숏폼(Short-form) 콘텐츠는 단순한 엔터테인먼트를 넘어 브랜드 인지도와 전환율을 결정짓는 핵심 수단으로 자리 잡았습니다. 특히 중국의 도우인(Douyin)과 샤오홍슈(Xiaohongshu)는 전 세계 숏폼 트렌드와 혁신적인 이커머스 비즈니스 모델이 탄생하는 최첨단 산실 역할을 하고 있습니다. 국내외 크리에이터와 마케터들이 시장에서 선도적인 위치를 확보하기 위해서는 도우인과 샤오홍슈의 콘텐츠 구성 방식, 시각적 연출, 그리고 유저 반응 요소를 철저하게 벤치마킹하는 것이 필수적입니다.
                 </p>
                 <p>
                   트렌드를 정밀하게 분석하기 위해서는 고화질 원본 비디오를 확보하는 것이 선행되어야 합니다. 로고나 정보 레이블이 포함된 영상은 시각적인 왜곡을 유발하며 인공지능 기반의 영상 분석 모델이나 비전 API가 프레임을 분석할 때 노이즈로 작용하여 정확도를 떨어뜨립니다. 불필요한 요소가 차단된 깨끗한 초고화질(HD) 비디오는 크리에이터가 영상의 미장센, 트랜지션 기법, 자막 위치 및 컷 편집의 호흡을 프레임 단위로 완벽하게 뜯어보고 분석할 수 있는 환경을 선사합니다. 무손실 오리지널 미디어를 직접 분석함으로써, 해외 바이럴 영상이 유저들의 시선을 사로잡는 시각적인 패턴과 구성 방식을 온전하게 학습할 수 있습니다.
@@ -819,7 +837,7 @@ export default function DownloaderClient({ initialCategory }: DownloaderClientPr
             ) : (
               <>
                 <p>
-                  In today's digital marketing landscape, short-form content has become a core mechanism for determining brand awareness and conversion rates, transcending simple entertainment. Led by TikTok, Instagram Reels, and YouTube Shorts dominate the global platform market, while China's Douyin and Xiaohongshu serve as cradles for entertainment and e-commerce business models. For creators and marketers to secure a leading position globally, it is essential to thoroughly benchmark these global platforms' content structure, visual presentation, and user reaction triggers. Monitoring and extracting value from global trends has become a primary metric for creator growth.
+                  In today's digital marketing landscape, short-form content has become a core mechanism for determining brand awareness and conversion rates. In particular, China's Douyin and Xiaohongshu serve as cutting-edge cradles for viral short-form trends and innovative e-commerce business models. For creators and marketers to secure a competitive edge, it is essential to thoroughly benchmark Douyin and Xiaohongshu's content structures, visual pacing, and user engagement triggers.
                 </p>
                 <p>
                   To precisely analyze trends, obtaining high-definition original videos must come first. Videos containing overlay labels or logos cause visual distortion and act as noise when AI-based video analysis models or vision APIs analyze frames, reducing accuracy. High-definition (HD) videos completely clean of overlays allow creators to perfectly dismantle and analyze video elements, transition techniques, caption placement, and cut editing pacing frame by frame. Analyzing lossless original media allows creators to learn visual patterns and storytelling structure that captivate global audiences.

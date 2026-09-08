@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolSubNav from "@/components/tools/ToolSubNav";
 import { Puzzle, Copy, CheckCircle2, Wand2 } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 type FrameworkType = "PAS" | "AIDA" | "3STEP";
 
@@ -41,6 +42,9 @@ export default function ScriptFrameworkPage() {
     }
     setResultText(combined.trim());
     setCopied(false);
+    try {
+      trackEvent('tool_run', { tool_name: 'script_framework' });
+    } catch (_) {}
   };
 
   const handleCopy = () => {

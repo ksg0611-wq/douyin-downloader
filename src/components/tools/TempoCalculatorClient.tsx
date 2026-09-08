@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { trackEvent } from "@/lib/analytics";
 
 interface SentenceAnalysis {
   text: string;
@@ -46,6 +47,7 @@ export default function TempoCalculatorClient() {
       setIsAnalyzing(false);
       
       try {
+        trackEvent("tool_run", { tool_name: "tempo_calculator" });
         sendGAEvent({ event: "generate_click", value: "tempo_calculator" });
       } catch (e) {
         // safe bypass
@@ -156,7 +158,7 @@ export default function TempoCalculatorClient() {
           <h2 className="text-lg sm:text-xl font-black text-zinc-900 dark:text-white tracking-tight flex items-center gap-2">
             ⏱️ 숏폼 템포 & 이탈률 방어 계산기
             <span className="bg-gradient-to-r from-rose-500 to-indigo-500 text-[9px] text-white font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider leading-none">
-              TEMPO
+              계산기
             </span>
           </h2>
           <p className="text-xs text-zinc-650 dark:text-zinc-400 mt-1">

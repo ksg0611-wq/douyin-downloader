@@ -6,10 +6,10 @@ export default function FeaturesGuide() {
     <section id="features-guide" className="my-5 md:my-6 max-w-4xl mx-auto">
       <div className="text-center mb-5">
         <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">
-          Douyin 비디오 저장하는 법 (초간단 3초 가이드)
+          중국 숏폼(더우인·샤오홍슈) 레퍼런스 저장하는 법 (초간단 3초 가이드)
         </h3>
         <p className="text-[11px] text-zinc-555 dark:text-zinc-500 mt-0.5">
-          링크 주소 입력만으로 크리에이터 벤치마킹을 위한 고화질 비디오 소스를 즉시 분석하고 저장할 수 있습니다.
+          링크 주소 입력만으로 크리에이터 벤치마킹을 위한 워터마크 없는 고화질 비디오 소스를 즉시 분석하고 백업할 수 있습니다.
         </p>
       </div>
 
@@ -20,10 +20,10 @@ export default function FeaturesGuide() {
           </div>
           <h4 className="font-bold text-zinc-800 dark:text-zinc-200 text-xs mb-1 flex items-center gap-1">
             <Smartphone className="w-3.5 h-3.5 text-[#fe0979]" />
-            Douyin에서 주소 복사
+            더우인·샤오홍슈에서 주소 복사
           </h4>
           <p className="text-[11px] text-zinc-650 dark:text-zinc-400 leading-normal">
-            Douyin 앱 또는 웹 사이트에서 마음에 드는 비디오를 탐색하고, 우하단의 <strong>[공유](分享) → [링크 복사](复制链接)</strong> 단추를 눌러 클립보드에 복사해 주세요.
+            더우인이나 샤오홍슈 앱/웹에서 원하는 영상을 찾아 <strong>[공유] → [링크 복사]</strong>를 눌러 클립보드에 복사해 주세요.
           </p>
         </div>
 
@@ -46,10 +46,10 @@ export default function FeaturesGuide() {
           </div>
           <h4 className="font-bold text-zinc-800 dark:text-zinc-200 text-xs mb-1 flex items-center gap-1">
             <Download className="w-3.5 h-3.5 text-emerald-400" />
-            클린 버전 MP4 백업
+            워터마크 없는 MP4 백업
           </h4>
           <p className="text-[11px] text-zinc-650 dark:text-zinc-400 leading-normal">
-            우회 분석이 종료되면 비디오 정보 카드와 함께 파일 사이즈가 표시됩니다. <strong>[MP4 백업]</strong>를 클릭해 최고화질(HD) 파일로 저장하십시오.
+            분석이 완료되면 비디오 정보 카드와 함께 파일 사이즈가 표시됩니다. <strong>[MP4 백업]</strong>을 클릭해 워터마크 없는 최고화질(HD) 파일로 저장하십시오.
           </p>
         </div>
       </div>

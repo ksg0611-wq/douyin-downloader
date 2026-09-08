@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ToolSubNav from "@/components/tools/ToolSubNav";
 import { Clapperboard, Copy, CheckCircle2, Wand2 } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 type TitleStyle = "curiosity" | "reversal" | "fomo";
 
@@ -40,6 +41,9 @@ export default function CtrTitlePage() {
     
     setResults(generated);
     setCopiedIndex(null);
+    try {
+      trackEvent('tool_run', { tool_name: 'ctr_title' });
+    } catch (_) {}
   };
 
   const handleCopy = (text: string, index: number) => {

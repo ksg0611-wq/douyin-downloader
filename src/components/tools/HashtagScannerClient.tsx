@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { trackEvent } from "@/lib/analytics";
 
 interface TagItem {
   tag: string;
@@ -115,6 +116,9 @@ export default function HashtagScannerClient() {
     setActiveCategory(category);
     setCustomKeyword("");
     setIsScanning(true);
+    try {
+      trackEvent("tool_run", { tool_name: "hashtag_scanner" });
+    } catch (_) {}
     setTimeout(() => {
       setResults(CATEGORY_PRESETS[category]);
       setIsScanning(false);
@@ -157,6 +161,7 @@ export default function HashtagScannerClient() {
       setIsScanning(false);
 
       try {
+        trackEvent("tool_run", { tool_name: "hashtag_scanner" });
         sendGAEvent({ event: "generate_click", value: "hashtag_scanner" });
       } catch (e) {
         // safe bypass
@@ -232,7 +237,7 @@ export default function HashtagScannerClient() {
           <h2 className="text-lg sm:text-xl font-black text-zinc-900 dark:text-white tracking-tight flex items-center gap-2">
             🏷️ 알고리즘 해시태그 스캐너
             <span className="bg-gradient-to-r from-rose-500 to-indigo-500 text-[9px] text-white font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider leading-none">
-              SEO
+              스캐너
             </span>
           </h2>
           <p className="text-xs text-zinc-650 dark:text-zinc-400 mt-1">

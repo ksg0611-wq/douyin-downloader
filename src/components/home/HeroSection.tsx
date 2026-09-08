@@ -31,9 +31,9 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           transition={{ delay: 0.1, duration: 0.5 }}
           className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black tracking-tight leading-tight text-zinc-950 dark:text-white break-keep"
         >
-          도우인·샤오홍슈 <br className="sm:hidden" />
+          중국 숏폼(더우인·샤오홍슈) <br className="sm:hidden" />
           <span className="bg-gradient-to-r from-blue-600 via-purple-650 to-rose-600 dark:from-[#00f2fe] dark:via-purple-400 dark:to-[#fe0979] bg-clip-text text-transparent">
-            클린 비디오 분석·저장
+            워터마크 없는 고화질 레퍼런스 백업
           </span>
         </motion.h2>
       ) : (
@@ -43,17 +43,17 @@ export default function HeroSection({ lang = "ko" }: HeroSectionProps) {
           transition={{ delay: 0.1, duration: 0.5 }}
           className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black tracking-tight leading-tight text-zinc-950 dark:text-white break-keep"
         >
-          Douyin & Xiaohongshu <br className="sm:hidden" />
+          Chinese Short-form (Douyin & Xiaohongshu) <br className="sm:hidden" />
           <span className="bg-gradient-to-r from-blue-600 via-purple-650 to-rose-600 dark:from-[#00f2fe] dark:via-purple-400 dark:to-[#fe0979] bg-clip-text text-transparent">
-            Clean Video Analysis & Saving
+            Watermark-Free HD Reference Backup
           </span>
         </motion.h2>
       )}
 
       <p className="text-zinc-800 dark:text-zinc-400 text-sm sm:text-base mt-4 max-w-xl mx-auto leading-relaxed font-semibold">
         {lang === "ko" 
-          ? "동영상 주소 입력 한 번으로 도우인 및 샤오홍슈의 원본 고화질 비디오 소스를 즉시 분석하고 추출합니다."
-          : "Instantly analyze and extract original HD video sources from Douyin and Xiaohongshu with a single click."}
+          ? "동영상 링크 입력 한 번으로 중국 숏폼(더우인·샤오홍슈) 워터마크 없는 고화질 레퍼런스를 즉시 분석하고 안전하게 백업합니다."
+          : "Instantly analyze and safely backup watermark-free HD references from Douyin and Xiaohongshu with a single link."}
       </p>
 
       {/* 종합 크리에이터 툴박스 배지 라인업 */}

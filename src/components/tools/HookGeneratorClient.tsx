@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { sendGAEvent } from "@next/third-parties/google";
+import { trackEvent } from "@/lib/analytics";
 
 const TEMPLATES = [
   "99%가 모르는 [키워드]의 진짜 비밀",
@@ -56,6 +57,7 @@ export default function HookGeneratorClient() {
       setIsGenerating(false);
       
       try {
+        trackEvent('tool_run', { tool_name: 'hook_generator' });
         sendGAEvent({ event: 'generate_click', value: 'hook_generator_client' });
       } catch (e) {
         // safe bypass
@@ -94,7 +96,7 @@ export default function HookGeneratorClient() {
           <h2 className="text-lg sm:text-xl font-black text-zinc-900 dark:text-white tracking-tight flex items-center gap-2">
             ⚡ 터지는 1초 훅 제조기
             <span className="bg-gradient-to-r from-rose-500 to-indigo-500 text-[9px] text-white font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider leading-none">
-              FAST
+              템플릿
             </span>
           </h2>
           <p className="text-xs text-zinc-650 dark:text-zinc-400 mt-1">
