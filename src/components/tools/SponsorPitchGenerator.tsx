@@ -69,7 +69,6 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
   const { user, signInWithGoogle } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [isFallback, setIsFallback] = useState(false);
 
   const handleSaveToToolbox = async () => {
     if (!result) return;
@@ -99,7 +98,6 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
           targetBrand: targetBrand.trim(),
         },
         resultData: result,
-        isFallback: isFallback,
         createdAt: serverTimestamp()
       });
       setSaveSuccess(true);
@@ -136,7 +134,6 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
     setError("");
     setResult(null);
     setCopiedAll(false);
-    setIsFallback(false);
 
     try {
       const response = await fetch("/api/generate-sponsor-pitch", {
@@ -149,17 +146,27 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
         })
       });
 
-      const data = await response.json();
+      let data: any;
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
 
       if (!response.ok) {
-        const errMsg = typeof data.error === 'string' ? data.error : (data.error?.message || data.message || "AI 제안서 생성 중 오류가 발생했습니다.");
+        const errMsg = (data && typeof data.error === 'string')
+          ? data.error
+          : (data?.error?.message || data?.message || (response.status === 429 || response.status === 503
+              ? "현재 AI 서버 사용량이 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요."
+              : "AI 제안서 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."));
         throw new Error(errMsg);
       }
 
-      setResult(data.data);
-      if (data.fallback === true) {
-        setIsFallback(true);
+      if (!data?.data) {
+        throw new Error("유효한 제안서 데이터를 받지 못했습니다. 다시 시도해 주세요.");
       }
+
+      setResult(data.data);
       if (presetData) {
         setChannelTopic(presetData.topic);
         setTargetAudience(presetData.audience);
@@ -332,20 +339,6 @@ export default function SponsorPitchGenerator({ lang = "ko" }: SponsorPitchGener
         </div>
       </div>
 
-      {/* Fallback 모드 안내 배너 */}
-      <AnimatePresence>
-        {isFallback && result && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="p-4 rounded-xl border border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-400 text-xs font-bold flex items-center gap-2 mb-4"
-          >
-            <Info className="w-4 h-4 text-amber-500 shrink-0" />
-            <span>⚠️ 현재 AI 서버 요청이 집중되어 샘플 데이터를 표시하고 있습니다. 잠시 후 다시 생성해 보세요!</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* 에러 상태 안내 배너 */}
       <AnimatePresence>

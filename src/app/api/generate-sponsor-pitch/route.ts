@@ -5,23 +5,10 @@ import { getClientIp, isRateLimited } from '@/lib/rateLimit';
 
 const MAX_RETRIES = 3;
 
-// ─── Fallback 샘플 데이터 ──────────────────────────────────────────────────────
-function getFallbackData(channelTopic: string, targetAudience: string, targetBrand: string) {
-  console.warn('[generate-sponsor-pitch] ⚠️ FALLBACK MODE 활성화 - Google API 한도 초과로 샘플 데이터를 반환합니다.');
-  return {
-    subject: `[샘플][협찬 제안] ${channelTopic} 전문 크리에이터와 ${targetBrand}의 협업을 제안드립니다.`,
-    greeting: `안녕하세요, ${targetBrand} 마케팅 팀 담당자님.\n\n저는 ${targetAudience} 오디언스를 기반으로 다양한 ${channelTopic} 콘텐츠를 전문적으로 연출하며 시청자분들과 활발히 소통 중인 크리에이터입니다.`,
-    channelAppeal: `[샘플] 저희 채널은 ${channelTopic} 분야에서 실제 시청자가 일상에 즉시 참고할 만한 밀도 높은 정보를 다룹니다. 특히 주요 구독자층의 ${targetAudience} 비중이 약 80% 이상을 차지하며, 활발한 피드백과 소통 중심의 높은 도달율을 자랑하고 있습니다.`,
-    synergy: `[샘플] ${targetBrand}이(가) 추구하는 브랜드 철학과 저희 채널의 주 오디언스 라이프스타일은 매우 강력한 시너지를 낼 수 있다고 확신합니다. 진정성 있는 실생활 활용 예시를 통해 핵심 가치를 가장 세련되게 전달해 드리겠습니다.`,
-    concept: `[샘플 기획안] 컨셉: 숏폼에 최적화된 3초 후킹 도입부로 시청자 시선 고정\n내용: ${targetBrand} 제품을 활용하여 바쁜 ${targetAudience} 오디언스가 실제 생활 속에서 문제를 즉시 해결하거나 가치를 느끼는 과정을 트렌디한 BGM에 맞춰 컷편집 형태로 전개\nCTA: 고정 댓글 링크 연결을 통해 브랜드 공식 몰이나 기획전 유입을 자연스럽게 유도`,
-    closing: `긍정적인 방향으로 브랜드 마케팅 성과를 낼 수 있도록 세밀하게 협력하고 싶습니다. 본 제안에 대한 긍정적인 검토 부탁드리며, 추가 상세 지표 자료나 제작 조건 협의는 본 메일로 답변 주시면 감사하겠습니다.\n\n감사합니다.\n크리에이터 드림.`
-  };
-}
-
 // ─── 한국어 에러 메시지 변환 ─────────────────────────────────────────────────────
 function toKoreanError(status: number, message?: string): string {
   if (status === 429 || status === 503) {
-    return '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!';
+    return '현재 AI 서버 사용량이 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.';
   }
   if (status === 500 || status === 400) {
     return '⚠️ AI 서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.';
@@ -70,20 +57,14 @@ export async function POST(request: Request) {
   try {
     const { channelTopic, targetAudience, targetBrand } = bodyData || {};
 
-    // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환 및 Fallback 연동)
+    // IP 기반 Rate Limiter 검증 (1분에 5회 초과 시 429 Too Many Requests 반환)
     const ip = getClientIp(request);
     if (isRateLimited(ip)) {
-      console.warn(`[generate-sponsor-pitch] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter). Returning fallback.`);
-      return NextResponse.json({
-        success: true,
-        data: getFallbackData(
-          typeof channelTopic === 'string' ? channelTopic.trim() : '',
-          typeof targetAudience === 'string' ? targetAudience.trim() : '',
-          typeof targetBrand === 'string' ? targetBrand.trim() : ''
-        ),
-        fallback: true,
-        fallbackReason: 'LOCAL_RATE_LIMIT',
-      }, { status: 429 });
+      console.warn(`[generate-sponsor-pitch] 🚨 Rate limit exceeded for IP: ${ip} (Local Limiter)`);
+      return NextResponse.json(
+        { error: "현재 AI 서버 사용량이 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요." },
+        { status: 429 }
+      );
     }
 
     // WO-03: 파라미터 유효성 검사 강화 (500 서버 크래시 방지 및 400 규격화)
@@ -139,15 +120,12 @@ export async function POST(request: Request) {
     try {
       response = await callGeminiWithRetry(targetUrl, body);
     } catch (retryErr: any) {
-      // 모든 재시도 소진 → Fallback 샘플 데이터 반환
-      if (retryErr?.status === 429) {
-        console.warn('[generate-sponsor-pitch] 모든 재시도 소진 → Fallback 샘플 데이터 반환');
-        return NextResponse.json({
-          success: true,
-          data: getFallbackData(channelTopic.trim(), targetAudience.trim(), targetBrand.trim()),
-          fallback: true,
-          fallbackReason: 'RATE_LIMIT',
-        });
+      if (retryErr?.status === 429 || retryErr?.message === 'RATE_LIMIT_EXCEEDED') {
+        console.warn('[generate-sponsor-pitch] 모든 재시도 소진 (429 Rate Limit)');
+        return NextResponse.json(
+          { error: "현재 AI 서버 사용량이 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요." },
+          { status: 429 }
+        );
       }
       throw retryErr;
     }
@@ -160,15 +138,11 @@ export async function POST(request: Request) {
       const errorDetails = JSON.stringify(data);
       console.error(`[generate-sponsor-pitch] ❌ 상위 AI API(Gemini) 호출 실패! Status: ${status} (${response.statusText}), Error Response: ${errorDetails}`);
 
-      // 429/503 → Fallback 모드
       if (status === 429 || status === 503) {
-        console.warn(`[generate-sponsor-pitch] HTTP ${status} 수신 → Fallback 샘플 데이터 반환`);
-        return NextResponse.json({
-          success: true,
-          data: getFallbackData(channelTopic.trim(), targetAudience.trim(), targetBrand.trim()),
-          fallback: true,
-          fallbackReason: status === 429 ? 'RATE_LIMIT' : 'SERVICE_UNAVAILABLE',
-        });
+        return NextResponse.json(
+          { error: "현재 AI 서버 사용량이 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요." },
+          { status }
+        );
       }
 
       const koreanMsg = toKoreanError(status, data.error?.message);
@@ -197,24 +171,17 @@ export async function POST(request: Request) {
 
       return NextResponse.json({ success: true, data: resultObj });
     } catch (parseErr) {
-      console.warn("[generate-sponsor-pitch] JSON 파싱 실패, 텍스트 기반 Fallback으로 대체", outputText);
-      return NextResponse.json({
-        success: true,
-        data: {
-          subject: `[협찬 제안] ${channelTopic} 전문 크리에이터와 ${targetBrand}의 협업을 제안드립니다.`,
-          greeting: `안녕하세요, ${targetBrand} 마케팅 팀 담당자님.\n\n저는 ${targetAudience} 오디언스를 기반으로 다양한 ${channelTopic} 콘텐츠를 전문적으로 연출하며 시청자분들과 활발히 소통 중인 크리에이터입니다.`,
-          channelAppeal: `저희 채널은 ${channelTopic} 분야에서 실제 시청자가 일상에 즉시 참고할 만한 밀도 높은 정보를 다룹니다. 특히 주요 구독자층의 ${targetAudience} 비중이 약 80% 이상을 차지하며, 활발한 피드백과 소통 중심의 높은 도달율을 자랑하고 있습니다.`,
-          synergy: `${targetBrand}이(가) 추구하는 브랜드 철학과 저희 채널의 주 오디언스 라이프스타일은 매우 강력한 시너지를 낼 수 있다고 확신합니다. 진정성 있는 실생활 라이브 활용 예시를 통해 핵심 가치를 가장 세련되게 전달해 드리겠습니다.`,
-          concept: `[추천 기획안 - 숏폼 챌린지 룩]\n- 컨셉: 숏폼에 최적화된 3초 후킹 도입부로 시청자 시선 고정\n- 내용: ${targetBrand} 제품을 활용하여 바쁜 ${targetAudience} 오디언스가 실제 생활 속에서 문제를 즉시 해결하거나 가치를 느끼는 과정을 트렌디한 BGM에 맞춰 컷편집 형태로 전개\n- CTA: 고정 댓글 링크 연결을 통해 브랜드 공식 몰이나 기획전 유입을 자연스럽게 유도`,
-          closing: `긍정적인 방향으로 브랜드 마케팅 성과를 낼 수 있도록 세밀하게 협력하고 싶습니다. 본 제안에 대한 긍정적인 검토 부탁드리며, 추가 상세 지표 자료나 제작 조건 협의는 본 메일로 답변 주시면 감사하겠습니다.\n\n감사합니다.\n크리에이터 드림.`
-        }
-      });
+      console.error("[generate-sponsor-pitch] JSON 파싱 실패:", parseErr, outputText);
+      return NextResponse.json(
+        { error: "AI 응답을 파싱하는 데 실패했습니다. 잠시 후 다시 시도해 주세요." },
+        { status: 500 }
+      );
     }
 
   } catch (error: any) {
-    const status = error?.status === 429 ? 429 : 500;
-    const message = status === 429
-      ? '💡 현재 AI 요청량이 많아 잠시 제한되었습니다. 1분 뒤에 다시 시도해 주세요!'
+    const status = (error?.status === 429 || error?.status === 503) ? error.status : 500;
+    const message = (status === 429 || status === 503)
+      ? '현재 AI 서버 사용량이 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.'
       : '⚠️ AI 서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.';
     // WO-02: 상위 AI API 예외 발생 시 상세 로깅 추가
     console.error('[generate-sponsor-pitch] ❌ 상위 AI API 호출 또는 처리 중 예외 발생:', {
