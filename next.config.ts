@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/downloader',
-        destination: '/',
-        permanent: true,
+        destination: 'https://shortspack.com/',
+        statusCode: 301,
       },
       {
         source: '/sponsor-pitch-generator',
